@@ -20,4 +20,9 @@ public class Tile {
         }
         return null;
     }
+    public void setTerrainTypeForTilePositions(TerrainType top, TerrainType left, TerrainType right){
+        this.topHex.setTerrainType(top);
+        this.leftHex.setTerrainType(left);
+        this.rightHex.setTerrainType(right);
+    }
 }
