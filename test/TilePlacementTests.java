@@ -30,7 +30,7 @@ public class TilePlacementTests {
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         ArrayList<Coordinate> returnedValidCoordinates = gameBoard.determineValidPositionsForNewTile(tile1);
-        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0).getX(), returnedValidCoordinates.get(0).getY());
+        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0));
 
         tile2.changeAnchorPosition(HexagonPosition.MIDDLE); //Make anchor position middle
 
@@ -59,7 +59,7 @@ public class TilePlacementTests {
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         ArrayList<Coordinate> returnedValidCoordinates = gameBoard.determineValidPositionsForNewTile(tile1);
-        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0).getX(), returnedValidCoordinates.get(0).getY());
+        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0));
 
         tile2.changeAnchorPosition(HexagonPosition.RIGHT); //Make anchor position right
 
@@ -88,7 +88,7 @@ public class TilePlacementTests {
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         ArrayList<Coordinate> returnedValidCoordinates = gameBoard.determineValidPositionsForNewTile(tile1);
-        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0).getX(), returnedValidCoordinates.get(0).getY());
+        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0));
 
         tile2.changeAnchorPosition(HexagonPosition.LEFT); //Make anchor position left
 
@@ -117,7 +117,7 @@ public class TilePlacementTests {
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         ArrayList<Coordinate> returnedValidCoordinates = gameBoard.determineValidPositionsForNewTile(tile1);
-        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0).getX(), returnedValidCoordinates.get(0).getY());
+        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0));
 
         tile2.changeOrientation();  //Make tile2 bottomheavy
         tile2.changeAnchorPosition(HexagonPosition.MIDDLE); //Make anchor position middle
@@ -147,7 +147,7 @@ public class TilePlacementTests {
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         ArrayList<Coordinate> returnedValidCoordinates = gameBoard.determineValidPositionsForNewTile(tile1);
-        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0).getX(), returnedValidCoordinates.get(0).getY());
+        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0));
 
         tile2.changeOrientation();  //Make tile2 bottomheavy
         tile2.changeAnchorPosition(HexagonPosition.RIGHT); //Make anchor position right
@@ -177,7 +177,7 @@ public class TilePlacementTests {
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         ArrayList<Coordinate> returnedValidCoordinates = gameBoard.determineValidPositionsForNewTile(tile1);
-        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0).getX(), returnedValidCoordinates.get(0).getY());
+        gameBoard.placeTile(tile1, returnedValidCoordinates.get(0));
 
         tile2.changeOrientation();  //Make tile2 bottomheavy
         tile2.changeAnchorPosition(HexagonPosition.LEFT); //Make anchor position left

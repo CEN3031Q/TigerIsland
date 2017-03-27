@@ -20,7 +20,8 @@ public class CreateSettlementSteps {
     // Tests for the existance of tiles
     @Given("^There is at least one tile on the board$")
     public void thereIsAtLeastOneTileOnTheBoard() {
-        gameBoard.placeTile(existingTile, 200, 200);
+        Coordinate testCoordinate = new Coordinate(200,200);
+        gameBoard.placeTile(existingTile, testCoordinate);
         boolean isBoardEmpty = true;
 
         for(int i = 0; i < maxBoardDimension; ++i){
