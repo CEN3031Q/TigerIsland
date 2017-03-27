@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class Game {
     private Board board;
     private ArrayList<Player> players;
+    Deck tileDeck = new Deck();
 
     public Game(Player... playersArray) {
         players = new ArrayList<Player>(Arrays.asList(playersArray));
@@ -24,7 +25,8 @@ public class Game {
                 GameActionPerformer actionPerformer = player.getGameActionPerformer();
 
                 Board currentBoard = board; // Do we need a copy here? I don't want to pass a modifiable reference of our Board...
-                Tile tile = new Tile(TerrainType.JUNGLE, TerrainType.GRASSLANDS, TerrainType.VOLCANO); //TODO: draw tile instead
+                Tile tile = tileDeck.gameDeck.get(0);//new Tile(TerrainType.JUNGLE, TerrainType.GRASSLANDS, TerrainType.VOLCANO); //TODO: draw tile instead
+                tileDeck.gameDeck.remove(0);
 
                 //TODO: Confirm that requested tile placement is valid
                 Coordinate tileCoordinate = actionPerformer.tileAction(tile, currentBoard);

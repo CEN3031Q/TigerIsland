@@ -3,6 +3,10 @@ import java.util.ArrayList;
 public class Board {
     Hexagon[][] gameBoard = new Hexagon[400][400];
     private int nextTileID = 1;
+    private int minBoardX = 400;
+    private int maxBoardX = 0;
+    private int minBoardY = 400;
+    private int maxBoardY = 0;
 
     public Board() {
         for (int ii = 0; ii < 400; ii++) {
@@ -17,38 +21,102 @@ public class Board {
                 }
             }
         }
+
     }
 
-    public boolean placeTile(Tile tileToPlace, int xPosition, int yPosition) {
-        //TODO: Place tiles starting from tile's anchor position (6 different cases)
+    //take in a coordinate instead of the x y. x and y is just the anchor's position
+    //make it void
+    //don't need rule enforcement
+    //change the name of setLevel needs to become incrementLevel
+    //make it not take inputs. just increment
+    //
+    public void placeTile(Tile tileToPlace, Coordinate tileCoordinate) {
+        int xCoordinate = tileCoordinate.getX();
+        int yCoordinate = tileCoordinate.getY();
 
-        if (!gameBoard[yPosition][xPosition].getSpaceIsValid()) {
-            return false;
-        } else {
 
-            //    No rule enforcement here except for placing in a valid location
+        //this is where it changes all of the values
+        //change the bounds if i loop based off of the anchor
+        //or don't even loop, just get the left and right locations and change the values
+        for (int ii = yCoordinate; ii < yCoordinate+2; ii++) {
+            for (int jj = xCoordinate; jj < xCoordinate+3; jj++) {
+                gameBoard[ii][jj].incrementLevel();
+                gameBoard[ii][jj].setTileID(nextTileID);
+                gameBoard[ii][jj].setOccupied(false);
+            }
+        }
+        this.nextTileID++;
+
+        TerrainType left = tileToPlace.getTerrainTypeForPosition(HexagonPosition.LEFT);
+        TerrainType right = tileToPlace.getTerrainTypeForPosition(HexagonPosition.RIGHT);
+        TerrainType middle = tileToPlace.getTerrainTypeForPosition(HexagonPosition.MIDDLE);
 
 
-            for (int ii = yPosition; ii < yPosition+2; ii++) {
-                for (int jj = xPosition; jj < xPosition+3; jj++) {
-                    gameBoard[ii][jj].setLevel(1);
-                    gameBoard[ii][jj].setTileID(nextTileID);
-                    gameBoard[ii][jj].setOccupied(false);
+        //Here I actually go to each of the coordinates and set the hexes' terrain types based on the Orientation and anchor
+        if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.MIDDLE) {
+            gameBoard[yCoordinate][xCoordinate].setTerrainType(middle);
+            gameBoard[yCoordinate - 1][xCoordinate - 1].setTerrainType(left);
+            gameBoard[yCoordinate - 1][xCoordinate + 1].setTerrainType(right);
+        }
+        else if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.LEFT) {
+            gameBoard[yCoordinate][xCoordinate].setTerrainType(left);
+            gameBoard[yCoordinate + 1][xCoordinate + 1].setTerrainType(middle);
+            gameBoard[yCoordinate][xCoordinate + 2].setTerrainType(right);
+        }
+        else if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.RIGHT) {
+            gameBoard[yCoordinate][xCoordinate].setTerrainType(right);
+            gameBoard[yCoordinate][xCoordinate - 2].setTerrainType(left);
+            gameBoard[yCoordinate + 1][xCoordinate - 1].setTerrainType(middle);
+        }
+        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.MIDDLE){
+            gameBoard[yCoordinate][xCoordinate].setTerrainType(middle);
+            gameBoard[yCoordinate - 1][xCoordinate - 1].setTerrainType(left);
+            gameBoard[yCoordinate - 1][xCoordinate + 1].setTerrainType(right);
+        }
+        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.LEFT){
+            gameBoard[yCoordinate][xCoordinate].setTerrainType(left);
+            gameBoard[yCoordinate + 1][xCoordinate + 1].setTerrainType(middle);
+            gameBoard[yCoordinate][xCoordinate + 2].setTerrainType(right);
+        }
+        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.RIGHT){
+            gameBoard[yCoordinate][xCoordinate].setTerrainType(right);
+            gameBoard[yCoordinate - 1][xCoordinate - 1].setTerrainType(middle);
+            gameBoard[yCoordinate][xCoordinate - 2].setTerrainType(left);
+        }
+        //trying to fin the min and max to print from
+        for (int ii = 0; ii < 400; ii++) {
+            for (int jj = 0; jj < 400; jj++) {
+                if(gameBoard[ii][jj].getTileID() != 0){
+                    if(ii > maxBoardX){
+                        maxBoardX = ii;
+                    }
+                    if(jj > maxBoardY){
+                        maxBoardY = jj;
+                    }
+                    if(ii < minBoardX){
+                        minBoardX = ii;
+                    }
+                    if(jj < minBoardY){
+                        minBoardY = jj;
+                    }
                 }
             }
-            this.nextTileID++;
-
-            TerrainType left = tileToPlace.getTerrainTypeForPosition(HexagonPosition.LEFT);
-            TerrainType right = tileToPlace.getTerrainTypeForPosition(HexagonPosition.RIGHT);
-            TerrainType middle = tileToPlace.getTerrainTypeForPosition(HexagonPosition.MIDDLE);
-
-            gameBoard[yPosition][xPosition].setTerrainType(left);
-            gameBoard[yPosition][xPosition+2].setTerrainType(right);
-            gameBoard[yPosition+1][xPosition+1].setTerrainType(middle);
-            return true;
         }
-    }
+        //making sure we don't go less than 0 or greater than 400
+        if(minBoardX >= 3){
+            minBoardX = minBoardX - 3;
+        }
+        if(minBoardY >= 3){
+            minBoardY = minBoardX - 3;
+        }
+        if(maxBoardX <= 397){
+            maxBoardX = maxBoardX + 3;
+        }
+        if(maxBoardY <= 397){
+            maxBoardY = maxBoardX + 3;
+        }
 
+    }
     public ArrayList<Coordinate> determineValidPositionsForNewTile(Tile tileToBePlaced) {
         ArrayList<Coordinate> validCoordinateList = new ArrayList<>();
 
@@ -323,8 +391,8 @@ public class Board {
 
     public void printBoard() {
         System.out.println("Terrain, TileID, Level");
-        for (int ii = 200; ii < 204; ii++) {
-            for (int jj = 200; jj < 210; jj++) {
+        for (int ii = minBoardX; ii < maxBoardX; ii++) {
+            for (int jj = minBoardY; jj < maxBoardY; jj++) {
                 System.out.print("(" + gameBoard[ii][jj].getTerrainType() + ", " + gameBoard[ii][jj].getTileID() + ", " + gameBoard[ii][jj].getLevel() + ")");
             }
             System.out.println();

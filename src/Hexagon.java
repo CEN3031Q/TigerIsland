@@ -1,6 +1,7 @@
 /**
  * Created by gonzalonunez on 3/16/17.
  */
+
 public class Hexagon {
     private TerrainType terrainType;
     private int tileID;
@@ -34,8 +35,8 @@ public class Hexagon {
         return this.level;
     }
 
-    public void setLevel(int level) {
-        this.level += level;
+    public void incrementLevel() {
+        this.level += 1;
     }
 
     public boolean getSpaceIsValid() {
@@ -65,4 +66,25 @@ public class Hexagon {
     public void setVillagersOnTop(int numOfVillagers){ numVillagersOnTop = numOfVillagers; }
 
     public int getNumVillagersOnTop() { return this.numVillagersOnTop; }
+
+    public void printTerrain (TerrainType terrain){
+        if(terrain == TerrainType.VOLCANO){
+            System.out.println("VOLCANO");
+        }
+        else if(terrain == TerrainType.JUNGLE){
+            System.out.println("JUNGLE");
+        }
+        else if(terrain == TerrainType.LAKE){
+            System.out.println("LAKE");
+        }
+        else if(terrain == TerrainType.ROCKY){
+            System.out.println("ROCKY");
+        }
+        else if(terrain == TerrainType.GRASSLANDS){
+            System.out.println("GRASSLANDS");
+        }
+        else{
+            System.out.println("EMPTY");
+        }
+    }
 }
