@@ -65,5 +65,80 @@ public class Tile {
     public TileOrientation getOrientation() {
         return this.tileOrientation;
     }
+    public void printTile(){
+        System.out.println("Tile for the turn:");
+        if(this.getOrientation() == TileOrientation.BOTTOMHEAVY){
+            System.out.println("BOTTOM HEAVY ORIENTATION TILE:");
+            System.out.println();
+            if(this.getAnchorPosition() == HexagonPosition.LEFT){
+                System.out.print("          TOP, ");
+                middleHex.printTerrain(middleHex.getTerrainType());
+                System.out.println();
+                System.out.print("LEFT, ");
+                leftHex.printTerrain(leftHex.getTerrainType());
+                System.out.print(", ANCHOR              RIGHT, ");
+                rightHex.printTerrain(rightHex.getTerrainType());
+                System.out.println();
+            }
+            else if(this.getAnchorPosition() == HexagonPosition.RIGHT){
+                System.out.print("          TOP, ");
+                middleHex.printTerrain(middleHex.getTerrainType());
+                System.out.println();
+                System.out.print("LEFT, ");
+                leftHex.printTerrain(leftHex.getTerrainType());
+                System.out.print("              RIGHT, ");
+                rightHex.printTerrain(rightHex.getTerrainType());
+                System.out.print(", ANCHOR");
+                System.out.println();
+            }
+            else if(this.getAnchorPosition() == HexagonPosition.MIDDLE){
+                System.out.print("          TOP, ");
+                middleHex.printTerrain(middleHex.getTerrainType());
+                System.out.print(", ANCHOR");
+                System.out.println();
+                System.out.print("LEFT, ");
+                leftHex.printTerrain(leftHex.getTerrainType());
+                System.out.print("              RIGHT, ");
+                rightHex.printTerrain(rightHex.getTerrainType());
+                System.out.println();
+            }
+        }
+        else if(this.getOrientation() == TileOrientation.TOPHEAVY){
+            System.out.println("BOTTOM HEAVY ORIENTATION TILE:");
+            System.out.println();
+            if(this.getAnchorPosition() == HexagonPosition.LEFT){
+                System.out.print("LEFT, ");
+                leftHex.printTerrain(leftHex.getTerrainType());
+                System.out.print(", ANCHOR              RIGHT, ");
+                rightHex.printTerrain(rightHex.getTerrainType());
+                System.out.println();
+                System.out.print("          BOTTOM, ");
+                middleHex.printTerrain(middleHex.getTerrainType());
+                System.out.println();
+            }
+            else if(this.getAnchorPosition() == HexagonPosition.RIGHT){
+                System.out.print("LEFT, ");
+                leftHex.printTerrain(leftHex.getTerrainType());
+                System.out.print("              RIGHT, ");
+                rightHex.printTerrain(rightHex.getTerrainType());
+                System.out.print(", ANCHOR");
+                System.out.println();
+                System.out.print("          BOTTOM, ");
+                middleHex.printTerrain(middleHex.getTerrainType());
+                System.out.println();
+            }
+            else if(this.getAnchorPosition() == HexagonPosition.MIDDLE){
+                System.out.print("LEFT, ");
+                leftHex.printTerrain(leftHex.getTerrainType());
+                System.out.print("              RIGHT, ");
+                rightHex.printTerrain(rightHex.getTerrainType());
+                System.out.println();
+                System.out.print("          BOTTOM, ");
+                middleHex.printTerrain(middleHex.getTerrainType());
+                System.out.print(", ANCHOR");
+                System.out.println();
+            }
+        }
+    }
 
 }

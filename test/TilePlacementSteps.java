@@ -61,7 +61,8 @@ public class TilePlacementSteps {
         Tile playerTile = new Tile(TerrainType.VOLCANO, TerrainType.GRASSLANDS, TerrainType.JUNGLE);
         int x = 200;
         int y = 200;
-        gameBoard.placeTile(playerTile, x, y);
+        Coordinate testCoordinate = new Coordinate(x,y);
+        gameBoard.placeTile(playerTile, testCoordinate);
 
         Assert.assertEquals(1, gameBoard.getLevelAtPosition(200,200));
         Assert.assertEquals(1, gameBoard.getLevelAtPosition(202,200));
