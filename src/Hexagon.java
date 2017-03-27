@@ -35,8 +35,8 @@ public class Hexagon {
         return this.level;
     }
 
-    public void incrementLevel(int level) {
-        this.level += level;
+    public void incrementLevel() {
+        this.level += 1;
     }
 
     public boolean getSpaceIsValid() {

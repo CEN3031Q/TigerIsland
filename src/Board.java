@@ -40,7 +40,7 @@ public class Board {
         //or don't even loop, just get the left and right locations and change the values
         for (int ii = yCoordinate; ii < yCoordinate+2; ii++) {
             for (int jj = xCoordinate; jj < xCoordinate+3; jj++) {
-                gameBoard[ii][jj].incrementLevel(1);
+                gameBoard[ii][jj].incrementLevel();
                 gameBoard[ii][jj].setTileID(nextTileID);
                 gameBoard[ii][jj].setOccupied(false);
             }
