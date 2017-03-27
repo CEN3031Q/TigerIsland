@@ -21,38 +21,6 @@ public class Board {
                 }
             }
         }
-        //trying to fin the min and max to print from
-        for (int ii = 0; ii < 400; ii++) {
-            for (int jj = 0; jj < 400; jj++) {
-                if(gameBoard[ii][jj].getTileID() != 0){
-                    if(ii > maxBoardX){
-                        maxBoardX = ii;
-                    }
-                    if(jj > maxBoardY){
-                        maxBoardY = jj;
-                    }
-                    if(ii < minBoardX){
-                        minBoardX = ii;
-                    }
-                    if(jj < minBoardY){
-                        minBoardY = jj;
-                    }
-                }
-            }
-        }
-        //making sure we don't go less than 0 or greater than 400
-        if(minBoardX >= 2){
-            minBoardX = minBoardX - 2;
-        }
-        if(minBoardY >= 2){
-            minBoardY = minBoardX - 2;
-        }
-        if(maxBoardX <= 398){
-            maxBoardX = maxBoardX + 2;
-        }
-        if(maxBoardY <= 398){
-            maxBoardY = maxBoardX + 2;
-        }
 
     }
 
@@ -115,6 +83,39 @@ public class Board {
             gameBoard[yCoordinate - 1][xCoordinate - 1].setTerrainType(middle);
             gameBoard[yCoordinate][xCoordinate - 2].setTerrainType(left);
         }
+        //trying to fin the min and max to print from
+        for (int ii = 0; ii < 400; ii++) {
+            for (int jj = 0; jj < 400; jj++) {
+                if(gameBoard[ii][jj].getTileID() != 0){
+                    if(ii > maxBoardX){
+                        maxBoardX = ii;
+                    }
+                    if(jj > maxBoardY){
+                        maxBoardY = jj;
+                    }
+                    if(ii < minBoardX){
+                        minBoardX = ii;
+                    }
+                    if(jj < minBoardY){
+                        minBoardY = jj;
+                    }
+                }
+            }
+        }
+        //making sure we don't go less than 0 or greater than 400
+        if(minBoardX >= 3){
+            minBoardX = minBoardX - 3;
+        }
+        if(minBoardY >= 3){
+            minBoardY = minBoardX - 3;
+        }
+        if(maxBoardX <= 397){
+            maxBoardX = maxBoardX + 3;
+        }
+        if(maxBoardY <= 397){
+            maxBoardY = maxBoardX + 3;
+        }
+
     }
     public ArrayList<Coordinate> determineValidPositionsForNewTile(Tile tileToBePlaced) {
         ArrayList<Coordinate> validCoordinateList = new ArrayList<>();
