@@ -2,6 +2,25 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class BoardTests {
+    @Test
+    public void testBoardCopyAndEquality() {
+        Board board = new Board();
+
+        Tile tile1 = new Tile(TerrainType.JUNGLE,  TerrainType.GRASSLANDS, TerrainType.VOLCANO);
+        board.placeTile(tile1, new Coordinate(200,200));
+
+        Board copy = new Board(board);
+
+        Assert.assertEquals(board, copy);
+        Assert.assertFalse(board == copy);
+
+        Tile tile2 = new Tile(TerrainType.VOLCANO,  TerrainType.JUNGLE, TerrainType.LAKE);
+        board.placeTile(tile1, new Coordinate(200,203));
+
+        Assert.assertNotEquals(copy, board);
+        Assert.assertFalse(board == copy);
+    }
+
     /*@Test
     public void createBoardAndPlaceTile() {
         Board gameBoard = new Board();

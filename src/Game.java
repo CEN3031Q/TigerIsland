@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class Game {
     private Board board;
     private ArrayList<Player> players;
-    Deck tileDeck = new Deck();
+    private Deck tileDeck = new Deck();
 
     public Game(Player... playersArray) {
         players = new ArrayList<Player>(Arrays.asList(playersArray));
@@ -22,37 +22,56 @@ public class Game {
                 int idx = players.indexOf(player) + 1;
                 System.out.println("* Player " + idx + "'s turn:");
 
-                GameActionPerformer actionPerformer = player.getGameActionPerformer();
-
-                Board currentBoard = board; // Do we need a copy here? I don't want to pass a modifiable reference of our Board...
-                Tile tile = tileDeck.gameDeck.get(0);//new Tile(TerrainType.JUNGLE, TerrainType.GRASSLANDS, TerrainType.VOLCANO); //TODO: draw tile instead
-                tileDeck.gameDeck.remove(0);
-
-                //TODO: Confirm that requested tile placement is valid
-                Coordinate tileCoordinate = actionPerformer.tileAction(tile, currentBoard);
-
-                //TODO: If valid, place tile at this coordinate! Modify the board!
-
-                //TODO: Confirm that the desired build move is valid
-                currentBoard = board; // meh
-                BuildAction buildAction = actionPerformer.buildAction(currentBoard);
-
-                //TODO: Is this all we need to perform the action? Does this modify the board?
-                buildAction.perform(board);
+                try {
+                    Tile tile = tileDeck.drawTile();
+                    Coordinate coord = performTileAction(player, tile);
+                    performBuildAction(player, coord);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    //TODO: Game over, we've run out of tiles!
+                    System.out.println("Game over! No tiles remaining.");
+                }
             }
         }
     }
 
-    private boolean isGameOver() {
-        return players.isEmpty();
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 
-    // Should this be public? Right now it's public for testing purposes...
     public void eliminatePlayer(Player player) {
         players.remove(player);
     }
 
-    public ArrayList<Player> getPlayers() {
-        return players;
+    public boolean isGameOver() {
+        return players.isEmpty() || tileDeck.isEmpty();
+    }
+
+    private Coordinate performTileAction(Player player, Tile tile) {
+        Board boardCopy = new Board(board);
+        GameActionPerformer actionPerformer = player.getGameActionPerformer();
+
+        Coordinate tileCoordinate = actionPerformer.tileAction(tile, boardCopy);
+
+        //TODO: Check if valid...
+
+        adoptBoard(boardCopy);
+
+        return tileCoordinate;
+    }
+
+    private void performBuildAction(Player player, Coordinate lastPlacedCoordinate) {
+        Board boardCopy = new Board(board);
+        GameActionPerformer actionPerformer = player.getGameActionPerformer();
+
+        BuildAction buildAction = actionPerformer.buildAction(boardCopy);
+        buildAction.perform(boardCopy);
+
+        //TODO: Check if valid...
+
+        adoptBoard(boardCopy);
+    }
+
+    private void adoptBoard(Board newBoard) {
+        board = newBoard;
     }
 }

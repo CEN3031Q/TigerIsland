@@ -21,7 +21,32 @@ public class Board {
                 }
             }
         }
+    }
 
+    // Copy constructor
+    public Board(Board aBoard) {
+        gameBoard = aBoard.gameBoard;
+        nextTileID = aBoard.nextTileID;
+        minBoardX = aBoard.minBoardX;
+        maxBoardX = aBoard.maxBoardX;
+        minBoardY = aBoard.minBoardY;
+        maxBoardY = aBoard.maxBoardY;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+
+        Board other = (Board)obj;
+
+        return other.gameBoard.equals(gameBoard) &&
+                other.nextTileID == nextTileID &&
+                other.minBoardY == minBoardY &&
+                other.maxBoardY == maxBoardY &&
+                other.minBoardX == minBoardX &&
+                other.maxBoardX == maxBoardX;
     }
 
     //take in a coordinate instead of the x y. x and y is just the anchor's position

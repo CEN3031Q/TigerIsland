@@ -1,13 +1,14 @@
-import java.util.Random;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+import java.lang.ArrayIndexOutOfBoundsException;
 
 /**
  * Created by patrickwert on 3/20/17.
  */
 public class Deck {
-    ArrayList<Tile> gameDeck;
-    Tile[] tilePile = new Tile [48];
+    private ArrayList<Tile> gameDeck;
+    private Tile[] tilePile = new Tile [48];
 
     public Deck(){
         //LAKES FIRST:
@@ -96,10 +97,20 @@ public class Deck {
 
         //calling the randomize function and pushing each randomized tile into our deck ArrayList
         tilePile = randomizeTilePile(tilePile);
-        for(int i = 0; i < 47; i++) {
-            gameDeck.add(tilePile[i]);
-        }
+        gameDeck = new ArrayList<Tile>(Arrays.asList(tilePile));
     }
+
+    public Tile drawTile() throws ArrayIndexOutOfBoundsException {
+        if (gameDeck.isEmpty()) {
+            throw new ArrayIndexOutOfBoundsException("No more tiles remaining in the Deck");
+        }
+        return gameDeck.remove(0);
+    }
+
+    public boolean isEmpty() {
+        return gameDeck.isEmpty();
+    }
+
     public void printDeck(){
         for(int i = 0; i < 48; i++) {
             System.out.println("TILE " + (i+1) + "!!!");
@@ -151,7 +162,7 @@ public class Deck {
         }
     }
 
-    public Tile[] randomizeTilePile(Tile[] tilePile){
+    private Tile[] randomizeTilePile(Tile[] tilePile){
         Random randomNumberGenerator = new Random();
         for (int i = 0; i<48; i++){
             int randomPosition = randomNumberGenerator.nextInt(48);
