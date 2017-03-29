@@ -1,9 +1,15 @@
-import java.awt.*;
+import cucumber.api.java8.Ar;
+import cucumber.api.java8.He;
+
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Arrays;
+import java.util.List;
 import java.lang.IllegalArgumentException;
 
 public class Board {
-    Hexagon[][] gameBoard = new Hexagon[400][400];
+    private ArrayList<ArrayList<Hexagon>> gameBoard = new ArrayList<>();
     private int nextTileID = 1;
     private int minBoardX = 400;
     private int maxBoardX = 0;
@@ -12,22 +18,29 @@ public class Board {
 
     public Board() {
         for (int ii = 0; ii < 400; ii++) {
+            ArrayList<Hexagon> hexagons = new ArrayList<Hexagon>();
+
             for (int jj = 0; jj < 400; jj++) {
-                gameBoard[ii][jj] = new Hexagon();
+                Hexagon hex = new Hexagon();
+
                 if (ii % 2 == 0 && jj % 2 == 0) {
-                    gameBoard[ii][jj].setSpaceAsValid(true);
+                    hex.setSpaceAsValid(true);
                 } else if (ii % 2 == 1 && jj % 2 == 1) {
-                    gameBoard[ii][jj].setSpaceAsValid(true);
+                    hex.setSpaceAsValid(true);
                 } else {
-                    gameBoard[ii][jj].setSpaceAsValid(false);
+                    hex.setSpaceAsValid(false);
                 }
+
+                hexagons.add(hex);
             }
+
+            gameBoard.add(hexagons);
         }
     }
 
     // Copy constructor
     public Board(Board aBoard) {
-        gameBoard = aBoard.gameBoard;
+        gameBoard = aBoard.getGameBoardCopy();
         nextTileID = aBoard.nextTileID;
         minBoardX = aBoard.minBoardX;
         maxBoardX = aBoard.maxBoardX;
@@ -44,6 +57,7 @@ public class Board {
         Board other = (Board)obj;
 
         return other.gameBoard.equals(gameBoard) &&
+                other.gameBoard != gameBoard &&
                 other.nextTileID == nextTileID &&
                 other.minBoardY == minBoardY &&
                 other.maxBoardY == maxBoardY &&
@@ -56,9 +70,9 @@ public class Board {
     //make it not take inputs. just increment
     //
     public void placeTile(Tile tileToPlace, Point tileCoordinate) throws IllegalArgumentException {
-        ArrayList<Point> validCoordinates = determineValidPositionsForNewTile(tileToPlace);
+        HashMap<Point, Boolean> validCoordinates = validPositionsForNewTile(tileToPlace);
 
-        if (!validCoordinates.contains(tileCoordinate)) {
+        if (validCoordinates.get(tileCoordinate) == null) {
             throw new IllegalArgumentException("{ " + tileCoordinate.getX() + ", " + tileCoordinate.getY() + " } is not a playable spot!");
         }
 
@@ -70,9 +84,10 @@ public class Board {
         //or don't even loop, just get the left and right locations and change the values
         for (int ii = yCoordinate; ii < yCoordinate+2; ii++) {
             for (int jj = xCoordinate; jj < xCoordinate+3; jj++) {
-                gameBoard[ii][jj].incrementLevel();
-                gameBoard[ii][jj].setTileID(nextTileID);
-                gameBoard[ii][jj].setOccupied(false);
+                Hexagon hex = gameBoard.get(ii).get(jj);
+                hex.incrementLevel();
+                hex.setTileID(nextTileID);
+                hex.setOccupied(false);
             }
         }
         this.nextTileID++;
@@ -81,42 +96,45 @@ public class Board {
         TerrainType right = tileToPlace.getTerrainTypeForPosition(HexagonPosition.RIGHT);
         TerrainType middle = tileToPlace.getTerrainTypeForPosition(HexagonPosition.MIDDLE);
 
+        HexagonNeighborsCalculator calc = new HexagonNeighborsCalculator(tileCoordinate,
+                                                                        tileToPlace.getOrientation(),
+                                                                        tileToPlace.getAnchorPosition());
 
         //Here I actually go to each of the coordinates and set the hexes' terrain types based on the Orientation and anchor
         if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.MIDDLE) {
-            gameBoard[yCoordinate][xCoordinate].setTerrainType(middle);
-            gameBoard[yCoordinate - 1][xCoordinate - 1].setTerrainType(left);
-            gameBoard[yCoordinate - 1][xCoordinate + 1].setTerrainType(right);
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(middle);
+            gameBoard.get(yCoordinate - 1).get(xCoordinate - 1).setTerrainType(left);
+            gameBoard.get(yCoordinate - 1).get(xCoordinate + 1).setTerrainType(right);
         }
         else if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.LEFT) {
-            gameBoard[yCoordinate][xCoordinate].setTerrainType(left);
-            gameBoard[yCoordinate + 1][xCoordinate + 1].setTerrainType(middle);
-            gameBoard[yCoordinate][xCoordinate + 2].setTerrainType(right);
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(left);
+            gameBoard.get(yCoordinate + 1).get(xCoordinate + 1).setTerrainType(middle);
+            gameBoard.get(yCoordinate).get(xCoordinate + 2).setTerrainType(right);
         }
         else if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.RIGHT) {
-            gameBoard[yCoordinate][xCoordinate].setTerrainType(right);
-            gameBoard[yCoordinate][xCoordinate - 2].setTerrainType(left);
-            gameBoard[yCoordinate + 1][xCoordinate - 1].setTerrainType(middle);
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(right);
+            gameBoard.get(yCoordinate).get(xCoordinate - 2).setTerrainType(left);
+            gameBoard.get(yCoordinate + 1).get(xCoordinate - 1).setTerrainType(middle);
         }
         else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.MIDDLE){
-            gameBoard[yCoordinate][xCoordinate].setTerrainType(middle);
-            gameBoard[yCoordinate - 1][xCoordinate - 1].setTerrainType(left);
-            gameBoard[yCoordinate - 1][xCoordinate + 1].setTerrainType(right);
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(middle);
+            gameBoard.get(yCoordinate - 1).get(xCoordinate - 1).setTerrainType(left);
+            gameBoard.get(yCoordinate - 1).get(xCoordinate + 1).setTerrainType(right);
         }
         else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.LEFT){
-            gameBoard[yCoordinate][xCoordinate].setTerrainType(left);
-            gameBoard[yCoordinate + 1][xCoordinate + 1].setTerrainType(middle);
-            gameBoard[yCoordinate][xCoordinate + 2].setTerrainType(right);
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(left);
+            gameBoard.get(yCoordinate + 1).get(xCoordinate + 1).setTerrainType(middle);
+            gameBoard.get(yCoordinate).get(xCoordinate + 2).setTerrainType(right);
         }
         else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.RIGHT){
-            gameBoard[yCoordinate][xCoordinate].setTerrainType(right);
-            gameBoard[yCoordinate - 1][xCoordinate - 1].setTerrainType(middle);
-            gameBoard[yCoordinate][xCoordinate - 2].setTerrainType(left);
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(right);
+            gameBoard.get(yCoordinate - 1).get(xCoordinate - 1).setTerrainType(middle);
+            gameBoard.get(yCoordinate).get(xCoordinate - 2).setTerrainType(left);
         }
         //trying to fin the min and max to print from
         for (int ii = 0; ii < 400; ii++) {
             for (int jj = 0; jj < 400; jj++) {
-                if(gameBoard[ii][jj].getTileID() != 0){
+                if(gameBoard.get(ii).get(jj).getTileID() != 0){
                     if(ii > maxBoardX){
                         maxBoardX = ii;
                     }
@@ -147,303 +165,59 @@ public class Board {
         }
 
     }
-    public ArrayList<Point> determineValidPositionsForNewTile(Tile tileToBePlaced) {
-        ArrayList<Point> validCoordinateList = new ArrayList<>();
 
-        //If checking the first tile to be placed
-        if (this.nextTileID == 1) {
-            Point validCoordinate = new Point(200, 200);
-            validCoordinateList.add(validCoordinate);
-            return validCoordinateList;
-        }
+    public HashMap<Point, Boolean> validPositionsForNewTile(Tile tile) {
+        HashMap<Point, Boolean> validPoints = new HashMap<>();
 
-        //TODO: Replace bounds of xCoordinate and yCoordinate in the for loop with min and max bounds of board in play
-        for (int yCoordinate = 3; yCoordinate <= 396; yCoordinate++) {
-            for (int xCoordinate = 3; xCoordinate <= 396; xCoordinate++) {
+        Board boardCopy = new Board(this);
+        FirstTilePlacementRule firstTilePR = new FirstTilePlacementRule(tile, boardCopy);
+        TilePlacementRule placementRule = new TilePlacementRule(tile, boardCopy);
 
-                //If the current x,y position is not a valid place to put the anchor continue
-                if (!gameBoard[yCoordinate][xCoordinate].getSpaceIsValid())
-                    continue;
+        List<TilePlacementRule> rules = Arrays.asList(firstTilePR, placementRule);
 
-                if (tileToBePlaced.getOrientation() == TileOrientation.TOPHEAVY) {
-
-                    if (tileToBePlaced.getAnchorPosition() == HexagonPosition.MIDDLE) {
-                        //Checks if positions within the new tile are going to overlap existing tiles
-                        if (gameBoard[yCoordinate-1][xCoordinate-1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate-1][xCoordinate].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate-1][xCoordinate+1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate-1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate+1].getTileID() != 0)
-                            continue;
-
-                        //Check if new tile is adjacent to existing tiles
-                        //If we found one no need to check the rest
-                        if (gameBoard[yCoordinate-2][xCoordinate-2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-2][xCoordinate].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-2][xCoordinate+2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate][xCoordinate+2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate+1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate-1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate][xCoordinate-2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        }
-
-                    } else if (tileToBePlaced.getAnchorPosition() == HexagonPosition.LEFT) {
-                        //Checks if positions within the new tile are going to overlap existing tiles
-                        if (gameBoard[yCoordinate+1][xCoordinate].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate+1][xCoordinate+1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate+1][xCoordinate+2].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate+1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate+2].getTileID() != 0)
-                            continue;
-
-                        //Check if new tile is adjacent to existing tiles
-                        //If we found one no need to check the rest
-                        if (gameBoard[yCoordinate-1][xCoordinate-1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-1][xCoordinate+1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-1][xCoordinate+3].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate-1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate+3].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+2][xCoordinate].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+2][xCoordinate+2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        }
-
-                    } else if (tileToBePlaced.getAnchorPosition() == HexagonPosition.RIGHT) {
-                        //Checks if positions within the new tile are going to overlap existing tiles
-                        if (gameBoard[yCoordinate+1][xCoordinate-2].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate+1][xCoordinate-1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate+1][xCoordinate].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate-2].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate-1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate].getTileID() != 0)
-                            continue;
-
-                        //Check if new tile is adjacent to existing tiles
-                        //If we found one no need to check the rest
-                        if (gameBoard[yCoordinate-1][xCoordinate-3].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-1][xCoordinate-1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-1][xCoordinate+1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate+1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate-3].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+2][xCoordinate].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+2][xCoordinate-2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        }
-                    }
-
-                } else if (tileToBePlaced.getOrientation() == TileOrientation.BOTTOMHEAVY) {
-
-                    if (tileToBePlaced.getAnchorPosition() == HexagonPosition.MIDDLE) {
-                        //Checks if positions within the new tile are going to overlap existing tiles
-                        if (gameBoard[yCoordinate+1][xCoordinate-1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate+1][xCoordinate].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate+1][xCoordinate+1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate-1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate+1].getTileID() != 0)
-                            continue;
-
-                        //Check if new tile is adjacent to existing tiles
-                        //If we found one no need to check the rest
-                        if (gameBoard[yCoordinate+2][xCoordinate-2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+2][xCoordinate].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+2][xCoordinate+2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate][xCoordinate+2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate][xCoordinate-2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-1][xCoordinate-1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-1][xCoordinate+1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        }
-
-                    } else if (tileToBePlaced.getAnchorPosition() == HexagonPosition.LEFT) {
-                        //Checks if positions within the new tile are going to overlap existing tiles
-                        if (gameBoard[yCoordinate-1][xCoordinate].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate-1][xCoordinate+1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate-1][xCoordinate+2].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate+1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate+2].getTileID() != 0)
-                            continue;
-
-                        //Check if new tile is adjacent to existing tiles
-                        //If we found one no need to check the rest
-                        if (gameBoard[yCoordinate-1][xCoordinate-1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-1][xCoordinate+3].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-2][xCoordinate].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-2][xCoordinate+2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate-1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate+1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate+3].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        }
-
-                    } else if (tileToBePlaced.getAnchorPosition() == HexagonPosition.RIGHT) {
-                        //Checks if positions within the new tile are going to overlap existing tiles
-                        if (gameBoard[yCoordinate-1][xCoordinate].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate-1][xCoordinate-1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate-1][xCoordinate-2].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate-1].getTileID() != 0)
-                            continue;
-                        if (gameBoard[yCoordinate][xCoordinate-2].getTileID() != 0)
-                            continue;
-
-                        //Check if new tile is adjacent to existing tiles
-                        //If we found one no need to check the rest
-                        if (gameBoard[yCoordinate-1][xCoordinate-3].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-1][xCoordinate+1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-2][xCoordinate].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate-2][xCoordinate-2].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate+1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate-1].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        } else if (gameBoard[yCoordinate+1][xCoordinate-3].getTileID() != 0) {
-                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
-                            validCoordinateList.add(validCoordinate);
-                        }
+        for (int y = 3; y <= 396; y++) {
+            for (int x = 3; x <= 396; x++) {
+                Point point = new Point(x, y);
+                for (TilePlacementRule rule : rules) {
+                    if (rule.tileMeetsConditionsForRuleToApply() && rule.pointIsValid(point)) {
+                        validPoints.put(point, true);
                     }
                 }
             }
         }
 
-        return validCoordinateList;
+        return validPoints;
     }
 
+    public ArrayList<ArrayList<Hexagon>> getGameBoardCopy() {
+        return new ArrayList<ArrayList<Hexagon>>(gameBoard);
+    }
 
-
-    public void printBoard() {
-        System.out.println("Terrain, TileID, Level");
-        for (int ii = minBoardX; ii < maxBoardX; ii++) {
-            for (int jj = minBoardY; jj < maxBoardY; jj++) {
-                System.out.print("(" + gameBoard[ii][jj].getTerrainType() + ", " + gameBoard[ii][jj].getTileID() + ", " + gameBoard[ii][jj].getLevel() + ")");
-            }
-            System.out.println();
-        }
+    public Hexagon hexagonAtPoint(Point p) {
+        return new Hexagon(gameBoard.get(p.y).get(p.x));
     }
 
     public TerrainType getTerrainTypeAtPosition(int xPosition, int yPosition) {
-        return gameBoard[yPosition][xPosition].getTerrainType();
+        return gameBoard.get(yPosition).get(xPosition).getTerrainType();
     }
 
     public int getLevelAtPosition(int xPosition, int yPosition) {
-        return gameBoard[yPosition][xPosition].getLevel();
+        return gameBoard.get(yPosition).get(xPosition).getLevel();
     }
 
     public int getTileIDAtPosition(int xPosition, int yPosition) {
-        return gameBoard[yPosition][xPosition].getTileID();
+        return gameBoard.get(yPosition).get(xPosition).getTileID();
+    }
+
+    public int getVillagerNumberAtPosition(int xPosition, int yPosition) {
+        return gameBoard.get(yPosition).get(xPosition).getNumVillagersOnTop();
     }
 
     public void setVillagersAtPosition(int numOfVillagers, int xPosition, int yPosition){
-        gameBoard[yPosition][xPosition].setVillagersOnTop(numOfVillagers);
+        gameBoard.get(yPosition).get(xPosition).setVillagersOnTop(numOfVillagers);
     }
 
-    public int getVillagerNumberAtPosition(int xPosition, int yPosition) { return gameBoard[yPosition][xPosition].getNumVillagersOnTop(); }
+    public int getNextTileID() {
+        return nextTileID;
+    }
 }
