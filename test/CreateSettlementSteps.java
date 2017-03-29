@@ -2,7 +2,10 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+
 import org.junit.Assert;
+
+import java.awt.*;
 
 /**
  * Created by hugh on 3/24/17.
@@ -20,7 +23,7 @@ public class CreateSettlementSteps {
     // Tests for the existance of tiles
     @Given("^There is at least one tile on the board$")
     public void thereIsAtLeastOneTileOnTheBoard() {
-        Coordinate testCoordinate = new Coordinate(200,200);
+        Point testCoordinate = new Point(200,200);
         gameBoard.placeTile(existingTile, testCoordinate);
         boolean isBoardEmpty = true;
 

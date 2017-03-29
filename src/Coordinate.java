@@ -1,6 +1,7 @@
 /**
  * Created by gonzalonunez on 3/16/17.
  */
+
 public class Coordinate {
     private int x;
     private int y;

@@ -1,10 +1,12 @@
+import java.awt.geom.Point2D;
+
 /**
  * Created by gonzalonunez on 3/21/17.
  */
 public class ExpandSettlementAction implements BuildAction {
-    private Coordinate coordinateToExpandFrom;
+    private Point2D coordinateToExpandFrom;
 
-    public ExpandSettlementAction(Coordinate coordinate) {
+    public ExpandSettlementAction(Point2D coordinate) {
         coordinateToExpandFrom = coordinate;
     }
 

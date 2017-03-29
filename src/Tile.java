@@ -10,7 +10,7 @@ public class Tile {
         rightHex = new Hexagon(rightType);
         leftHex = new Hexagon(leftType);
         tileOrientation = TileOrientation.TOPHEAVY;
-        anchor = HexagonPosition.MIDDLE;    //Used to determine valid placement of tile
+        anchor = HexagonPosition.MIDDLE;  //Used to determine valid placement of tile
     }
 
     public TerrainType getTerrainTypeForPosition(HexagonPosition position) {

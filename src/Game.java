@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,22 +11,25 @@ public class Game {
     private ArrayList<Player> players;
     private Deck tileDeck = new Deck();
 
+    public Game(Deck deck, Player... playersArray) {
+        players = new ArrayList<Player>(Arrays.asList(playersArray));
+        board = new Board();
+        tileDeck = deck;
+    }
+
     public Game(Player... playersArray) {
         players = new ArrayList<Player>(Arrays.asList(playersArray));
         board = new Board();
     }
 
-    //TODO: Let's make this method a little smaller!
     public void runGameLoop() {
         while (!isGameOver()) {
             for (Player player : players) {
-                int idx = players.indexOf(player) + 1;
-                System.out.println("* Player " + idx + "'s turn:");
-
+                //int idx = players.indexOf(player) + 1;
+                //System.out.println("* Player " + idx + "'s turn *");
                 try {
                     Tile tile = tileDeck.drawTile();
-                    Coordinate coord = performTileAction(player, tile);
-                    performBuildAction(player, coord);
+                    performTurn(player, tile);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     //TODO: Game over, we've run out of tiles!
                     System.out.println("Game over! No tiles remaining.");
@@ -46,20 +50,33 @@ public class Game {
         return players.isEmpty() || tileDeck.isEmpty();
     }
 
-    private Coordinate performTileAction(Player player, Tile tile) {
-        Board boardCopy = new Board(board);
+    private void performTurn(Player player, Tile tile)  {
+        Point point = performTileAction(player, tile);
+        performBuildAction(player, point);
+    }
+
+    private Point performTileAction(Player player, Tile tile) {
         GameActionPerformer actionPerformer = player.getGameActionPerformer();
 
-        Coordinate tileCoordinate = actionPerformer.tileAction(tile, boardCopy);
+        Board boardCopy;
+        Point tileCoordinate;
 
-        //TODO: Check if valid...
+        while (true) {
+            try {
+                boardCopy = new Board(board);
+                tileCoordinate = actionPerformer.tileAction(tile, boardCopy);
+                boardCopy.placeTile(tile, tileCoordinate);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage() + " Please try again.");
+            }
+        }
 
         adoptBoard(boardCopy);
-
         return tileCoordinate;
     }
 
-    private void performBuildAction(Player player, Coordinate lastPlacedCoordinate) {
+    private void performBuildAction(Player player, Point lastPlacedCoordinate) {
         Board boardCopy = new Board(board);
         GameActionPerformer actionPerformer = player.getGameActionPerformer();
 

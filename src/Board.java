@@ -1,4 +1,6 @@
+import java.awt.*;
 import java.util.ArrayList;
+import java.lang.IllegalArgumentException;
 
 public class Board {
     Hexagon[][] gameBoard = new Hexagon[400][400];
@@ -49,16 +51,19 @@ public class Board {
                 other.maxBoardX == maxBoardX;
     }
 
-    //take in a coordinate instead of the x y. x and y is just the anchor's position
-    //make it void
     //don't need rule enforcement
     //change the name of setLevel needs to become incrementLevel
     //make it not take inputs. just increment
     //
-    public void placeTile(Tile tileToPlace, Coordinate tileCoordinate) {
-        int xCoordinate = tileCoordinate.getX();
-        int yCoordinate = tileCoordinate.getY();
+    public void placeTile(Tile tileToPlace, Point tileCoordinate) throws IllegalArgumentException {
+        ArrayList<Point> validCoordinates = determineValidPositionsForNewTile(tileToPlace);
 
+        if (!validCoordinates.contains(tileCoordinate)) {
+            throw new IllegalArgumentException("{ " + tileCoordinate.getX() + ", " + tileCoordinate.getY() + " } is not a playable spot!");
+        }
+
+        int xCoordinate = (int)tileCoordinate.getX();
+        int yCoordinate = (int)tileCoordinate.getY();
 
         //this is where it changes all of the values
         //change the bounds if i loop based off of the anchor
@@ -142,12 +147,12 @@ public class Board {
         }
 
     }
-    public ArrayList<Coordinate> determineValidPositionsForNewTile(Tile tileToBePlaced) {
-        ArrayList<Coordinate> validCoordinateList = new ArrayList<>();
+    public ArrayList<Point> determineValidPositionsForNewTile(Tile tileToBePlaced) {
+        ArrayList<Point> validCoordinateList = new ArrayList<>();
 
         //If checking the first tile to be placed
         if (this.nextTileID == 1) {
-            Coordinate validCoordinate = new Coordinate(200, 200);
+            Point validCoordinate = new Point(200, 200);
             validCoordinateList.add(validCoordinate);
             return validCoordinateList;
         }
@@ -180,25 +185,25 @@ public class Board {
                         //Check if new tile is adjacent to existing tiles
                         //If we found one no need to check the rest
                         if (gameBoard[yCoordinate-2][xCoordinate-2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-2][xCoordinate].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-2][xCoordinate+2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate][xCoordinate+2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate+1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate-1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate][xCoordinate-2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         }
 
@@ -220,25 +225,25 @@ public class Board {
                         //Check if new tile is adjacent to existing tiles
                         //If we found one no need to check the rest
                         if (gameBoard[yCoordinate-1][xCoordinate-1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-1][xCoordinate+1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-1][xCoordinate+3].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate-1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate+3].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+2][xCoordinate].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+2][xCoordinate+2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         }
 
@@ -260,25 +265,25 @@ public class Board {
                         //Check if new tile is adjacent to existing tiles
                         //If we found one no need to check the rest
                         if (gameBoard[yCoordinate-1][xCoordinate-3].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-1][xCoordinate-1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-1][xCoordinate+1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate+1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate-3].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+2][xCoordinate].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+2][xCoordinate-2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         }
                     }
@@ -303,25 +308,25 @@ public class Board {
                         //Check if new tile is adjacent to existing tiles
                         //If we found one no need to check the rest
                         if (gameBoard[yCoordinate+2][xCoordinate-2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+2][xCoordinate].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+2][xCoordinate+2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate][xCoordinate+2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate][xCoordinate-2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-1][xCoordinate-1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-1][xCoordinate+1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         }
 
@@ -343,25 +348,25 @@ public class Board {
                         //Check if new tile is adjacent to existing tiles
                         //If we found one no need to check the rest
                         if (gameBoard[yCoordinate-1][xCoordinate-1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-1][xCoordinate+3].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-2][xCoordinate].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-2][xCoordinate+2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate-1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate+1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate+3].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         }
 
@@ -383,25 +388,25 @@ public class Board {
                         //Check if new tile is adjacent to existing tiles
                         //If we found one no need to check the rest
                         if (gameBoard[yCoordinate-1][xCoordinate-3].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-1][xCoordinate+1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-2][xCoordinate].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate-2][xCoordinate-2].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate+1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate-1].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         } else if (gameBoard[yCoordinate+1][xCoordinate-3].getTileID() != 0) {
-                            Coordinate validCoordinate = new Coordinate(xCoordinate, yCoordinate);
+                            Point validCoordinate = new Point(xCoordinate, yCoordinate);
                             validCoordinateList.add(validCoordinate);
                         }
                     }

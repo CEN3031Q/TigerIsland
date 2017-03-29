@@ -4,6 +4,8 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
+import java.awt.*;
+
 /**
  * Created by hugh on 3/22/17.
 * Acceptance tests for placing a tile onto the board
@@ -61,7 +63,7 @@ public class TilePlacementSteps {
         Tile playerTile = new Tile(TerrainType.VOLCANO, TerrainType.GRASSLANDS, TerrainType.JUNGLE);
         int x = 200;
         int y = 200;
-        Coordinate testCoordinate = new Coordinate(x,y);
+        Point testCoordinate = new Point(x, y);
         gameBoard.placeTile(playerTile, testCoordinate);
 
         Assert.assertEquals(1, gameBoard.getLevelAtPosition(200,200));

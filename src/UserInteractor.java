@@ -1,6 +1,7 @@
 /**
  * Created by gonzalonunez on 3/21/17.
  */
+import java.awt.*;
 import java.util.Scanner;
 
 public class UserInteractor implements GameActionPerformer {
@@ -14,7 +15,7 @@ public class UserInteractor implements GameActionPerformer {
         scanner.close();
     }
 
-    public Coordinate tileAction(Tile tile, Board board) {
+    public Point tileAction(Tile tile, Board board) {
         //TODO: Display the tile and the current board to the user. Maybe we want to show valid spots with numbers on them?
 
         System.out.println("Where would you like to place your tile?");
@@ -22,7 +23,7 @@ public class UserInteractor implements GameActionPerformer {
         int x = getXCoordinate();
         int y = getYCoordinate();
 
-        return new Coordinate(x, y);
+        return new Point(x, y);
     }
 
     private int getXCoordinate() {

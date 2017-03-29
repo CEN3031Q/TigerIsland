@@ -8,9 +8,10 @@ import java.lang.ArrayIndexOutOfBoundsException;
  */
 public class Deck {
     private ArrayList<Tile> gameDeck;
-    private Tile[] tilePile = new Tile [48];
 
     public Deck(){
+        Tile[] tilePile = new Tile [48];
+
         //LAKES FIRST:
         //LAKE LAKE VOLCANO
         tilePile[0] = new Tile(TerrainType.LAKE, TerrainType.LAKE, TerrainType.VOLCANO);
@@ -95,7 +96,7 @@ public class Deck {
         tilePile[46]= new Tile(TerrainType.ROCKY, TerrainType.ROCKY, TerrainType.VOLCANO);
         tilePile[47]= new Tile(TerrainType.ROCKY, TerrainType.ROCKY, TerrainType.VOLCANO);
 
-        //calling the randomize function and pushing each randomized tile into our deck ArrayList
+        //Randomize tilePile and instantiate gameDeck
         tilePile = randomizeTilePile(tilePile);
         gameDeck = new ArrayList<Tile>(Arrays.asList(tilePile));
     }
@@ -105,6 +106,10 @@ public class Deck {
             throw new ArrayIndexOutOfBoundsException("No more tiles remaining in the Deck");
         }
         return gameDeck.remove(0);
+    }
+
+    public int size() {
+        return gameDeck.size();
     }
 
     public boolean isEmpty() {
@@ -142,7 +147,7 @@ public class Deck {
                 System.out.println("LEFT is VOLCANO");
             }
             else if(gameDeck.get(i).getTerrainTypeForPosition(HexagonPosition.LEFT) == TerrainType.GRASSLANDS) {
-                System.out.println("LEDT is GRASSLANDS");
+                System.out.println("LEFT is GRASSLANDS");
             }
             if(gameDeck.get(i).getTerrainTypeForPosition(HexagonPosition.RIGHT) == TerrainType.LAKE){
                 System.out.println("RIGHT is LAKE");
@@ -162,15 +167,15 @@ public class Deck {
         }
     }
 
-    private Tile[] randomizeTilePile(Tile[] tilePile){
+    private Tile[] randomizeTilePile(Tile[] tiles){
         Random randomNumberGenerator = new Random();
         for (int i = 0; i<48; i++){
             int randomPosition = randomNumberGenerator.nextInt(48);
-            Tile temp = tilePile[i];
-            tilePile[i] = tilePile[randomPosition];
-            tilePile[randomPosition] = temp;
+            Tile temp = tiles[i];
+            tiles[i] = tiles[randomPosition];
+            tiles[randomPosition] = temp;
         }
-        return tilePile;
+        return tiles;
     }
 
 }
