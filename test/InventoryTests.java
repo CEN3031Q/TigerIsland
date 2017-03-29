@@ -69,4 +69,38 @@ public class InventoryTests {
         }
         Assert.assertEquals(true, inventory.isInventoryEmpty());
     }
+    @Test
+    public void isMeepleEmptyTest(){
+        Inventory inventory = new Inventory();
+        for (int i = 0; i<20; i++){
+            inventory.removeMeeplePiece();
+        }
+        Assert.assertEquals(true, inventory.isMeepleEmpty());
+    }
+    @Test
+    public void isTotoroEmptyTest(){
+        Inventory inventory = new Inventory();
+        for (int i = 0; i<3; i++){
+            inventory.removeTotoroPiece();
+        }
+        Assert.assertEquals(true, inventory.isTotoroEmpty());
+    }
+    @Test
+    public void isTigerEmptyTest(){
+        Inventory inventory = new Inventory();
+        for (int i = 0; i<2; i++){
+            inventory.removeTigerPiece();
+        }
+        Assert.assertEquals(true, inventory.isTigerEmpty());
+    }
+    @Test
+    public void alreadyEmptyTest() {
+        Inventory inventory = new Inventory();
+        for (int i = 0; i<20; i++){
+            inventory.removeMeeplePiece();
+        }
+        inventory.removeMeeplePiece();
+        Assert.assertEquals(true, inventory.isMeepleEmpty());
+        Assert.assertEquals(0, inventory.getMeepleSize());
+    }
 }

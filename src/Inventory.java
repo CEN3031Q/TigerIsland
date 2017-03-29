@@ -4,11 +4,14 @@
 import java.util.ArrayList;
 public class Inventory {
 
-    ArrayList<Pieces> meepleList = new ArrayList<>(20);
-    ArrayList<Pieces> totoroList = new ArrayList<>(3);
-    ArrayList<Pieces> tigerList = new ArrayList<>(2);
+    private ArrayList<Pieces> meepleList;
+    private ArrayList<Pieces> totoroList;
+    private ArrayList<Pieces> tigerList;
 
     public Inventory (){
+        meepleList = new ArrayList<>(20);
+        totoroList = new ArrayList<>(3);
+        tigerList = new ArrayList<>(2);
         initMeepleList();
         initTotoroList();
         initTigerList();
@@ -21,7 +24,7 @@ public class Inventory {
     }
 
     private void initTotoroList(){
-        for (int i =0; i<3; i++){
+        for (int i = 0; i < 3; i++){
             totoroList.add(Pieces.TOTORO);
         }
     }
@@ -58,6 +61,28 @@ public class Inventory {
     }
     public void removeTigerPiece(){
         tigerList.remove(Pieces.TIGER);
+    }
+    public boolean isMeepleEmpty() {
+        if(getMeepleSize() == 0) {
+            return true;
+        }
+        else return false;
+    }
+    public boolean isTotoroEmpty() {
+        if(getTotoroSize() == 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public boolean isTigerEmpty() {
+        if(getTigerSize() == 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     public boolean isInventoryEmpty() {
         if(getMeepleSize() == 0 && getTotoroSize() == 0 && getTigerSize() == 0) {
