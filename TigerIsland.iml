@@ -8,8 +8,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="TEST" name="junit-4.12" level="project" />
-    <orderEntry type="library" name="info.cukes:cucumber-java8:1.2.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="info.cukes:cucumber-junit:1.2.5" level="project" />
+    <orderEntry type="library" name="info.cukes:cucumber-java8:1.2.5" level="project" />
   </component>
 </module>
