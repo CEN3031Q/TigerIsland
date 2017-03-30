@@ -1,12 +1,8 @@
-import cucumber.api.java8.Ar;
-import cucumber.api.java8.He;
-
-import java.awt.Point;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.lang.IllegalArgumentException;
 
 public class Board {
     private ArrayList<ArrayList<Hexagon>> gameBoard = new ArrayList<>();
@@ -79,6 +75,67 @@ public class Board {
         int xCoordinate = (int)tileCoordinate.getX();
         int yCoordinate = (int)tileCoordinate.getY();
 
+        TerrainType left = tileToPlace.getTerrainTypeForPosition(HexagonPosition.LEFT);
+        TerrainType right = tileToPlace.getTerrainTypeForPosition(HexagonPosition.RIGHT);
+        TerrainType middle = tileToPlace.getTerrainTypeForPosition(HexagonPosition.MIDDLE);
+
+        HexagonNeighborsCalculator calc = new HexagonNeighborsCalculator(tileCoordinate,
+                tileToPlace.getOrientation(),
+                tileToPlace.getAnchorPosition());
+
+
+        //Here I actually go to each of the coordinates and set the hexes' terrain types based on the Orientation and anchor
+        if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.MIDDLE) {
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(middle);
+            gameBoard.get(yCoordinate - 1).get(xCoordinate - 1).setTerrainType(left);
+            gameBoard.get(yCoordinate - 1).get(xCoordinate + 1).setTerrainType(right);
+
+            //Move x, y to upper left corner of tile to place it
+            yCoordinate -= 1;
+            xCoordinate -= 1;
+        }
+        else if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.LEFT) {
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(left);
+            gameBoard.get(yCoordinate + 1).get(xCoordinate + 1).setTerrainType(middle);
+            gameBoard.get(yCoordinate).get(xCoordinate + 2).setTerrainType(right);
+
+            //Move x, y to upper left corner of tile to place it
+            //Nothing to do here, default tile is topheavy + left anchor
+        }
+        else if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.RIGHT) {
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(right);
+            gameBoard.get(yCoordinate).get(xCoordinate - 2).setTerrainType(left);
+            gameBoard.get(yCoordinate + 1).get(xCoordinate - 1).setTerrainType(middle);
+
+            //Move x, y to upper left corner of tile to place it
+            xCoordinate -= 2;
+        }
+        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.MIDDLE){
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(middle);
+            gameBoard.get(yCoordinate + 1).get(xCoordinate - 1).setTerrainType(left);
+            gameBoard.get(yCoordinate + 1).get(xCoordinate + 1).setTerrainType(right);
+
+            //Move x, y to upper left corner of tile to place it
+            xCoordinate -= 1;
+        }
+        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.LEFT){
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(left);
+            gameBoard.get(yCoordinate - 1).get(xCoordinate + 1).setTerrainType(middle);
+            gameBoard.get(yCoordinate).get(xCoordinate + 2).setTerrainType(right);
+
+            //Move x, y to upper left corner of tile to place it
+            yCoordinate -= 1;
+        }
+        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.RIGHT){
+            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(right);
+            gameBoard.get(yCoordinate - 1).get(xCoordinate - 1).setTerrainType(middle);
+            gameBoard.get(yCoordinate).get(xCoordinate - 2).setTerrainType(left);
+
+            //Move x, y to upper left corner of tile to place it
+            yCoordinate -= 1;
+            xCoordinate -= 2;
+        }
+
         //this is where it changes all of the values
         //change the bounds if i loop based off of the anchor
         //or don't even loop, just get the left and right locations and change the values
@@ -92,26 +149,7 @@ public class Board {
         }
         this.nextTileID++;
 
-        HexagonNeighborsCalculator calc = new HexagonNeighborsCalculator(tileCoordinate,
-                                                                        tileToPlace.getOrientation(),
-                                                                        tileToPlace.getAnchorPosition());
-
-        HashMap<HexagonPosition, Point> points = calc.pointsForTerrainHexagons();
-
-        Point leftPoint = points.get(HexagonPosition.LEFT);
-        Point midPoint = points.get(HexagonPosition.MIDDLE);
-        Point rightPoint = points.get(HexagonPosition.RIGHT);
-
-        TerrainType leftTerrain = tileToPlace.getTerrainTypeForPosition(HexagonPosition.LEFT);
-        TerrainType rightTerrain = tileToPlace.getTerrainTypeForPosition(HexagonPosition.RIGHT);
-        TerrainType middleTerrain = tileToPlace.getTerrainTypeForPosition(HexagonPosition.MIDDLE);
-
-        gameBoard.get(leftPoint.y).get(leftPoint.x).setTerrainType(leftTerrain);
-        gameBoard.get(midPoint.y).get(midPoint.x).setTerrainType(middleTerrain);
-        gameBoard.get(rightPoint.y).get(rightPoint.x).setTerrainType(rightTerrain);
-
-        // Trying to find the min and max to print from
-
+        //trying to fin the min and max to print from
         for (int ii = 0; ii < 400; ii++) {
             for (int jj = 0; jj < 400; jj++) {
                 if(gameBoard.get(ii).get(jj).getTileID() != 0){
@@ -130,8 +168,7 @@ public class Board {
                 }
             }
         }
-        
-        // Making sure we don't go less than 0 or greater than 400
+        //making sure we don't go less than 0 or greater than 400
         if(minBoardX >= 3){
             minBoardX = minBoardX - 3;
         }

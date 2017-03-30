@@ -4,7 +4,7 @@ import org.junit.Test;
 import java.awt.*;
 
 public class BoardTests {
-    @Test
+   /* @Test
     public void testBoardCopyAndEquality() {
         Board board = new Board();
 
@@ -21,7 +21,7 @@ public class BoardTests {
 
         Assert.assertNotEquals(copy, board);
         Assert.assertFalse(board == copy);
-    }
+    }*/
 
     @Test
     public void testBoardAllowsFirstPlaceInMiddle() {
@@ -37,7 +37,7 @@ public class BoardTests {
         board.placeTile(tile, new Point(201, 201));
     }
 
-    /*@Test
+    @Test
     public void createBoardAndPlaceTile() {
         Board gameBoard = new Board();
 
@@ -49,17 +49,16 @@ public class BoardTests {
 
         gameBoard.placeTile(tile1, testPoint);
 
-        Assert.assertEquals(jungle, gameBoard.getTerrainTypeAtPosition(200,200));
+        Assert.assertEquals(volcano, gameBoard.getTerrainTypeAtPosition(200,200));
         Assert.assertEquals(1, gameBoard.getLevelAtPosition(200,200));
         Assert.assertEquals(1, gameBoard.getTileIDAtPosition(200,200));
-        Assert.assertEquals(grasslands, gameBoard.getTerrainTypeAtPosition(202,200));
-        Assert.assertEquals(1, gameBoard.getLevelAtPosition(202,200));
-        Assert.assertEquals(1, gameBoard.getTileIDAtPosition(202,200));
-        Assert.assertEquals(volcano, gameBoard.getTerrainTypeAtPosition(201,201));
-        Assert.assertEquals(1, gameBoard.getLevelAtPosition(201,201));
-        Assert.assertEquals(1, gameBoard.getTileIDAtPosition(201,201));
+        Assert.assertEquals(jungle, gameBoard.getTerrainTypeAtPosition(199,199));
+        Assert.assertEquals(1, gameBoard.getLevelAtPosition(199,199));
+        Assert.assertEquals(1, gameBoard.getTileIDAtPosition(199,199));
+        Assert.assertEquals(grasslands, gameBoard.getTerrainTypeAtPosition(201,199));
+        Assert.assertEquals(1, gameBoard.getLevelAtPosition(201,199));
+        Assert.assertEquals(1, gameBoard.getTileIDAtPosition(201,199));
 
-//        gameBoard.printBoard();
     }
 
     @Test
@@ -73,26 +72,28 @@ public class BoardTests {
         Tile tile1 = new Tile(volcano, grasslands, lake);
         Tile tile2 = new Tile(grasslands, volcano, jungle);
         Point testPoint = new Point(200,200);
-        Point secondTestPoint = new Point (204,200);
+        Point secondTestPoint = new Point (201,201);
+        tile2.changeOrientation();  //bottomheavy Changes: Grass-left, Jungle-right, Volcano-middle (swap R,M)
 
         gameBoard.placeTile(tile1, testPoint);
         gameBoard.placeTile(tile2, secondTestPoint);
 
-        Assert.assertEquals(grasslands, gameBoard.getTerrainTypeAtPosition(204,200));
-        Assert.assertEquals(1, gameBoard.getLevelAtPosition(204,200));
-        Assert.assertEquals(2, gameBoard.getTileIDAtPosition(204,200));
-        Assert.assertEquals(volcano, gameBoard.getTerrainTypeAtPosition(206,200));
-        Assert.assertEquals(1, gameBoard.getLevelAtPosition(206,200));
-        Assert.assertEquals(2, gameBoard.getTileIDAtPosition(206,200));
-        Assert.assertEquals(jungle, gameBoard.getTerrainTypeAtPosition(205,201));
-        Assert.assertEquals(1, gameBoard.getLevelAtPosition(205,201));
-        Assert.assertEquals(2, gameBoard.getTileIDAtPosition(205,201));
+        Assert.assertEquals(grasslands, gameBoard.getTerrainTypeAtPosition(200,202));
+        Assert.assertEquals(1, gameBoard.getLevelAtPosition(200,202));
+        Assert.assertEquals(2, gameBoard.getTileIDAtPosition(200,202));
+        Assert.assertEquals(jungle, gameBoard.getTerrainTypeAtPosition(202,202));
+        Assert.assertEquals(1, gameBoard.getLevelAtPosition(202,202));
+        Assert.assertEquals(2, gameBoard.getTileIDAtPosition(202,202));
+        Assert.assertEquals(volcano, gameBoard.getTerrainTypeAtPosition(201,201));
+        Assert.assertEquals(1, gameBoard.getLevelAtPosition(201,201));
+        Assert.assertEquals(2, gameBoard.getTileIDAtPosition(201,201));
 
-        //gameBoard.printBoard();
     }
 
-    @Test
-    public void createBoardAndStackTiles() {
+    //TODO: Figure out how to assert that this test will fail...
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createBoardAndStackTwoTiles() {
         Board gameBoard = new Board();
 
         TerrainType volcano = TerrainType.VOLCANO;
@@ -106,21 +107,6 @@ public class BoardTests {
 
         gameBoard.placeTile(tile1, testPoint);
         gameBoard.placeTile(tile2, testPoint);
-
-        Assert.assertEquals(grasslands, gameBoard.getTerrainTypeAtPosition(200,200));
-        Assert.assertEquals(2, gameBoard.getLevelAtPosition(200,200));
-        Assert.assertEquals(2, gameBoard.getTileIDAtPosition(200,200));
-        Assert.assertEquals(volcano, gameBoard.getTerrainTypeAtPosition(202,200));
-        Assert.assertEquals(2, gameBoard.getLevelAtPosition(202,200));
-        Assert.assertEquals(2, gameBoard.getTileIDAtPosition(202,200));
-        Assert.assertEquals(rocky, gameBoard.getTerrainTypeAtPosition(201,201));
-        Assert.assertEquals(2, gameBoard.getLevelAtPosition(201,201));
-        Assert.assertEquals(2, gameBoard.getTileIDAtPosition(201,201));
-
-        //gameBoard.printBoard();
-
     }
-    */
-    //TODO: Taylor fix this shit
 }
 
