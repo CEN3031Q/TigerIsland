@@ -92,46 +92,26 @@ public class Board {
         }
         this.nextTileID++;
 
-        TerrainType left = tileToPlace.getTerrainTypeForPosition(HexagonPosition.LEFT);
-        TerrainType right = tileToPlace.getTerrainTypeForPosition(HexagonPosition.RIGHT);
-        TerrainType middle = tileToPlace.getTerrainTypeForPosition(HexagonPosition.MIDDLE);
-
         HexagonNeighborsCalculator calc = new HexagonNeighborsCalculator(tileCoordinate,
                                                                         tileToPlace.getOrientation(),
                                                                         tileToPlace.getAnchorPosition());
 
-        //Here I actually go to each of the coordinates and set the hexes' terrain types based on the Orientation and anchor
-        if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.MIDDLE) {
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(middle);
-            gameBoard.get(yCoordinate - 1).get(xCoordinate - 1).setTerrainType(left);
-            gameBoard.get(yCoordinate - 1).get(xCoordinate + 1).setTerrainType(right);
-        }
-        else if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.LEFT) {
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(left);
-            gameBoard.get(yCoordinate + 1).get(xCoordinate + 1).setTerrainType(middle);
-            gameBoard.get(yCoordinate).get(xCoordinate + 2).setTerrainType(right);
-        }
-        else if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.RIGHT) {
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(right);
-            gameBoard.get(yCoordinate).get(xCoordinate - 2).setTerrainType(left);
-            gameBoard.get(yCoordinate + 1).get(xCoordinate - 1).setTerrainType(middle);
-        }
-        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.MIDDLE){
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(middle);
-            gameBoard.get(yCoordinate - 1).get(xCoordinate - 1).setTerrainType(left);
-            gameBoard.get(yCoordinate - 1).get(xCoordinate + 1).setTerrainType(right);
-        }
-        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.LEFT){
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(left);
-            gameBoard.get(yCoordinate + 1).get(xCoordinate + 1).setTerrainType(middle);
-            gameBoard.get(yCoordinate).get(xCoordinate + 2).setTerrainType(right);
-        }
-        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.RIGHT){
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(right);
-            gameBoard.get(yCoordinate - 1).get(xCoordinate - 1).setTerrainType(middle);
-            gameBoard.get(yCoordinate).get(xCoordinate - 2).setTerrainType(left);
-        }
-        //trying to fin the min and max to print from
+        HashMap<HexagonPosition, Point> points = calc.pointsForTerrainHexagons();
+
+        Point leftPoint = points.get(HexagonPosition.LEFT);
+        Point midPoint = points.get(HexagonPosition.MIDDLE);
+        Point rightPoint = points.get(HexagonPosition.RIGHT);
+
+        TerrainType leftTerrain = tileToPlace.getTerrainTypeForPosition(HexagonPosition.LEFT);
+        TerrainType rightTerrain = tileToPlace.getTerrainTypeForPosition(HexagonPosition.RIGHT);
+        TerrainType middleTerrain = tileToPlace.getTerrainTypeForPosition(HexagonPosition.MIDDLE);
+
+        gameBoard.get(leftPoint.y).get(leftPoint.x).setTerrainType(leftTerrain);
+        gameBoard.get(midPoint.y).get(midPoint.x).setTerrainType(middleTerrain);
+        gameBoard.get(rightPoint.y).get(rightPoint.x).setTerrainType(rightTerrain);
+
+        // Trying to find the min and max to print from
+
         for (int ii = 0; ii < 400; ii++) {
             for (int jj = 0; jj < 400; jj++) {
                 if(gameBoard.get(ii).get(jj).getTileID() != 0){
@@ -150,7 +130,8 @@ public class Board {
                 }
             }
         }
-        //making sure we don't go less than 0 or greater than 400
+        
+        // Making sure we don't go less than 0 or greater than 400
         if(minBoardX >= 3){
             minBoardX = minBoardX - 3;
         }
@@ -193,7 +174,7 @@ public class Board {
         return new ArrayList<ArrayList<Hexagon>>(gameBoard);
     }
 
-    public Hexagon hexagonAtPoint(Point p) {
+    public Hexagon copyOfHexagonAtPoint(Point p) {
         return new Hexagon(gameBoard.get(p.y).get(p.x));
     }
 
