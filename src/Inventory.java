@@ -44,48 +44,35 @@ public class Inventory {
     public int getTigerSize(){
         return tigerList.size();
     }
-    public Pieces getMeepleObject(){
-        return meepleList.get(5);
+    public Pieces removeMeeplePiece() throws ArrayIndexOutOfBoundsException {
+        if(isMeepleEmpty()) {
+            throw new ArrayIndexOutOfBoundsException("No more Meeple pieces remaining.");
+        }
+        return meepleList.remove(0);
     }
-    public Pieces getTotoroObject(){
-        return totoroList.get(1);
+    public Pieces removeTotoroPiece() throws ArrayIndexOutOfBoundsException {
+        if(isTotoroEmpty()) {
+            throw new ArrayIndexOutOfBoundsException("No more Totoro pieces remaining.");
+        }
+        return totoroList.remove(0);
     }
-    public Pieces getTigerObject(){
-        return tigerList.get(1);
-    }
-    public void removeMeeplePiece(){
-        meepleList.remove(Pieces.MEEPLE);
-    }
-    public void removeTotoroPiece(){
-        totoroList.remove(Pieces.TOTORO);
-    }
-    public void removeTigerPiece(){
-        tigerList.remove(Pieces.TIGER);
+    public Pieces removeTigerPiece() throws ArrayIndexOutOfBoundsException {
+        if(isTigerEmpty()) {
+            throw new ArrayIndexOutOfBoundsException("No more Tiger pieces remaining.");
+        }
+        return tigerList.remove(0);
     }
     public boolean isMeepleEmpty() {
-        if(getMeepleSize() == 0) {
-            return true;
-        }
-        else return false;
+        return meepleList.size() == 0;
     }
     public boolean isTotoroEmpty() {
-        if(getTotoroSize() == 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return totoroList.size() == 0;
     }
     public boolean isTigerEmpty() {
-        if(getTigerSize() == 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return tigerList.size() == 0;
     }
     public boolean isInventoryEmpty() {
-        if(getMeepleSize() == 0 && getTotoroSize() == 0 && getTigerSize() == 0) {
+        if(isMeepleEmpty() && isTotoroEmpty() && isTigerEmpty()) {
             return true;
         }
         else {
