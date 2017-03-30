@@ -27,13 +27,13 @@ public class TilePlacementRule {
 
         List<Hexagon> hexagonsWithinTile = calc.neighborsWithinTile()
                 .stream()
-                .map( neighborPoint -> board.hexagonAtPoint(neighborPoint))
+                .map( neighborPoint -> board.copyOfHexagonAtPoint(neighborPoint))
                 .filter( hex -> hex.getTileID() != 0)
                 .collect(toList());
 
         List<Hexagon> hexagonsAroundTile = calc.neighborsAroundTile()
                 .stream()
-                .map( neighborPoint -> board.hexagonAtPoint(neighborPoint))
+                .map( neighborPoint -> board.copyOfHexagonAtPoint(neighborPoint))
                 .filter( hex -> hex.getTileID() != 0)
                 .collect(toList());
 
