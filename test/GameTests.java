@@ -79,8 +79,8 @@ public class GameTests {
         MockActionPerformer actionPerformer1 = new MockActionPerformer(new Point(200, 200), true);
         MockActionPerformer actionPerformer2 = new MockActionPerformer(new Point(200, 198), true);
 
-        Player p1 = new Player(actionPerformer1);
-        Player p2 = new Player(actionPerformer2);
+        Player p1 = new Player(1, actionPerformer1);
+        Player p2 = new Player(2, actionPerformer2);
 
         Player[] players = {p1, p2};
 

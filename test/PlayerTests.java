@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.awt.*;
+
 public class PlayerTests {
 
     private static GameActionPerformer gap;
@@ -16,7 +18,7 @@ public class PlayerTests {
         playerID = 1;
         gap = new GameActionPerformer() {
             @Override
-            public Coordinate tileAction(Tile tile, Board board) {
+            public Point tileAction(Tile tile, Board board) {
                 return null;
             }
 
