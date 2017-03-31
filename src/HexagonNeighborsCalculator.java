@@ -58,8 +58,8 @@ public class HexagonNeighborsCalculator {
 
         if (orientation == TileOrientation.BOTTOMHEAVY && position == HexagonPosition.MIDDLE) {
             positionsMap.put(HexagonPosition.MIDDLE, new Point(0, 0));
-            positionsMap.put(HexagonPosition.LEFT, new Point(-1, -1));
-            positionsMap.put(HexagonPosition.RIGHT, new Point(1, -1));
+            positionsMap.put(HexagonPosition.LEFT, new Point(-1, 1));
+            positionsMap.put(HexagonPosition.RIGHT, new Point(1, 1));
         }
 
         if (orientation == TileOrientation.BOTTOMHEAVY && position == HexagonPosition.LEFT) {

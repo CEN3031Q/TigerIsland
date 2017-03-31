@@ -28,7 +28,7 @@ public class GameTests {
 
             public Point tileAction(Tile tile, Board board) {
             Point toReturn = point;
-            if (decrements) { point = new Point(toReturn.x - 2, toReturn.y - 2); }
+            if (decrements) { point = new Point(toReturn.x, toReturn.y - 2); }
             return toReturn;
         }
 
@@ -77,7 +77,7 @@ public class GameTests {
     @Test()
     public void testGameEndsWhenDeckEmptyAndHandlesException() {
         MockActionPerformer actionPerformer1 = new MockActionPerformer(new Point(200, 200), true);
-        MockActionPerformer actionPerformer2 = new MockActionPerformer(new Point(199, 199), true);
+        MockActionPerformer actionPerformer2 = new MockActionPerformer(new Point(200, 198), true);
 
         Player p1 = new Player(actionPerformer1);
         Player p2 = new Player(actionPerformer2);

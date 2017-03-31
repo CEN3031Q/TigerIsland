@@ -14,8 +14,10 @@ import java.awt.*;
 
 public class CreateSettlementSteps {
     Board gameBoard = new Board();
+
     UserInteractor userInteractor = new UserInteractor();
     Player daveXtraLarge = new Player(userInteractor);
+
     final int maxBoardDimension= 400;
     Tile existingTile = new Tile(TerrainType.VOLCANO, TerrainType.GRASSLANDS, TerrainType.JUNGLE);
 
@@ -29,7 +31,8 @@ public class CreateSettlementSteps {
 
         for(int i = 0; i < maxBoardDimension; ++i){
             for(int j = 0; j < maxBoardDimension; ++j){
-                if (gameBoard.getLevelAtPosition(i, j) != 0){
+                Point p = new Point(i, j);
+                if (gameBoard.getLevelAtPoint(p) != 0){
                     isBoardEmpty = false;
                 }
             }
@@ -44,15 +47,14 @@ public class CreateSettlementSteps {
         int x = 200;
         int y = 200;
 
-        Assert.assertEquals(1, gameBoard.getLevelAtPosition(200,200));
-        Assert.assertEquals(1, gameBoard.getLevelAtPosition(202,200));
-        Assert.assertEquals(1, gameBoard.getLevelAtPosition(201,201));
-
+        Point p = new Point(200, 200);
+        Assert.assertEquals(1, gameBoard.getTileIDAtPoint(p));
     }
 
     @Then("^The location receives 1 villager$")
-    public void locationReceivesVillager(){
-        gameBoard.setVillagersAtPosition(1, 200, 200);
+    public void locationReceivesVillager() {
+        Point p = new Point(200, 200);
+        gameBoard.setVillagersAtPoint(1, p);
     }
 
     @And("^The player removes 1 villager from their inventory$")

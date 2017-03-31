@@ -6,21 +6,22 @@ public class Tile {
     private HexagonPosition anchor;
 
     public Tile(TerrainType leftType, TerrainType rightType, TerrainType middleType) {
-        middleHex = new Hexagon(middleType);
-        rightHex = new Hexagon(rightType);
         leftHex = new Hexagon(leftType);
+        rightHex = new Hexagon(rightType);
+        middleHex = new Hexagon(middleType);
         tileOrientation = TileOrientation.TOPHEAVY;
-        anchor = HexagonPosition.MIDDLE;  //Used to determine valid placement of tile
+        anchor = HexagonPosition.MIDDLE;
     }
 
     public TerrainType getTerrainTypeForPosition(HexagonPosition position) {
         switch (position) {
-            case MIDDLE:
-                return middleHex.getTerrainType();
-            case RIGHT:
-                return rightHex.getTerrainType();
             case LEFT:
                 return leftHex.getTerrainType();
+            case RIGHT:
+                return rightHex.getTerrainType();
+            case MIDDLE:
+                return middleHex.getTerrainType();
+
         }
         return null;
     }

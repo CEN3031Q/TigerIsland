@@ -61,10 +61,6 @@ public class Board {
                 other.maxBoardX == maxBoardX;
     }
 
-    //don't need rule enforcement
-    //change the name of setLevel needs to become incrementLevel
-    //make it not take inputs. just increment
-    //
     public void placeTile(Tile tileToPlace, Point tileCoordinate) throws IllegalArgumentException {
         HashMap<Point, Boolean> validCoordinates = validPositionsForNewTile(tileToPlace);
 
@@ -72,82 +68,29 @@ public class Board {
             throw new IllegalArgumentException("{ " + tileCoordinate.getX() + ", " + tileCoordinate.getY() + " } is not a playable spot!");
         }
 
-        int xCoordinate = (int)tileCoordinate.getX();
-        int yCoordinate = (int)tileCoordinate.getY();
+        HexagonNeighborsCalculator calc = new HexagonNeighborsCalculator(tileCoordinate, tileToPlace.getOrientation(), tileToPlace.getAnchorPosition());
+        HashMap<HexagonPosition, Point> points = calc.pointsForTerrainHexagons();
+
+        Point leftPoint = points.get(HexagonPosition.LEFT);
+        Point midPoint = points.get(HexagonPosition.MIDDLE);
+        Point rightPoint = points.get(HexagonPosition.RIGHT);
 
         TerrainType left = tileToPlace.getTerrainTypeForPosition(HexagonPosition.LEFT);
         TerrainType right = tileToPlace.getTerrainTypeForPosition(HexagonPosition.RIGHT);
         TerrainType middle = tileToPlace.getTerrainTypeForPosition(HexagonPosition.MIDDLE);
 
-        HexagonNeighborsCalculator calc = new HexagonNeighborsCalculator(tileCoordinate,
-                tileToPlace.getOrientation(),
-                tileToPlace.getAnchorPosition());
+        hexagonAtPoint(leftPoint).setTerrainType(left);
+        hexagonAtPoint(rightPoint).setTerrainType(right);
+        hexagonAtPoint(midPoint).setTerrainType(middle);
 
-
-        //Here I actually go to each of the coordinates and set the hexes' terrain types based on the Orientation and anchor
-        if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.MIDDLE) {
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(middle);
-            gameBoard.get(yCoordinate - 1).get(xCoordinate - 1).setTerrainType(left);
-            gameBoard.get(yCoordinate - 1).get(xCoordinate + 1).setTerrainType(right);
-
-            //Move x, y to upper left corner of tile to place it
-            yCoordinate -= 1;
-            xCoordinate -= 1;
-        }
-        else if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.LEFT) {
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(left);
-            gameBoard.get(yCoordinate + 1).get(xCoordinate + 1).setTerrainType(middle);
-            gameBoard.get(yCoordinate).get(xCoordinate + 2).setTerrainType(right);
-
-            //Move x, y to upper left corner of tile to place it
-            //Nothing to do here, default tile is topheavy + left anchor
-        }
-        else if(tileToPlace.getOrientation() == TileOrientation.TOPHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.RIGHT) {
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(right);
-            gameBoard.get(yCoordinate).get(xCoordinate - 2).setTerrainType(left);
-            gameBoard.get(yCoordinate + 1).get(xCoordinate - 1).setTerrainType(middle);
-
-            //Move x, y to upper left corner of tile to place it
-            xCoordinate -= 2;
-        }
-        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.MIDDLE){
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(middle);
-            gameBoard.get(yCoordinate + 1).get(xCoordinate - 1).setTerrainType(left);
-            gameBoard.get(yCoordinate + 1).get(xCoordinate + 1).setTerrainType(right);
-
-            //Move x, y to upper left corner of tile to place it
-            xCoordinate -= 1;
-        }
-        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.LEFT){
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(left);
-            gameBoard.get(yCoordinate - 1).get(xCoordinate + 1).setTerrainType(middle);
-            gameBoard.get(yCoordinate).get(xCoordinate + 2).setTerrainType(right);
-
-            //Move x, y to upper left corner of tile to place it
-            yCoordinate -= 1;
-        }
-        else if (tileToPlace.getOrientation() == TileOrientation.BOTTOMHEAVY && tileToPlace.getAnchorPosition() == HexagonPosition.RIGHT){
-            gameBoard.get(yCoordinate).get(xCoordinate).setTerrainType(right);
-            gameBoard.get(yCoordinate - 1).get(xCoordinate - 1).setTerrainType(middle);
-            gameBoard.get(yCoordinate).get(xCoordinate - 2).setTerrainType(left);
-
-            //Move x, y to upper left corner of tile to place it
-            yCoordinate -= 1;
-            xCoordinate -= 2;
+        for (Point point : calc.neighborsWithinTile()) {
+            Hexagon hex = hexagonAtPoint(point);
+            hex.incrementLevel();
+            hex.setOccupied(false);
+            hex.setTileID(nextTileID);
         }
 
-        //this is where it changes all of the values
-        //change the bounds if i loop based off of the anchor
-        //or don't even loop, just get the left and right locations and change the values
-        for (int ii = yCoordinate; ii < yCoordinate+2; ii++) {
-            for (int jj = xCoordinate; jj < xCoordinate+3; jj++) {
-                Hexagon hex = gameBoard.get(ii).get(jj);
-                hex.incrementLevel();
-                hex.setTileID(nextTileID);
-                hex.setOccupied(false);
-            }
-        }
-        this.nextTileID++;
+        nextTileID++;
 
         //trying to fin the min and max to print from
         for (int ii = 0; ii < 400; ii++) {
@@ -211,28 +154,32 @@ public class Board {
         return new ArrayList<ArrayList<Hexagon>>(gameBoard);
     }
 
+    private Hexagon hexagonAtPoint(Point p) {
+        return gameBoard.get(p.y).get(p.x);
+    }
+
     public Hexagon copyOfHexagonAtPoint(Point p) {
-        return new Hexagon(gameBoard.get(p.y).get(p.x));
+        return new Hexagon(hexagonAtPoint(p));
     }
 
-    public TerrainType getTerrainTypeAtPosition(int xPosition, int yPosition) {
-        return gameBoard.get(yPosition).get(xPosition).getTerrainType();
+    public TerrainType getTerrainTypeAtPoint(Point point) {
+        return hexagonAtPoint(point).getTerrainType();
     }
 
-    public int getLevelAtPosition(int xPosition, int yPosition) {
-        return gameBoard.get(yPosition).get(xPosition).getLevel();
+    public int getLevelAtPoint(Point point) {
+        return hexagonAtPoint(point).getLevel();
     }
 
-    public int getTileIDAtPosition(int xPosition, int yPosition) {
-        return gameBoard.get(yPosition).get(xPosition).getTileID();
+    public int getTileIDAtPoint(Point point) {
+        return hexagonAtPoint(point).getTileID();
     }
 
-    public int getVillagerNumberAtPosition(int xPosition, int yPosition) {
-        return gameBoard.get(yPosition).get(xPosition).getNumVillagersOnTop();
+    public int getVillagerNumberAtPoint(Point point) {
+        return hexagonAtPoint(point).getNumVillagersOnTop();
     }
 
-    public void setVillagersAtPosition(int numOfVillagers, int xPosition, int yPosition){
-        gameBoard.get(yPosition).get(xPosition).setVillagersOnTop(numOfVillagers);
+    public void setVillagersAtPoint(int numOfVillagers, Point point){
+        hexagonAtPoint(point).setVillagersOnTop(numOfVillagers);
     }
 
     public int getNextTileID() {

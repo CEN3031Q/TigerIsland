@@ -26,7 +26,7 @@ public class TilePlacementSteps {
         boolean isBoardEmpty = true;
         for(int i = 0; i < maxBoardDimension; ++i){
             for(int j = 0; j < maxBoardDimension; ++j){
-                if (gameBoard.getLevelAtPosition(i, j) != 0){
+                if (gameBoard.getLevelAtPoint(new Point(i, j)) != 0){
                     isBoardEmpty = false;
                 }
             }
@@ -61,14 +61,12 @@ public class TilePlacementSteps {
     @Then("^The tile is placed on the board$")
     public void tilePlaced(){
         Tile playerTile = new Tile(TerrainType.VOLCANO, TerrainType.GRASSLANDS, TerrainType.JUNGLE);
-        int x = 200;
-        int y = 200;
-        Point testCoordinate = new Point(x, y);
+
+        Point testCoordinate = new Point(200, 200);
         gameBoard.placeTile(playerTile, testCoordinate);
 
-        Assert.assertEquals(1, gameBoard.getLevelAtPosition(200,200));
-        Assert.assertEquals(1, gameBoard.getLevelAtPosition(202,200));
-        Assert.assertEquals(1, gameBoard.getLevelAtPosition(201,201));
-
+        Assert.assertEquals(1, gameBoard.getLevelAtPoint(new Point(200,200)));
+        Assert.assertEquals(1, gameBoard.getLevelAtPoint(new Point(199,199)));
+        Assert.assertEquals(1, gameBoard.getLevelAtPoint(new Point(201,199)));
     }
 }

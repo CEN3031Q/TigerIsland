@@ -30,6 +30,8 @@ public class TilePlacementTests {
         TerrainType jungle = TerrainType.JUNGLE;
 
         Tile tile1 = new Tile(volcano, grasslands, jungle);
+        tile1.changeAnchorPosition(HexagonPosition.LEFT);
+
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         gameBoard.placeTile(tile1, new Point(200, 200));
@@ -63,6 +65,8 @@ public class TilePlacementTests {
         TerrainType jungle = TerrainType.JUNGLE;
 
         Tile tile1 = new Tile(volcano, grasslands, jungle);
+        tile1.changeAnchorPosition(HexagonPosition.LEFT);
+
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         gameBoard.placeTile(tile1, new Point(200, 200));
@@ -97,6 +101,8 @@ public class TilePlacementTests {
         TerrainType jungle = TerrainType.JUNGLE;
 
         Tile tile1 = new Tile(volcano, grasslands, jungle);
+        tile1.changeAnchorPosition(HexagonPosition.LEFT);
+
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         gameBoard.placeTile(tile1, new Point(200, 200));
@@ -131,6 +137,8 @@ public class TilePlacementTests {
         TerrainType jungle = TerrainType.JUNGLE;
 
         Tile tile1 = new Tile(volcano, grasslands, jungle);
+        tile1.changeAnchorPosition(HexagonPosition.LEFT);
+
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         gameBoard.placeTile(tile1, new Point(200, 200));
@@ -164,6 +172,8 @@ public class TilePlacementTests {
         TerrainType jungle = TerrainType.JUNGLE;
 
         Tile tile1 = new Tile(volcano, grasslands, jungle);
+        tile1.changeAnchorPosition(HexagonPosition.LEFT);
+
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         gameBoard.placeTile(tile1, new Point(200, 200));
@@ -197,6 +207,8 @@ public class TilePlacementTests {
         TerrainType jungle = TerrainType.JUNGLE;
 
         Tile tile1 = new Tile(volcano, grasslands, jungle);
+        tile1.changeAnchorPosition(HexagonPosition.LEFT);
+
         Tile tile2 = new Tile(grasslands, volcano, rocky);
 
         gameBoard.placeTile(tile1, new Point(200, 200));
