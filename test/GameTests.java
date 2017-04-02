@@ -41,8 +41,8 @@ public class GameTests {
     public void testGameCreatedWithPlayers() {
         MockActionPerformer actionPerformer = new MockActionPerformer();
 
-        Player p1 = new Player(actionPerformer);
-        Player p2 = new Player(actionPerformer);
+        Player p1 = new Player(1, actionPerformer);
+        Player p2 = new Player(2, actionPerformer);
 
         Player[] originalPlayers = {p1, p2};
 
@@ -55,8 +55,8 @@ public class GameTests {
     public void testGameEliminatesPlayer() {
         MockActionPerformer actionPerformer = new MockActionPerformer();
 
-        Player p1 = new Player(actionPerformer);
-        Player p2 = new Player(actionPerformer);
+        Player p1 = new Player(1, actionPerformer);
+        Player p2 = new Player(2, actionPerformer);
 
         Player[] originalPlayers = {p1, p2};
         Player[] onlyPlayer2 = {p2};

@@ -16,7 +16,7 @@ import java.awt.*;
 public class TilePlacementSteps {
     UserInteractor userInteractor = new UserInteractor();
     Board gameBoard = new Board();
-    Player daveLarge = new Player(userInteractor);
+    Player daveLarge = new Player(1, userInteractor);
     final int maxBoardDimension = 400;
 
 

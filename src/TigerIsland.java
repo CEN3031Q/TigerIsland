@@ -6,8 +6,8 @@ public class TigerIsland {
     static public void main(String... args) {
         UserInteractor sharedInteractor = new UserInteractor();
 
-        Player firstPlayer = new Player(sharedInteractor);
-        Player secondPlayer = new Player(sharedInteractor);
+        Player firstPlayer = new Player(1, sharedInteractor);
+        Player secondPlayer = new Player(2, sharedInteractor);
 
         Game game = new Game(firstPlayer, secondPlayer);
         game.runGameLoop();
