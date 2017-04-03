@@ -21,12 +21,9 @@ public class Player {
         return gameActionPerformer;
     }
     public int getMeepleSize(){return inventory.getMeepleSize();}
-    public int getTigerSize(){return inventory.getTigerSize();}
     public int getTotoroSize(){return inventory.getTotoroSize();}
-    public void placeMeeplePiece(){inventory.removeMeeplePiece();}
-    public void placeTigerPiece(){inventory.removeTigerPiece();}
-    public void placeTotoroPiece(){inventory.removeTotoroPiece();}
-
-
-
+    public int getTigerSize(){return inventory.getTigerSize();}
+    public Meeple placeMeeplePiece(){return inventory.removeMeeplePiece();}
+    public Totoro placeTotoroPiece(){return inventory.removeTotoroPiece();}
+    public Tiger placeTigerPiece(){return inventory.removeTigerPiece();}
 }

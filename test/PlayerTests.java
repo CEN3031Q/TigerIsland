@@ -48,6 +48,21 @@ public class PlayerTests {
         Assert.assertEquals(2, p1.getTigerSize());
     }
     @Test
+    public void meeplePlacedTest() {
+        Player p1 = new Player(playerID, gap);
+        Assert.assertTrue(p1.placeMeeplePiece() instanceof Meeple);
+    }
+    @Test
+    public void totoroPlacedTest() {
+        Player p1 = new Player(playerID, gap);
+        Assert.assertTrue(p1.placeTotoroPiece() instanceof Totoro);
+    }
+    @Test
+    public void tigerPlacedTest() {
+        Player p1 = new Player(playerID, gap);
+        Assert.assertTrue(p1.placeTigerPiece() instanceof Tiger);
+    }
+    @Test
     public void meepleSizeAfterPlacementTest(){
         Player p1 = new Player(playerID, gap);
         p1.placeMeeplePiece();
