@@ -15,6 +15,7 @@ public class SettlementManager {
         this.gameBoard = gameBoard;
     }
 
+    /* TODO: BFS STUFF
     public int calculateSettlementSizeAtPoint(Point pointToCheck){
         TerrainType pointTerrainType = gameBoard.getTerrainTypeAtPoint(pointToCheck);
 
@@ -29,6 +30,21 @@ public class SettlementManager {
         }
 
     }
+    */
 
+    public void addNewSettlement(Settlement settlementToAdd){
+        listOfSettlements.add(settlementToAdd);
+    }
+
+    // Given a point, runs through every settlement and checks if the point is in a settlement
+    // and returns that size
+    public int calculateSettlementSizeAtPoint(Point pointToCheck){
+        for(Settlement s : listOfSettlements){
+            if (s.pointExistsInThisSettlement(pointToCheck)){
+                return s.getSettlementSize();
+            }
+        }
+        return 0;
+    }
 
 }
