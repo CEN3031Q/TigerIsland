@@ -26,7 +26,7 @@ public class GameTests {
             decrements = false;
         }
 
-            public Point tileAction(Tile tile, Board board) {
+        public Point tileAction(Tile tile, Board board) {
             Point toReturn = point;
             if (decrements) { point = new Point(toReturn.x, toReturn.y - 2); }
             return toReturn;
