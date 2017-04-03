@@ -29,7 +29,7 @@ public class Hexagon {
         this.terrainType = hex.terrainType;
         this.tileID = hex.tileID;
         this.level = hex.level;
-        this.numVillagersOnTop = hex.numVillagersOnTop;
+        this.numberOfVillagersOnTop = hex.numberOfVillagersOnTop;
         this.occupied = hex.occupied;
         this.validSpace = hex.validSpace;
     }
@@ -87,7 +87,7 @@ public class Hexagon {
     public boolean getTigerOnTop(){ return this.tigerOnTop; }
 
 
-    public int getNumVillagersOnTop() { return this.numVillagersOnTop; }
+    public int getNumVillagersOnTop() { return this.numberOfVillagersOnTop; }
 
     public void printTerrain (TerrainType terrain){
         if(terrain == TerrainType.VOLCANO){
