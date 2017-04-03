@@ -13,22 +13,20 @@ public class SettlementTest {
 
     @Test
     public void findSettlementSizeTest(){
-        MockScenario m = new MockScenario();
         Board gameBoard = new Board();
-
-        m.getTileWithGivenTerrain(TerrainType.GRASSLANDS, TerrainType.GRASSLANDS, TerrainType.GRASSLANDS);
 
         gameBoard.setVillagersAtPoint(1, new Point(200, 200));
         gameBoard.setVillagersAtPoint(1, new Point(202, 200));
-        gameBoard.setVillagersAtPoint(1, new Point(201, 201);
+        gameBoard.setVillagersAtPoint(1, new Point(201, 201));
 
-        SettlementManager settlementManager = new SettlementManager();
+        Settlement testSettlement = new Settlement(new Point(200, 200));
+        testSettlement.addPointToSettlement(new Point(202, 200));
+        testSettlement.addPointToSettlement(new Point(201, 201));
 
+        SettlementManager settlementManager = new SettlementManager(gameBoard);
+        settlementManager.addNewSettlement(testSettlement);
 
-        Assert.assertEquals(3, settlementManager.calculateSettlementSizeAtPoint(new Point(200, 200)););
+        Assert.assertEquals(3, settlementManager.calculateSettlementSizeAtPoint(new Point(200, 200)));
     }
-
-
-
 
 }
