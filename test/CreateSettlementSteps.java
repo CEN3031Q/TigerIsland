@@ -10,6 +10,7 @@ import java.awt.*;
 /**
  * Created by hugh on 3/24/17.
  * Acceptance tests for making a new settlement
+ * TODO: Refactor this class after making the settlement class
  */
 
 public class CreateSettlementSteps {
