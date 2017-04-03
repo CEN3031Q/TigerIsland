@@ -3,4 +3,6 @@ class Piece {
     public Piece(int playerID) {
         this.playerID = playerID;
     }
+
+    public int getPlayerID() {return  playerID; }
 }
