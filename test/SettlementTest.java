@@ -1,4 +1,7 @@
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.awt.*;
 
 /**
  * Created by hugh on 3/29/17.
@@ -15,18 +18,17 @@ public class SettlementTest {
 
         m.getTileWithGivenTerrain(TerrainType.GRASSLANDS, TerrainType.GRASSLANDS, TerrainType.GRASSLANDS);
 
-        gameBoard.setVillagersAtPosition(1, 200, 200);
-        gameBoard.setVillagersAtPosition(1, 202, 200);
-        gameBoard.setVillagersAtPosition(1, 201, 201);
+        gameBoard.setVillagersAtPoint(1, new Point(200, 200));
+        gameBoard.setVillagersAtPoint(1, new Point(202, 200));
+        gameBoard.setVillagersAtPoint(1, new Point(201, 201);
 
-        Settlement s = new Settlement(200, 200);
+        SettlementManager settlementManager = new SettlementManager();
 
 
+        Assert.assertEquals(3, settlementManager.calculateSettlementSizeAtPoint(new Point(200, 200)););
     }
 
-    // Can probably split this function up or move it
-    public int checkForAdjacentVillager(Board gameBoard){
 
-    }
+
 
 }

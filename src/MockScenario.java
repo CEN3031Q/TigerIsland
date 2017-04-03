@@ -1,3 +1,5 @@
+import java.awt.*;
+
 /**
  * Created by hugh on 3/29/17.
  * This class helps to quickly create different states for the board to
@@ -21,7 +23,7 @@ public class MockScenario {
         Board gameBoard = new Board();
 
         Tile testTile = new Tile(TerrainType.GRASSLANDS, TerrainType.LAKE, TerrainType.VOLCANO);
-        gameBoard.placeTile(testTile, 200, 200);
+        gameBoard.placeTile(testTile, new Point(200, 200));
         return gameBoard;
     }
 

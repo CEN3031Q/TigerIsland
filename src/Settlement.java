@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -6,21 +7,27 @@ import java.util.ArrayList;
  * TODO: Find out what should be the entity should be in charge of settlements
  */
 
-
 public class Settlement {
-    private ArrayList<Coordinate> coordinatesInSettlement = new ArrayList<>();
+    // List of all hexagons in a particular settlement
+    private ArrayList<Point> pointsInSettlement = new ArrayList<>();
 
-    // Constructor takin in a Coordinate object
-    public Settlement(Coordinate newSettlementCoordinate){
-        coordinatesInSettlement.add(newSettlementCoordinate);
+    // Constructor taking in a Point object
+    public Settlement(Point newSettlementPoint){
+
     }
 
-    // An overloaded constructor if we want to use x, y int values
-    public Settlement(int xPosition, int yPosition){
-        coordinatesInSettlement.add(new Coordinate(xPosition, yPosition));
+    public void addPointToSettlement(Point pointToAdd){
+        pointsInSettlement.add(pointToAdd);
     }
 
- 
+    public void removePointToSettle(Point pointToRemove){
+            pointsInSettlement.remove(pointToRemove);
+    }
+
+    public int getSettlementSize(){
+        return pointsInSettlement.size();
+    }
+
 
 
 }
