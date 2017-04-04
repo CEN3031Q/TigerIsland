@@ -1,29 +1,45 @@
+import javafx.geometry.Point3D;
+
 public class Player {
-    private int playerID;
-    private Inventory inventory;
+    private int id;
+    private Game game;
+
     private GameActionPerformer gameActionPerformer;
 
-    // The tile the player has just drawn
-    // Currently set to public for testing purposes
-    // Maybe move this responsibility elsewhere
-    Tile tileInHand;
+    public Player(int id, Game game) {
+        this.id = id;
+        this.game = game;
 
-    public Player(int playerID, GameActionPerformer actionPerformer) {
-        this.playerID = playerID;
-        inventory = new Inventory(playerID);
-        gameActionPerformer = actionPerformer;
-
-        tileInHand = null;
+        this.gameActionPerformer = new GameAI(id);
     }
 
-    public int getPlayerID() {return playerID;}
-    public GameActionPerformer getGameActionPerformer() {
-        return gameActionPerformer;
+    public int getPlayerID() {
+        return id;
     }
-    public int getMeepleSize(){return inventory.getMeepleSize();}
-    public int getTotoroSize(){return inventory.getTotoroSize();}
-    public int getTigerSize(){return inventory.getTigerSize();}
-    public Meeple placeMeeplePiece(){return inventory.removeMeeplePiece();}
-    public Totoro placeTotoroPiece(){return inventory.removeTotoroPiece();}
-    public Tiger placeTigerPiece(){return inventory.removeTigerPiece();}
+
+    /**** CHANNELS OF COMMUNICATION ****/
+
+    // Make our move
+
+    public Point3D performTileAction(Tile tile) {
+        Point3D chosenPoint = gameActionPerformer.tileAction(tile, game.getBoardCopy());
+        game.applyTileAction(tile, chosenPoint);
+        return chosenPoint;
+    }
+
+    public BuildAction performBuildAction() {
+        BuildAction chosenBuildAction = gameActionPerformer.buildAction(game.getBoardCopy());
+        game.applyBuildAction(chosenBuildAction);
+        return chosenBuildAction;
+    }
+
+    // Apply opponents move
+
+    public void applyOtherTileAction(Tile tile, Point3D point) {
+        game.applyTileAction(tile, point);
+    }
+
+    public void applyOtherBuildAction(BuildAction action) {
+        game.applyBuildAction(action);
+    }
 }
