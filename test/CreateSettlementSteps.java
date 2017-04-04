@@ -16,7 +16,7 @@ public class CreateSettlementSteps {
     Board gameBoard = new Board();
 
     UserInteractor userInteractor = new UserInteractor();
-    Player daveXtraLarge = new Player(userInteractor);
+    Player daveXtraLarge = new Player(1, userInteractor);
 
     final int maxBoardDimension= 400;
     Tile existingTile = new Tile(TerrainType.VOLCANO, TerrainType.GRASSLANDS, TerrainType.JUNGLE);

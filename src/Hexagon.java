@@ -1,5 +1,3 @@
-import cucumber.deps.com.thoughtworks.xstream.mapper.Mapper;
-
 /**
  * Created by gonzalonunez on 3/16/17.
  */
@@ -11,6 +9,7 @@ public class Hexagon {
     private int numVillagersOnTop;
     private boolean occupied;
     private boolean validSpace;
+
 
     public Hexagon() {
         this.terrainType = TerrainType.EMPTY;
