@@ -47,4 +47,37 @@ public class SettlementManager {
         return 0;
     }
 
+    // Given two settlements, it takes the list of points in the second settlement
+    // and adds them to the list in the first settlement
+    public void mergeSettlement(Settlement settlementToAddTo, Settlement settlementToDelete){
+        settlementToAddTo.getPointsInSettlement().addAll(settlementToDelete.getPointsInSettlement());
+        listOfSettlements.remove(settlementToDelete);
+    }
+
+    // Overloaded method that merges to settlements given two points
+    public void mergeSettlement(Point pointInNewSettlement, Point pointInOldSettlememnt){
+        // Do nothing if the two points are the same
+        if(pointInNewSettlement.equals(pointInOldSettlememnt)){
+            return;
+        }
+
+        Settlement settlementToAddTo = null;
+        Settlement settlementToDelete = null;
+        for(Settlement s : listOfSettlements){
+            if(s.pointExistsInThisSettlement(pointInNewSettlement)){
+                settlementToAddTo = s;
+            }
+            if(s.pointExistsInThisSettlement(pointInOldSettlememnt)){
+                 settlementToDelete = s;
+            }
+        }
+        // If the settlements found in the list are the same, that means the points are in the same settlement
+        if(settlementToAddTo == settlementToDelete){
+            return;
+        }
+
+        // This may throw an error if one of the settlements is not found
+        mergeSettlement(settlementToAddTo, settlementToDelete);
+    }
+
 }

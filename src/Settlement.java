@@ -20,8 +20,13 @@ public class Settlement {
         containsTiger = false;
     }
 
+    // Returns an array list of the points in this settlement
+    public ArrayList<Point> getPointsInSettlement(){
+        return pointsInSettlement;
+    }
+
     // Adds a new point to this settlement
-    //
+    // Does not check if the point already exists however
     public void addPointToSettlement(Point pointToAdd){
         pointsInSettlement.add(pointToAdd);
     }
@@ -37,7 +42,7 @@ public class Settlement {
 
     }
 
-    // Returns the number of spaces in this particular settlement
+    // Returns the number of hexagon spaces in this particular settlement
     public int getSettlementSize(){
         return pointsInSettlement.size();
     }
@@ -52,4 +57,11 @@ public class Settlement {
         return false;
     }
 
+    public boolean containsTotoro(){
+        return containsTotoro;
+    }
+
+    public boolean containsTiger(){
+        return containsTiger;
+    }
 }
