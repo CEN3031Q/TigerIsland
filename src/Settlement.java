@@ -33,7 +33,7 @@ public class Settlement {
 
     // Removes a certain point
     // Goes through each point in the list and checks if the point actually exists first
-    public void removePointToSettle(Point pointToRemove){
+    public void removePointInSettlement(Point pointToRemove){
         for(Point p : pointsInSettlement){
             if(p.equals(pointToRemove)){
                 pointsInSettlement.remove(pointToRemove);

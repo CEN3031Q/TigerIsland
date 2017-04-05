@@ -28,7 +28,6 @@ public class SettlementManager {
         while(!adjacentSpaces.isEmpty()){
 
         }
-
     }
     */
 
