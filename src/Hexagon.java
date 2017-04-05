@@ -9,6 +9,12 @@ public class Hexagon {
     private TerrainType terrainType;
     private int tileID;
     private int level;
+<<<<<<< HEAD
+    private int numberOfVillagersOnTop;
+    private boolean totoroOnTop;
+    private boolean tigerOnTop;
+=======
+>>>>>>> master
     private boolean occupied;
     private boolean validSpace;
     private Point boardPoint;
@@ -25,6 +31,12 @@ public class Hexagon {
         this.terrainType = TerrainType.EMPTY;
         this.tileID = 0;
         this.level = 0;
+<<<<<<< HEAD
+        this.numberOfVillagersOnTop = 0;
+        this.totoroOnTop = false;
+        this.tigerOnTop = false;
+=======
+>>>>>>> master
         this.occupied = false;
         this.validSpace = false;
         this.meepleOnTop = false;
@@ -40,6 +52,10 @@ public class Hexagon {
         this.terrainType = hex.terrainType;
         this.tileID = hex.tileID;
         this.level = hex.level;
+<<<<<<< HEAD
+        this.numberOfVillagersOnTop = hex.numberOfVillagersOnTop;
+=======
+>>>>>>> master
         this.occupied = hex.occupied;
         this.validSpace = hex.validSpace;
         this.meepleOnTop = hex.meepleOnTop;
@@ -86,14 +102,12 @@ public class Hexagon {
         this.tileID = tileID;
     }
 
-    public boolean getOccupied() {
-        return this.occupied;
-    }
+    public boolean getOccupied() { return this.occupied; }
 
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
     }
-
+    
     public void printTerrain (TerrainType terrain){
         if(terrain == TerrainType.VOLCANO){
             System.out.println("VOLCANO");
@@ -114,6 +128,7 @@ public class Hexagon {
             System.out.println("EMPTY");
         }
     }
+
 
     public boolean getMeepleOnTop() {return this.meepleOnTop; }
     public void setMeepleOnTop(boolean meepleOnTop) { this.meepleOnTop = meepleOnTop; }
@@ -193,4 +208,5 @@ public class Hexagon {
             System.out.println("Cannot remove Meeple from Hex.");
         }
     }
+
 }

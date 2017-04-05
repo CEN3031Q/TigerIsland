@@ -192,6 +192,7 @@ public class Board {
         return hexagonAtPoint(point).getTerrainType();
     }
 
+
     public int getLevelAtPoint(Point point) {
         return hexagonAtPoint(point).getLevel();
     }
@@ -434,4 +435,5 @@ public class Board {
         settlementList = listOfSettlements;
         return listOfSettlements;
     }
+
 }
