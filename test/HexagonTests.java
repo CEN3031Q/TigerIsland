@@ -11,4 +11,15 @@ public class HexagonTests {
         Hexagon hex = new Hexagon(volcano);
         Assert.assertEquals(volcano, hex.getTerrainType());
     }
+
+    @Test
+    public void getMeepleTest() {
+        TerrainType grass = TerrainType.GRASSLANDS;
+        Hexagon hex = new Hexagon();
+        hex.setTerrainType(grass);
+        hex.incrementLevel();
+        hex.addPiece(new Meeple(1));
+        Assert.assertTrue(hex.getPiece() instanceof Meeple);
+    }
+
 }

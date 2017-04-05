@@ -2,6 +2,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
+<<<<<<< HEAD
  * Created by hugh on 3/28/17.
  * Contains information about which spots on the board are considered a settlement
  * TODO: Find out what should be the entity should be in charge of settlements
@@ -61,7 +62,7 @@ public class Settlement {
         return containsTotoro;
     }
 
-    public boolean containsTiger(){
+    public boolean containsTiger() {
         return containsTiger;
     }
 }

@@ -6,6 +6,7 @@ import java.awt.*;
 
 
 public class TilePlacementTests {
+    /*
     @Test
     public void testFirstTileHasOneValidPoint() {
         Board gameBoard = new Board();
@@ -232,4 +233,5 @@ public class TilePlacementTests {
             Assert.assertTrue(points.contains(expected));
         }
     }
+    */
 }
