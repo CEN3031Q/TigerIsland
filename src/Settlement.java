@@ -2,7 +2,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
-<<<<<<< HEAD
  * Created by hugh on 3/28/17.
  * Contains information about which spots on the board are considered a settlement
  * TODO: Find out what should be the entity should be in charge of settlements
@@ -11,8 +10,17 @@ import java.util.ArrayList;
 public class Settlement {
     // List of all hexagons in a particular settlement
     private ArrayList<Point> pointsInSettlement = new ArrayList<>();
+    private Board gameBoard;
     private boolean containsTotoro;
     private boolean containsTiger;
+
+    // Constructor taking a Board
+    // Maybe refactor this so a Settlement does not have to be aware of a board object
+    public Settlement(Board board){
+        gameBoard =  board;
+        containsTotoro = false;;
+        containsTiger = false;
+    }
 
     // Constructor taking in a Point object
     public Settlement(Point newSettlementPoint){
@@ -58,11 +66,21 @@ public class Settlement {
         return false;
     }
 
+    public void addTotoro(){
+        containsTotoro = true;
+    }
+
     public boolean containsTotoro(){
         return containsTotoro;
+    }
+
+    public void addTiger(){
+        containsTiger = true;
     }
 
     public boolean containsTiger() {
         return containsTiger;
     }
+
+
 }

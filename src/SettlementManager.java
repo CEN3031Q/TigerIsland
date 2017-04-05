@@ -46,6 +46,17 @@ public class SettlementManager {
         return 0;
     }
 
+    // Given a point, checks the list of settlements and checks every settlement list of points
+    // for the point specified. Otherwise returns null.
+    public Settlement getSettlementFromPoint(Point pointTocheck){
+        for(Settlement s : listOfSettlements){
+            if(s.pointExistsInThisSettlement(pointTocheck)){
+                return s;
+            }
+        }
+        return null;
+    }
+
     // Given two settlements, it takes the list of points in the second settlement
     // and adds them to the list in the first settlement
     public void mergeSettlement(Settlement settlementToAddTo, Settlement settlementToDelete){
@@ -78,5 +89,7 @@ public class SettlementManager {
         // This may throw an error if one of the settlements is not found
         mergeSettlement(settlementToAddTo, settlementToDelete);
     }
+
+
 
 }
