@@ -120,4 +120,34 @@ public class BoardTests {
         Assert.assertTrue(expected.equals(offsets));
     }
 
+    @Test
+    public void testBoardFindsEdgeOfSettlements(){
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        Point settlementOffset = new Point(-1, 0);
+        board.placeTile(firstTile, Board.axialToCube(settlementOffset));
+
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 0))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 0))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
+
+        Set<Point> offsets = board.offsetsAtEdgeOfSettlementAtOffset(settlementOffset).keySet();
+
+        Set<Point> expected = new HashSet<Point>(Arrays.asList(
+                new Point(0, -1),
+                new Point(-1, -1),
+                new Point(-2, 0),
+                new Point(-3, 1),
+                new Point(-3, 2),
+                new Point(-2, 2),
+                new Point(-1, 1)
+        ));
+
+        Assert.assertTrue(expected.equals(offsets));
+
+    }
+
 }
