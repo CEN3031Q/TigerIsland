@@ -6,6 +6,7 @@
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.awt.Point;
 
 public class SettlementManager {
     private ArrayList<Settlement> listOfSettlements = new ArrayList<>();
@@ -90,8 +91,6 @@ public class SettlementManager {
     }
 
     public void updateSettlements(Board board) {
-        /*
-        Hexagon[][] gameBoard = board.boardStorage;
         ArrayList<Hexagon> visited = new ArrayList<>();
         ArrayList<Settlement> updatedListOfSettlements = new ArrayList<>();
 
@@ -103,50 +102,29 @@ public class SettlementManager {
 
         for (int ii = minBoardX; ii < maxBoardX; ii++) {
             for (int jj = minBoardY; jj < maxBoardY; jj++) {
-                if(gameBoard.get(jj).get(ii).getOccupied() && !visited.contains(gameBoard.get(jj).get(ii))) {
+                if(board.hexagonAtPoint(new Point(ii,jj)).isOccupied() && !visited.contains(board.hexagonAtPoint(new Point(ii,jj)))) {
                     Settlement newSettlement = new Settlement(new Point(jj, ii));
-                    Hexagon visitingHexagon = gameBoard.get(jj).get(ii);
+                    Hexagon visitingHexagon = board.hexagonAtPoint(new Point(ii,jj));
                     int visitingHexagonX = ii;
                     int visitingHexagonY = jj;
-                    int isEvenOrOdd;
-                    if(visitingHexagonY % 2 == 0){
-                        isEvenOrOdd = 0;
-                    }
-                    else{
-                        isEvenOrOdd = 1;
-                    }
 
 
-                    Hexagon tempHex = board.copyOfHexagonAtPoint(new Point(ii, jj));
-                    int playerID = tempHex.getPiece().getPlayerID();
+
+                    Integer playerID = board.hexagonAtPoint(new Point(ii,jj)).getOccupiedID();
                     ArrayList<Hexagon> queue = new ArrayList<>();
 
                     queue.add(visitingHexagon);
                     while(!queue.isEmpty()) {
-                        Hexagon hexUp = gameBoard.get(visitingHexagonY-1).get(visitingHexagonX);
-                        Hexagon hexDown = gameBoard.get(visitingHexagonY+1).get(visitingHexagonX);
-                        Hexagon hexUpRight = gameBoard.get(visitingHexagonY-1).get(visitingHexagonX+1);
-                        Hexagon hexUpLeft = gameBoard.get(visitingHexagonY-1).get(visitingHexagonX-1);
-                        Hexagon hexLeft = gameBoard.get(visitingHexagonY).get(visitingHexagonX-1);
-                        Hexagon hexRight = gameBoard.get(visitingHexagonY).get(visitingHexagonX+1);
-                        Hexagon hexDownLeft = gameBoard.get(visitingHexagonY+1).get(visitingHexagonX-1);
-                        Hexagon hexDownRight = gameBoard.get(visitingHexagonY+1).get(visitingHexagonX+1);
+                        Hexagon hexUpRight = board.hexagonAtPoint(new Point((visitingHexagonY+1),(visitingHexagonX-1)));
+                        Hexagon hexUpLeft = board.hexagonAtPoint(new Point((visitingHexagonY),(visitingHexagonX-1)));
+                        Hexagon hexLeft = board.hexagonAtPoint(new Point ((visitingHexagonY),(visitingHexagonX-1)));
+                        Hexagon hexRight = board.hexagonAtPoint(new Point ((visitingHexagonY),(visitingHexagonX+1)));
+                        Hexagon hexDownLeft = board.hexagonAtPoint(new Point ((visitingHexagonY+1),(visitingHexagonX-1)));
+                        Hexagon hexDownRight = board.hexagonAtPoint(new Point ((visitingHexagonY+1),(visitingHexagonX+1)));
                         //put all of its neighbors into the queue
-                        //Check if it's even
-                        if(isEvenOrOdd == 0) {
-                            if(hexUp.getOccupied()){
-                                if(!visited.contains(hexUp)) {
-                                    if (hexUp.getPiece().getPlayerID() == playerID) {
-                                        queue.add(hexUp);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexUp);
-                            }
-                            if(hexUpRight.getOccupied()) {
+                            if(hexUpRight.isOccupied()) {
                                 if (!visited.contains(hexUpRight)){
-                                    if (hexUpRight.getPiece().getPlayerID() == playerID) {
+                                    if (hexUpRight.getOccupiedID() == playerID) {
                                         queue.add(hexUpRight);
                                     }
                                 }
@@ -154,9 +132,9 @@ public class SettlementManager {
                             else{
                                 visited.add(hexUpRight);
                             }
-                            if(hexLeft.getOccupied()) {
+                            if(hexLeft.isOccupied()) {
                                 if( !visited.contains(hexLeft)) {
-                                    if (hexLeft.getPiece().getPlayerID() == playerID) {
+                                    if (hexLeft.getOccupiedID()== playerID) {
                                         queue.add(hexLeft);
                                     }
                                 }
@@ -164,9 +142,9 @@ public class SettlementManager {
                             else{
                                 visited.add(hexLeft);
                             }
-                            if(hexRight.getOccupied()) {
+                            if(hexRight.isOccupied()) {
                                 if(!visited.contains(hexRight)) {
-                                    if (hexRight.getPiece().getPlayerID() == playerID) {
+                                    if (hexRight.getOccupiedID() == playerID) {
                                         queue.add(hexRight);
                                     }
                                 }
@@ -174,9 +152,9 @@ public class SettlementManager {
                             else{
                                 visited.add(hexRight);
                             }
-                            if(hexDownRight.getOccupied()) {
+                            if(hexDownRight.isOccupied()) {
                                 if(!visited.contains(hexDownRight)) {
-                                    if (hexDownRight.getPiece().getPlayerID() == playerID) {
+                                    if (hexDownRight.getOccupiedID() == playerID) {
                                         queue.add(hexDownRight);
                                     }
                                 }
@@ -184,80 +162,16 @@ public class SettlementManager {
                             else{
                                 visited.add(hexDownRight);
                             }
-                            if(hexDown.getOccupied()) {
-                                if (!visited.contains(hexDown)){
-                                    if (hexDown.getPiece().getPlayerID() == playerID) {
-                                        queue.add(hexDown);
+                            if(hexUpRight.isOccupied()) {
+                                if (!visited.contains(hexUpRight)){
+                                    if (hexDownLeft.getOccupiedID() == playerID) {
+                                        queue.add(hexUpRight);
                                     }
                                 }
                             }
                             else{
-                                visited.add(hexDown);
+                                visited.add(hexUpRight);
                             }
-                        }
-                        //if it's not even, then it's odd
-                        else{
-                            if(hexUp.getOccupied()) {
-                                if(!visited.contains(hexUp)) {
-                                    if (hexUp.getPiece().getPlayerID() == playerID) {
-                                        queue.add(hexUp);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexUp);
-                            }
-                            if(hexLeft.getOccupied()) {
-                                if (!visited.contains(hexLeft)){
-                                    if (hexLeft.getPiece().getPlayerID() == playerID) {
-                                        queue.add(hexLeft);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexLeft);
-                            }
-                            if(hexRight.getOccupied()) {
-                                if(!visited.contains(hexRight)) {
-                                    if (hexRight.getPiece().getPlayerID() == playerID) {
-                                        queue.add(hexRight);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexRight);
-                            }
-                            if(hexDown.getOccupied()) {
-                                if(!visited.contains(hexDown)) {
-                                    if (hexDown.getPiece().getPlayerID() == playerID) {
-                                        queue.add(hexDown);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexDown);
-                            }
-                            if(hexDownLeft.getOccupied()) {
-                                if(!visited.contains(hexDownLeft)) {
-                                    if (hexDownLeft.getPiece().getPlayerID() == playerID) {
-                                        queue.add(hexDownLeft);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexDownLeft);
-                            }
-                            if(hexUpLeft.getOccupied()) {
-                                if(!visited.contains(hexUpLeft)) {
-                                    if (hexUpLeft.getPiece().getPlayerID() == playerID) {
-                                        queue.add(hexUpLeft);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexUpLeft);
-                            }
-                        }
 
                         //What we do when we visit
                         //Add our visitingHexagon to the visited list
@@ -270,13 +184,7 @@ public class SettlementManager {
                         visitingHexagon = queue.get(0);
 
                         //update visitingHexagonX and visitingHexagonY
-                        if(visitingHexagon == hexUp){
-                            visitingHexagonY--;
-                        }
-                        else if(visitingHexagon == hexDown){
-                            visitingHexagonY++;
-                        }
-                        else if(visitingHexagon == hexLeft){
+                        if(visitingHexagon == hexLeft){
                             visitingHexagonX--;
                         }
                         else if(visitingHexagon == hexRight){
@@ -288,12 +196,9 @@ public class SettlementManager {
                         }
                         else if(visitingHexagon == hexDownRight){
                             visitingHexagonY++;
-                            visitingHexagonX++;
                         }
                         else if(visitingHexagon == hexUpLeft){
                             visitingHexagonY--;
-                            visitingHexagonX
-                                    --;
                         }
                         else if(visitingHexagon == hexUpRight){
                             visitingHexagonY--;
@@ -306,7 +211,7 @@ public class SettlementManager {
             }
         }
         this.listOfSettlements = updatedListOfSettlements;
-        */
+
     }
 
 }

@@ -16,6 +16,7 @@ public class GameAI implements GameActionPerformer {
 
     /** DO NOT MODIFY THE BOARD. I'M SORRY BUT DEADLINES ARE DEATH */
     public Point tileAction(Tile tile, Board board) {
+        //TODO: Make stacking decisions
 
         /**** PLACE AT EDGE ****/
         Set<Point> edgePoints = board.offsetsAtEdgeOfCurrentlyPlayedBoard().keySet();
@@ -35,7 +36,7 @@ public class GameAI implements GameActionPerformer {
 
     /** DO NOT MODIFY THE BOARD. I'M SORRY BUT DEADLINES ARE DEATH */
     public BuildAction buildAction(Board board) {
-        //TODO: I want to iterate all of my settlements on the board
+        //TODO: I want to make a decision and pick an action
         /**
          So we go to each settlement and do a few checks:
          If no Totoros and size >= 5, place a Totoro
