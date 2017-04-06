@@ -234,17 +234,17 @@ public class Board {
                 Hexagon hexagonA = hexagonAtPoint(pointA);
                 Hexagon hexagonB = hexagonAtPoint(pointB);
 
-                if (volcanoHexagon.isTotoroOnTop() || hexagonA.isTotoroOnTop() || hexagonB.isTotoroOnTop()) {
+                if (hexagonA.isTotoroOnTop() || hexagonB.isTotoroOnTop()) {
                     continue;
                 }
 
-                if (volcanoHexagon.isTigerOnTop() || hexagonA.isTigerOnTop() || hexagonB.isTigerOnTop()) {
+                if (hexagonA.isTigerOnTop() || hexagonB.isTigerOnTop()) {
                     continue;
                 }
 
                 if (hexagonA.getTileID() != hexagonB.getTileID() || hexagonA.getTileID() != volcanoHexagon.getTileID()) {
-                    if (hexagonA.getLevel() == hexagonB.getLevel() && hexagonA.getLevel() == hexagonB.getLevel()) {
-
+                    if (volcanoHexagon.getLevel() == hexagonA.getLevel() && hexagonA.getLevel() == hexagonB.getLevel()) {
+                        //TODO: Get settlement size at point A and B, make sure that we don't completely kill it if it's of size 2.
                     }
                 }
             }
@@ -471,7 +471,6 @@ public class Board {
 
     public void foundSettlementAtOffset(Point offset, int id) {
         hexagonAtPoint(boardPointForOffset(offset)).setOccupied(id);
-        settlementManager.addNewSettlement(new Settlement(offset));
     }
 
     public void expandSettlementAtOffset(Point offset, TerrainType type, int id) {
