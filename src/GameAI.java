@@ -17,7 +17,6 @@ public class GameAI implements GameActionPerformer {
     /** DO NOT MODIFY THE BOARD. I'M SORRY BUT DEADLINES ARE DEATH */
     public Point tileAction(Tile tile, Board board) {
         //TODO: Make stacking decisions
-
         /**** PLACE AT EDGE ****/
         Set<Point> edgePoints = board.offsetsAtEdgeOfCurrentlyPlayedBoard().keySet();
         tile.setOrientation(ThreadLocalRandom.current().nextInt(1,7));
@@ -36,6 +35,8 @@ public class GameAI implements GameActionPerformer {
 
     /** DO NOT MODIFY THE BOARD. I'M SORRY BUT DEADLINES ARE DEATH */
     public BuildAction buildAction(Board board) {
+        //TODO: I want to iterate over all of my settlements
+
         //TODO: I want to make a decision and pick an action
         /**
          So we go to each settlement and do a few checks:

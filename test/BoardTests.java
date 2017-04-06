@@ -9,12 +9,6 @@ import java.util.stream.Collectors;
 
 public class BoardTests {
     @Test
-    public void testCreateBoard() {
-        Board board = new Board();
-        Assert.assertTrue(true);
-    }
-
-    @Test
     public void testBoardCreatedWithFirstTile() {
         Board board = new Board();
 

@@ -18,7 +18,7 @@ public class Game {
     }
 
     public void applyTileAction(Tile tile, Point point) {
-
+        board.placeTile(tile, Board.axialToCube(point));
     }
 
     public void applyBuildAction(BuildAction buildAction) {

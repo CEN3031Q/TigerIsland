@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import javafx.geometry.Point3D;
 
 public class Board {
-    public Hexagon[][] boardStorage;
+    private Hexagon[][] boardStorage;
     private SettlementManager settlementManager;
 
     private int nextTileID = 1;
@@ -338,6 +338,52 @@ public class Board {
         }
     }
 
+    private int meepleCountForExpansionFromOffset(Point rootOffset, Integer settlementID) {
+        Integer meepleCount = 0;
+
+        HashMap<Point, Boolean> visited = new HashMap<>();
+
+        ArrayList<Point> queue = new ArrayList<>();
+        queue.add(rootOffset);
+
+        Hexagon rootHex = hexagonAtPoint(boardPointForOffset(rootOffset));
+        TerrainType desiredTerrainType = rootHex.getTerrainType();
+
+        while (!queue.isEmpty()) {
+            Point offset = queue.remove(0);
+            Hexagon hex = hexagonAtPoint(boardPointForOffset(offset));
+
+            if (visited.get(offset) == null && hex.getTerrainType() == desiredTerrainType) {
+                if (!hex.isOccupied()) {
+                    meepleCount += hex.getLevel();
+                }
+            }
+
+            visited.put(offset, true);
+
+            ArrayList<Point> appliedNeighborOffsets = new ArrayList<>();
+            for (Point neighborOffset : HexagonNeighborsCalculator.hexagonNeighborOffsets()) {
+                appliedNeighborOffsets.add(Board.pointTranslatedByPoint(offset, neighborOffset));
+            }
+
+            for (Point neighborOffset : appliedNeighborOffsets) {
+                Point neighborPoint = boardPointForOffset(neighborOffset);
+                Hexagon neighborHex = hexagonAtPoint(neighborPoint);
+
+                if (visited.get(neighborOffset) == null && neighborHex.getTerrainType() == desiredTerrainType) {
+                    if (!neighborHex.isOccupied()) {
+                        meepleCount += hex.getLevel();
+                    }
+                    queue.add(neighborOffset);
+                }
+
+                visited.put(neighborOffset, true);
+            }
+        }
+
+        return meepleCount;
+    }
+
     /***** CONVERSIONS *****/
 
     /*
@@ -447,6 +493,30 @@ public class Board {
         for (Point terrainOffset : offsetsOfTerrain) {
             expandAndConquerFromRootOffset(terrainOffset, id);
         }
+    }
+
+    public int numberOfMeeplesNeededForExpansion(Point offset, TerrainType type, int id) {
+        Set<Point> edgeOffsets = offsetsAtEdgeOfSettlementAtOffset(offset).keySet();
+
+        if (edgeOffsets.isEmpty()) {
+            return Integer.MIN_VALUE;
+        }
+
+        Set<Point> offsetsOfTerrain = edgeOffsets.stream().filter( edgeOffset -> {
+            Hexagon hex = hexagonAtPoint(boardPointForOffset(edgeOffset));
+            return hex.getTerrainType() == type;
+        }).collect(Collectors.toSet());
+
+        if (offsetsOfTerrain.isEmpty()) {
+            return Integer.MIN_VALUE;
+        }
+
+        int meepleCount = 0;
+        for (Point terrainOffset : offsetsOfTerrain) {
+            meepleCount += meepleCountForExpansionFromOffset(terrainOffset, id);
+        }
+
+        return meepleCount;
     }
 
     public void buildTotoroSanctuaryAtOffset(Point offset, int id) {
