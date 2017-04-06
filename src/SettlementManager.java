@@ -7,9 +7,11 @@
 import java.awt.*;
 import java.util.ArrayList;
 import java.awt.Point;
+import java.util.Set;
+import java.util.HashSet;
 
 public class SettlementManager {
-    private ArrayList<Settlement> listOfSettlements = new ArrayList<>();
+    private Set<Settlement> listOfSettlements = new HashSet<>();
 
     public SettlementManager() {
 
@@ -92,7 +94,7 @@ public class SettlementManager {
 
     public void updateSettlements(Board board) {
         ArrayList<Hexagon> visited = new ArrayList<>();
-        ArrayList<Settlement> updatedListOfSettlements = new ArrayList<>();
+        Set<Settlement> updatedListOfSettlements = new HashSet<>();
 
         int minBoardX = board.getMinX();
         int maxBoardX = board.getMaxX();
@@ -211,6 +213,10 @@ public class SettlementManager {
         }
         this.listOfSettlements = updatedListOfSettlements;
 
+    }
+
+    public Set<Settlement> getListOfSettlements(){
+        return listOfSettlements;
     }
 
 }

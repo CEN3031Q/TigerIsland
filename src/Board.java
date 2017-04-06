@@ -444,6 +444,9 @@ public class Board {
     public int getMaxY() {
         return maxBoardY;
     }
+    public SettlementManager getSettlementManager(){
+        return settlementManager;
+    }
 
     /*
     public Point getPointOfHexagon(Hexagon hexagon){

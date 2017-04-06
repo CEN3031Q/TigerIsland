@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by hugh on 3/28/17.
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 
 public class Settlement {
     // List of all hexagons in a particular settlement
-    private ArrayList<Point> pointsInSettlement = new ArrayList<>();
+    private Set<Point> pointsInSettlement = new HashSet<>();
     private boolean containsTotoro;
     private boolean containsTiger;
 
@@ -21,7 +23,7 @@ public class Settlement {
     }
 
     // Returns an array list of the points in this settlement
-    public ArrayList<Point> getPointsInSettlement(){
+    public Set<Point> getPointsInSettlement(){
         return pointsInSettlement;
     }
 
