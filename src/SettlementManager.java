@@ -94,11 +94,10 @@ public class SettlementManager {
         ArrayList<Hexagon> visited = new ArrayList<>();
         ArrayList<Settlement> updatedListOfSettlements = new ArrayList<>();
 
-        int nextTileID = 1;
-        int minBoardX = 3;
-        int maxBoardX = 397;
-        int minBoardY = 3;
-        int maxBoardY = 397;
+        int minBoardX = board.getMinX();
+        int maxBoardX = board.getMaxX();
+        int minBoardY = board.getMinY();
+        int maxBoardY = board.getMaxY();
 
         for (int ii = minBoardX; ii < maxBoardX; ii++) {
             for (int jj = minBoardY; jj < maxBoardY; jj++) {
