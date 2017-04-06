@@ -22,15 +22,6 @@ public class HexagonTests {
         Assert.assertEquals(2, hex.getLevel());
     }
     @Test
-    public void getMeepleOnTopTest() {
-        Hexagon hex = new Hexagon();
-        TerrainType grass = TerrainType.GRASSLANDS;
-        hex.setTerrainType(grass);
-        hex.incrementLevel();
-        hex.setOccupied(true);
-        Assert.assertEquals(true, hex.isOccupied());
-    }
-    @Test
     public void getTotoroOnTopTest() {
         Hexagon hex = new Hexagon();
         TerrainType grass = TerrainType.GRASSLANDS;

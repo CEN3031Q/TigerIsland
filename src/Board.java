@@ -63,7 +63,7 @@ public class Board {
             Hexagon hex = hexagonAtPoint(p);
             hex.incrementLevel();
             hex.setTileID(nextTileID);
-            hex.setOccupied(false);
+            //hex.setOccupied(false);
 
             minBoardX = java.lang.Math.min(minBoardX, (int)p.getX());
             minBoardY = java.lang.Math.min(minBoardY, (int)p.getY());
@@ -106,7 +106,7 @@ public class Board {
             Hexagon hex = hexagonAtPoint(point);
             hex.incrementLevel();
             hex.setTileID(nextTileID);
-            hex.setOccupied(false);
+            //hex.setOccupied(false);
 
             minBoardX = java.lang.Math.min(minBoardX, (int)point.getX());
             minBoardY = java.lang.Math.min(minBoardY, (int)point.getY());
@@ -160,7 +160,6 @@ public class Board {
     }
 
     public HashMap<Point, Boolean> volcanoesOnCurrentlyPlayedBoard() {
-        // This does a BFS from the center of the board in order to find all the empty hexagons at the edge where we can place a tile.
         HashMap<Point, Boolean> validOffsets = new HashMap<>();
         HashMap<Point, Boolean> visited = new HashMap<>();
 
@@ -342,7 +341,7 @@ public class Board {
     // Founds a new settlement at the specified hexagon
     // Puts one villager at the location and creates a new settlement object
     public void foundSettlementAtPoint(Point point, int id) {
-        hexagonAtPoint(point).setOccupied(true);
+        hexagonAtPoint(point).setOccupied(id);
         settlementManager.addNewSettlement(new Settlement(point));
     }
 

@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /**
  * Created by gonzalonunez on 3/16/17.
  */
@@ -9,7 +7,7 @@ public class Hexagon {
     private int tileID;
     private int level;
 
-    private boolean isOccupied;
+    private Integer occupiedID = Integer.MIN_VALUE;
 
     private boolean totoroOnTop;
     private boolean tigerOnTop;
@@ -19,8 +17,6 @@ public class Hexagon {
 
         this.tileID = 0;
         this.level = 0;
-
-        this.isOccupied = false;
 
         this.totoroOnTop = false;
         this.tigerOnTop = false;
@@ -36,7 +32,6 @@ public class Hexagon {
         this.terrainType = type;
         this.tileID = tileID;
         this.level = level;
-        this.isOccupied = false;
     }
 
     public TerrainType getTerrainType() {
@@ -64,11 +59,15 @@ public class Hexagon {
     }
 
     public boolean isOccupied() {
-        return this.isOccupied;
+        return occupiedID != Integer.MIN_VALUE;
     }
 
-    public void setOccupied(boolean occupied) {
-        this.isOccupied = occupied;
+    public Integer getOccupiedID() {
+        return occupiedID;
+    }
+
+    public void setOccupied(Integer occupiedID) {
+        this.occupiedID = occupiedID;
     }
 
     public void printTerrain (TerrainType terrain){
