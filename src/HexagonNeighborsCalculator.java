@@ -17,21 +17,27 @@ public class HexagonNeighborsCalculator {
             case 1:
                 points.put(HexagonPosition.A, new Point(0, -1));
                 points.put(HexagonPosition.B, new Point(1, -1));
+                break;
             case 2:
                 points.put(HexagonPosition.A, new Point(1, -1));
                 points.put(HexagonPosition.B, new Point(1, 0));
+                break;
             case 3:
                 points.put(HexagonPosition.A, new Point(1, 0));
                 points.put(HexagonPosition.B, new Point(0, 1));
+                break;
             case 4:
                 points.put(HexagonPosition.A, new Point(0, 1));
                 points.put(HexagonPosition.B, new Point(-1, 1));
+                break;
             case 5:
                 points.put(HexagonPosition.A, new Point(-1, 1));
                 points.put(HexagonPosition.B, new Point(-1, 0));
+                break;
             case 6:
                 points.put(HexagonPosition.A, new Point(-1, 0));
                 points.put(HexagonPosition.B, new Point(0, -1));
+                break;
             default:
                 break;
         }

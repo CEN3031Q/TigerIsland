@@ -18,24 +18,29 @@ public class Game {
     }
 
     public void applyTileAction(Tile tile, Point point) {
-
+        board.placeTile(tile, Board.axialToCube(point));
     }
 
     public void applyBuildAction(BuildAction buildAction) {
-        Point point = buildAction.getCoordinates();
+        Point offset = buildAction.getCoordinates();
         Integer id = buildAction.getID();
         TerrainType terrainType = buildAction.getTerrainType();
 
         switch (buildAction.getType()) {
             case FOUND_SETTLEMENT:
-                board.foundSettlementAtPoint(point, id);
+                board.foundSettlementAtOffset(offset, id);
+                break;
             case EXPAND_SETTLEMENT:
-                //FIXME: implement expand
-                //board.expandSettlement(point, terrainType, id);
+                board.expandSettlementAtOffset(offset, terrainType, id);
+                break;
             case TIGER_PLAYGROUND:
-                board.buildTigerPlayground(point, id);
+                board.buildTigerPlaygroundAtOffset(offset, id);
+                break;
             case TOTORO_SANCTUARY:
-                board.buildTotoroSanctuary(point, id);
+                board.buildTotoroSanctuaryAtOffset(offset, id);
+                break;
+            default:
+                break;
         }
     }
 

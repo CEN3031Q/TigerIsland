@@ -2,11 +2,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javafx.geometry.Point3D;
 
 public class Board {
-    public Hexagon[][] boardStorage;
+    private Hexagon[][] boardStorage;
     private SettlementManager settlementManager;
 
     private int nextTileID = 1;
@@ -63,7 +64,7 @@ public class Board {
             Hexagon hex = hexagonAtPoint(p);
             hex.incrementLevel();
             hex.setTileID(nextTileID);
-            //hex.setOccupied(false);
+            hex.setOccupied(Integer.MIN_VALUE);
 
             minBoardX = java.lang.Math.min(minBoardX, (int)p.getX());
             minBoardY = java.lang.Math.min(minBoardY, (int)p.getY());
@@ -106,7 +107,7 @@ public class Board {
             Hexagon hex = hexagonAtPoint(point);
             hex.incrementLevel();
             hex.setTileID(nextTileID);
-            //hex.setOccupied(false);
+            hex.setOccupied(Integer.MIN_VALUE);
 
             minBoardX = java.lang.Math.min(minBoardX, (int)point.getX());
             minBoardY = java.lang.Math.min(minBoardY, (int)point.getY());
@@ -154,12 +155,11 @@ public class Board {
             }
         }
 
-        //TODO: Add spots where we can potentially stack
-
         return validOffsets;
     }
 
     public HashMap<Point, Boolean> volcanoesOnCurrentlyPlayedBoard() {
+        // Finds all volcano points on the current board.
         HashMap<Point, Boolean> validOffsets = new HashMap<>();
         HashMap<Point, Boolean> visited = new HashMap<>();
 
@@ -194,12 +194,11 @@ public class Board {
             }
         }
 
-        //TODO: Add spots where we can potentially stack
-
         return validOffsets;
     }
 
     public boolean canPlaceTileAtEdgeOffset(Tile tile, Point offset) {
+        // Checks if you can place this tile (at it's current orientation) on this edge offset.
         Set<Point> edgePoints = offsetsAtEdgeOfCurrentlyPlayedBoard().keySet();
         if (!edgePoints.contains(offset)) {
             return false;
@@ -218,6 +217,7 @@ public class Board {
     }
 
     public HashMap<RequirementsToStack, Boolean> requirementsToStack() {
+        // Finds all volcano points and returns what orientation you can use to stack at that point, if any.
         HashMap<RequirementsToStack, Boolean> stackInfo = new HashMap<>();
 
         Set<Point> volcanoOffsets = volcanoesOnCurrentlyPlayedBoard().keySet();
@@ -234,17 +234,17 @@ public class Board {
                 Hexagon hexagonA = hexagonAtPoint(pointA);
                 Hexagon hexagonB = hexagonAtPoint(pointB);
 
-                if (volcanoHexagon.isTotoroOnTop() || hexagonA.isTotoroOnTop() || hexagonB.isTotoroOnTop()) {
+                if (hexagonA.isTotoroOnTop() || hexagonB.isTotoroOnTop()) {
                     continue;
                 }
 
-                if (volcanoHexagon.isTigerOnTop() || hexagonA.isTigerOnTop() || hexagonB.isTigerOnTop()) {
+                if (hexagonA.isTigerOnTop() || hexagonB.isTigerOnTop()) {
                     continue;
                 }
 
                 if (hexagonA.getTileID() != hexagonB.getTileID() || hexagonA.getTileID() != volcanoHexagon.getTileID()) {
-                    if (hexagonA.getLevel() == hexagonB.getLevel() && hexagonA.getLevel() == hexagonB.getLevel()) {
-
+                    if (volcanoHexagon.getLevel() == hexagonA.getLevel() && hexagonA.getLevel() == hexagonB.getLevel()) {
+                        //TODO: Get settlement size at point A and B, make sure that we don't completely kill it if it's of size 2.
                     }
                 }
             }
@@ -294,6 +294,94 @@ public class Board {
         }
 
         return validOffsets;
+    }
+
+    private void expandAndConquerFromRootOffset(Point rootOffset, Integer settlementID) {
+        HashMap<Point, Boolean> visited = new HashMap<>();
+
+        ArrayList<Point> queue = new ArrayList<>();
+        queue.add(rootOffset);
+
+        Hexagon rootHex = hexagonAtPoint(boardPointForOffset(rootOffset));
+        TerrainType desiredTerrainType = rootHex.getTerrainType();
+
+        while (!queue.isEmpty()) {
+            Point offset = queue.remove(0);
+            Hexagon hex = hexagonAtPoint(boardPointForOffset(offset));
+
+            if (visited.get(offset) == null && hex.getTerrainType() == desiredTerrainType) {
+                if (!hex.isOccupied()) {
+                    hex.setOccupied(settlementID);
+                }
+            }
+
+            visited.put(offset, true);
+
+            ArrayList<Point> appliedNeighborOffsets = new ArrayList<>();
+            for (Point neighborOffset : HexagonNeighborsCalculator.hexagonNeighborOffsets()) {
+                appliedNeighborOffsets.add(Board.pointTranslatedByPoint(offset, neighborOffset));
+            }
+
+            for (Point neighborOffset : appliedNeighborOffsets) {
+                Point neighborPoint = boardPointForOffset(neighborOffset);
+                Hexagon neighborHex = hexagonAtPoint(neighborPoint);
+
+                if (visited.get(neighborOffset) == null && neighborHex.getTerrainType() == desiredTerrainType) {
+                    if (!neighborHex.isOccupied()) {
+                        neighborHex.setOccupied(settlementID);
+                    }
+                    queue.add(neighborOffset);
+                }
+
+                visited.put(neighborOffset, true);
+            }
+        }
+    }
+
+    private int meepleCountForExpansionFromOffset(Point rootOffset, Integer settlementID) {
+        Integer meepleCount = 0;
+
+        HashMap<Point, Boolean> visited = new HashMap<>();
+
+        ArrayList<Point> queue = new ArrayList<>();
+        queue.add(rootOffset);
+
+        Hexagon rootHex = hexagonAtPoint(boardPointForOffset(rootOffset));
+        TerrainType desiredTerrainType = rootHex.getTerrainType();
+
+        while (!queue.isEmpty()) {
+            Point offset = queue.remove(0);
+            Hexagon hex = hexagonAtPoint(boardPointForOffset(offset));
+
+            if (visited.get(offset) == null && hex.getTerrainType() == desiredTerrainType) {
+                if (!hex.isOccupied()) {
+                    meepleCount += hex.getLevel();
+                }
+            }
+
+            visited.put(offset, true);
+
+            ArrayList<Point> appliedNeighborOffsets = new ArrayList<>();
+            for (Point neighborOffset : HexagonNeighborsCalculator.hexagonNeighborOffsets()) {
+                appliedNeighborOffsets.add(Board.pointTranslatedByPoint(offset, neighborOffset));
+            }
+
+            for (Point neighborOffset : appliedNeighborOffsets) {
+                Point neighborPoint = boardPointForOffset(neighborOffset);
+                Hexagon neighborHex = hexagonAtPoint(neighborPoint);
+
+                if (visited.get(neighborOffset) == null && neighborHex.getTerrainType() == desiredTerrainType) {
+                    if (!neighborHex.isOccupied()) {
+                        meepleCount += hex.getLevel();
+                    }
+                    queue.add(neighborOffset);
+                }
+
+                visited.put(neighborOffset, true);
+            }
+        }
+
+        return meepleCount;
     }
 
     /***** CONVERSIONS *****/
@@ -381,35 +469,72 @@ public class Board {
 
     /***** ACTIONS *****/
 
-    // Founds a new settlement at the specified hexagon
-    // Puts one villager at the location and creates a new settlement object
-    public void foundSettlementAtPoint(Point point, int id) {
-        hexagonAtPoint(point).setOccupied(id);
-        settlementManager.addNewSettlement(new Settlement(point));
+    public void foundSettlementAtOffset(Point offset, int id) {
+        hexagonAtPoint(boardPointForOffset(offset)).setOccupied(id);
     }
 
-    // Places a Totoro at the specified Hexagon
-    public void buildTotoroSanctuary(Point point, int id) {
-        // Add a Totoro to the hexagon
-        hexagonAtPoint(point).setTotoroOnTop(true);
+    public void expandSettlementAtOffset(Point offset, TerrainType type, int id) {
+        Set<Point> edgeOffsets = offsetsAtEdgeOfSettlementAtOffset(offset).keySet();
+
+        if (edgeOffsets.isEmpty()) {
+            return;
+        }
+
+        Set<Point> offsetsOfTerrain = edgeOffsets.stream().filter( edgeOffset -> {
+            Hexagon hex = hexagonAtPoint(boardPointForOffset(edgeOffset));
+            return hex.getTerrainType() == type;
+        }).collect(Collectors.toSet());
+
+        if (offsetsOfTerrain.isEmpty()) {
+            return;
+        }
+
+        for (Point terrainOffset : offsetsOfTerrain) {
+            expandAndConquerFromRootOffset(terrainOffset, id);
+        }
+    }
+
+    public int numberOfMeeplesNeededForExpansion(Point offset, TerrainType type, int id) {
+        Set<Point> edgeOffsets = offsetsAtEdgeOfSettlementAtOffset(offset).keySet();
+
+        if (edgeOffsets.isEmpty()) {
+            return Integer.MIN_VALUE;
+        }
+
+        Set<Point> offsetsOfTerrain = edgeOffsets.stream().filter( edgeOffset -> {
+            Hexagon hex = hexagonAtPoint(boardPointForOffset(edgeOffset));
+            return hex.getTerrainType() == type;
+        }).collect(Collectors.toSet());
+
+        if (offsetsOfTerrain.isEmpty()) {
+            return Integer.MIN_VALUE;
+        }
+
+        int meepleCount = 0;
+        for (Point terrainOffset : offsetsOfTerrain) {
+            meepleCount += meepleCountForExpansionFromOffset(terrainOffset, id);
+        }
+
+        return meepleCount;
+    }
+
+    public void buildTotoroSanctuaryAtOffset(Point offset, int id) {
+        hexagonAtPoint(boardPointForOffset(offset)).setTotoroOnTop(true);
 
         // Find the particular settlement this point belongs to and add the point to the settlement
         // as well as setting the Totoro to be true;
-        Settlement settlementToUpdate = settlementManager.getSettlementFromPoint(point);
-        settlementToUpdate.addPointToSettlement(point);
+        Settlement settlementToUpdate = settlementManager.getSettlementFromPoint(offset);
+        settlementToUpdate.addPointToSettlement(offset);
         settlementToUpdate.addTotoro();
     }
 
-    // Places a Tiger at the specified hexagon
-    // Assumes that the location is a valid spot
-    public void buildTigerPlayground(Point point, int id) {
-        // Add a Tiger to the hexagon
-        hexagonAtPoint(point).setTigerOnTop(true);
+    public void buildTigerPlaygroundAtOffset(Point offset, int id) {
+        hexagonAtPoint(boardPointForOffset(offset)).setTigerOnTop(true);
 
         // Find the particular settlement this point belongs to and add the point to the settlement
         // as well as setting the Tiger to be true;
-        Settlement settlementToUpdate = settlementManager.getSettlementFromPoint(point);
-        settlementToUpdate.addPointToSettlement(point);
+        Settlement settlementToUpdate = settlementManager.getSettlementFromPoint(offset);
+        settlementToUpdate.addPointToSettlement(offset);
         settlementToUpdate.addTiger();
     }
 }
