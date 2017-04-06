@@ -4,7 +4,6 @@
  * It keeps a list of settlements - which are a list of Points
  */
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.awt.Point;
 import java.util.Set;
@@ -62,7 +61,7 @@ public class SettlementManager {
     // Given two settlements, it takes the list of points in the second settlement
     // and adds them to the list in the first settlement
     public void mergeSettlement(Settlement settlementToAddTo, Settlement settlementToDelete){
-        settlementToAddTo.getPointsInSettlement().addAll(settlementToDelete.getPointsInSettlement());
+        settlementToAddTo.getPoints().addAll(settlementToDelete.getPoints());
         listOfSettlements.remove(settlementToDelete);
     }
 
@@ -178,7 +177,7 @@ public class SettlementManager {
                         //Add our visitingHexagon to the visited list
                         visited.add(visitingHexagon);
                         //update settlementCoordinates
-                        newSettlement.getPointsInSettlement().add(new Point(visitingHexagonX, visitingHexagonY));
+                        newSettlement.getPoints().add(new Point(visitingHexagonX, visitingHexagonY));
                         //pop visitingHexagon out of our queue
                         queue.remove(0);
                         //update our visitingHexagon to the front of the queue

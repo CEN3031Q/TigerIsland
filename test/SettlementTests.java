@@ -1,8 +1,8 @@
 import org.junit.Test;
 import org.junit.Assert;
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Created by gonzalonunez on 4/5/17.
@@ -31,31 +31,43 @@ public class SettlementTests {
         board.getSettlementManager().updateSettlements(board);
 
         Set<Settlement> expected = board.getSettlementManager().getListOfSettlements();
-        ArrayList<Settlement> compareSettlement = new ArrayList();
-        //set expected equal to List of settlements
-        //then manually make a settlement with the right points and settlements
+        Set<Settlement> compareSettlement = new HashSet<>();
 
         Settlement settlement1 = new Settlement(board.boardPointForOffset(new Point(-1,-2)));
-        settlement1.getPointsInSettlement().add(board.boardPointForOffset(new Point(-1,-2)));
-        settlement1.getPointsInSettlement().add(board.boardPointForOffset(new Point(-2,-1)));
+        settlement1.getPoints().add(board.boardPointForOffset(new Point(-2,-1)));
 
-        Settlement settlement2 = new Settlement(board.boardPointForOffset(new Point(-1,-2)));
-        settlement1.getPointsInSettlement().add(board.boardPointForOffset(new Point(-2,1)));
-        settlement1.getPointsInSettlement().add(board.boardPointForOffset(new Point(-1,1)));
-        settlement1.getPointsInSettlement().add(board.boardPointForOffset(new Point(0,1)));
+        Settlement settlement2 = new Settlement(board.boardPointForOffset(new Point(-2,1)));
+        settlement2.getPoints().add(board.boardPointForOffset(new Point(-1,1)));
+        settlement2.getPoints().add(board.boardPointForOffset(new Point(0,1)));
 
         compareSettlement.add(settlement1);
         compareSettlement.add(settlement2);
 
-
-
-
-        for(int i = 0; i < expected.size(); i++){
-            //Assert.assertTrue(expected.get(i).getPointsInSettlement().equals());
-        }
+        Assert.assertTrue(expected.equals(compareSettlement));
 
         //TODO: need to "place" settlers by setting a couple of these occupied
         //board.boardPointForOffset();
 
+    }
+
+    @Test
+    public void testBasicSettlementEquality(){
+        Settlement settlement1 = new Settlement(new Point(-1,-2));
+        Settlement settlement2 = new Settlement(new Point(-1,-2));
+        Assert.assertEquals(settlement1, settlement2);
+    }
+
+    @Test
+    public void testSettlementInequality(){
+        Settlement settlement1 = new Settlement(new Point(-1,-2));
+        Settlement settlement2 = new Settlement(new Point(0,-2));
+        Assert.assertNotEquals(settlement1, settlement2);
+    }
+
+    @Test
+    public void testSettlementSetBehavior(){
+        Settlement settlement1 = new Settlement(new Point(-1,-2));
+        settlement1.getPoints().add(new Point(-1,-2));
+        Assert.assertTrue(settlement1.getPoints().size() == 1);
     }
 }
