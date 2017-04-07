@@ -5,7 +5,6 @@ import java.util.Set;
 /**
  * Created by hugh on 3/28/17.
  * Contains information about which spots on the board are considered a settlement
- * TODO: Find out what should be the entity should be in charge of settlements
  */
 
 public class Settlement {
