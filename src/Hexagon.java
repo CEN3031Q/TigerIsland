@@ -70,27 +70,6 @@ public class Hexagon {
         this.occupiedID = occupiedID;
     }
 
-    public void printTerrain (TerrainType terrain){
-        if(terrain == TerrainType.VOLCANO){
-            System.out.println("VOLCANO");
-        }
-        else if(terrain == TerrainType.JUNGLE){
-            System.out.println("JUNGLE");
-        }
-        else if(terrain == TerrainType.LAKE){
-            System.out.println("LAKE");
-        }
-        else if(terrain == TerrainType.ROCKY){
-            System.out.println("ROCKY");
-        }
-        else if(terrain == TerrainType.GRASSLANDS){
-            System.out.println("GRASSLANDS");
-        }
-        else{
-            System.out.println("EMPTY");
-        }
-    }
-
     public boolean isTotoroOnTop() {
         return this.totoroOnTop;
     }

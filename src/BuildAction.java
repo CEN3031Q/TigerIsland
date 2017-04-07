@@ -16,7 +16,6 @@ public class BuildAction {
         this.coordinates = coordinates;
     }
 
-    // This is a very questionable design, it banks off of us never choosing or doing this option so just don't lmao
     public BuildAction(BuildActionType type, Point coordinates, TerrainType terrainType) throws IllegalArgumentException {
         this.type = type;
         this.coordinates = coordinates;

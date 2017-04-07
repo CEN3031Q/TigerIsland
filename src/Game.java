@@ -19,6 +19,7 @@ public class Game {
 
     public void applyTileAction(Tile tile, Point point) {
         board.placeTile(tile, Board.axialToCube(point));
+        board.getSettlementManager().updateSettlements();
     }
 
     public void applyBuildAction(BuildAction buildAction) {
@@ -42,6 +43,8 @@ public class Game {
             default:
                 break;
         }
+
+        board.getSettlementManager().updateSettlements();
     }
 
     public Board getGameBoard() {

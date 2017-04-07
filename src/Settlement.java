@@ -10,26 +10,19 @@ import java.util.Set;
 
 public class Settlement {
     // List of all hexagons in a particular settlement
-    private Set<Point> points = new HashSet<>();
+    private Set<Point> offsets = new HashSet<>();
     private boolean containsTotoro;
     private boolean containsTiger;
 
     // Constructor taking in a Point object
-    public Settlement(Point newSettlementPoint){
-        points.add(newSettlementPoint);
+    public Settlement() {
         containsTotoro = false;
         containsTiger = false;
     }
 
     @Override
     public int hashCode() {
-        int hash = 17;
-        int tmp = 0;
-        for (Point p : points) {
-            tmp = (hash + p.hashCode());
-            hash = (tmp << 5) - tmp;
-        }
-        return hash;
+        return offsets.hashCode() + (containsTotoro ? 1 : 0) + (containsTiger ? 1 : 0);
     }
 
     @Override
@@ -39,69 +32,40 @@ public class Settlement {
         if (obj == this)
             return true;
         Settlement rhs = (Settlement) obj;
-        return points.equals(rhs.points) &&
+        return offsets.equals(rhs.offsets) &&
                 containsTotoro == rhs.containsTotoro &&
                 containsTiger == rhs.containsTiger;
     }
 
-    // Returns an array list of the points in this settlement
-    public Set<Point> getPoints(){
-        return points;
+    public Set<Point> getOffsets(){
+        return offsets;
     }
 
-    // Adds a new point to this settlement
-    // Does not check if the point already exists however
-    public void addPointToSettlement(Point pointToAdd){
-        points.add(pointToAdd);
+    public void addOffset(Point pointToAdd){
+        offsets.add(pointToAdd);
     }
 
-    // Removes a certain point
-    // Goes through each point in the list and checks if the point actually exists first
-    public void removePointInSettlement(Point pointToRemove){
-        for(Point p : points){
-            if(p.equals(pointToRemove)){
-                points.remove(pointToRemove);
-            }
-        }
-
+    public int size() {
+        return offsets.size();
     }
 
-    // Returns the number of hexagon spaces in this particular settlement
-    public int getSettlementSize(){
-        return points.size();
+    public boolean containsOffset(Point offset) {
+        return offsets.contains(offset);
     }
 
-    // Checks if a given point is already in this settlement
-    public boolean pointExistsInThisSettlement(Point pointToCheck){
-        for(Point p : points){
-            if(p.equals(pointToCheck)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void addTotoro(){
+    public void addTotoro() {
         containsTotoro = true;
     }
 
-    public boolean containsTotoro(){
+    public boolean containsTotoro() {
         return containsTotoro;
     }
 
-    public void addTiger(){
+    public void addTiger() {
         containsTiger = true;
     }
 
     public boolean containsTiger() {
         return containsTiger;
     }
-
-    // Prints a list of (x, y) points in this settlement
-    public void printPoints(){
-        for(Point p : points){
-            System.out.format("(%d, %d)", p.getX(), p.getY());
-        }
-    }
-
 }
