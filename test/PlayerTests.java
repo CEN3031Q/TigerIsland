@@ -48,6 +48,6 @@ public class PlayerTests {
     public void testOneTurnInUnderOneAndAHalfSeconds() {
         Tile tile = new Tile(TerrainType.JUNGLE, TerrainType.ROCKY);
         Point offset = firstPlayer.performTileAction(tile);
-        BuildAction action = firstPlayer.performBuildAction(tile);
+        BuildAction action = firstPlayer.performBuildAction();
     }
 }

@@ -27,7 +27,7 @@ public class Player {
         return chosenPoint;
     }
 
-    public BuildAction performBuildAction(Tile tile) {
+    public BuildAction performBuildAction() {
         BuildAction chosenBuildAction = gameActionPerformer.buildAction(game.getGameBoard());
         game.applyBuildAction(chosenBuildAction);
         return chosenBuildAction;

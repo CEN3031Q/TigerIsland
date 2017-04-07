@@ -2,6 +2,8 @@
  * Created by gonzalonunez on 3/21/17.
  */
 
+import javafx.geometry.Point3D;
+
 import java.awt.*;
 
 public class BuildAction {
@@ -44,5 +46,14 @@ public class BuildAction {
 
     public boolean isExpansionAction() {
         return terrainType != TerrainType.EMPTY;
+    }
+
+    public void setTerrainType(TerrainType terrainType) {
+        this.terrainType = terrainType;
+    }
+
+    public String coordinatesToString() {
+        Point3D point = Board.axialToCube(this.coordinates);
+        return point.getX() + " " + point.getY() + " " + point.getZ();
     }
 }
