@@ -1,10 +1,10 @@
+import javafx.geometry.Point3D;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import javafx.geometry.Point3D;
 
 public class Board {
     private Hexagon[][] boardStorage;
@@ -597,22 +597,14 @@ public class Board {
     }
 
     public void buildTotoroSanctuaryAtOffset(Point offset, int id) {
-        hexagonAtPoint(boardPointForOffset(offset)).setTotoroOnTop(true);
-
-        // Find the particular settlement this point belongs to and add the point to the settlement
-        // as well as setting the Totoro to be true;
-        Settlement settlementToUpdate = settlementManager.getSettlementForOffset(offset);
-        settlementToUpdate.addOffset(offset);
-        settlementToUpdate.addTotoro();
+        Hexagon hex = hexagonAtPoint(boardPointForOffset(offset));
+        hex.setTotoroOnTop(true);
+        hex.setOccupied(id);
     }
 
     public void buildTigerPlaygroundAtOffset(Point offset, int id) {
-        hexagonAtPoint(boardPointForOffset(offset)).setTigerOnTop(true);
-
-        // Find the particular settlement this point belongs to and add the point to the settlement
-        // as well as setting the Tiger to be true;
-        Settlement settlementToUpdate = settlementManager.getSettlementForOffset(offset);
-        settlementToUpdate.addOffset(offset);
-        settlementToUpdate.addTiger();
+        Hexagon hex = hexagonAtPoint(boardPointForOffset(offset));
+        hex.setTigerOnTop(true);
+        hex.setOccupied(id);
     }
 }
