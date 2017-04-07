@@ -58,37 +58,50 @@ public class SettlementManager {
         return null;
     }
 
-    // Given two settlements, it takes the list of points in the second settlement
-    // and adds them to the list in the first settlement
-    public void mergeSettlement(Settlement settlementToAddTo, Settlement settlementToDelete){
-        settlementToAddTo.getPoints().addAll(settlementToDelete.getPoints());
-        listOfSettlements.remove(settlementToDelete);
+    // Given any number of settlements, this method will add to the first
+    // settlement's list of points all the other settlement's points
+    public void mergeSettlement(Settlement ... settlementsToMerge){
+        // Do nothing if there is only one settlement given
+        if(settlementsToMerge.length == 1){
+            return;
+        }
+
+        // Loop through the remaining settlements, add their points to
+        // the first list and then remove them from the total list of settlements
+        Settlement baseSettlement = settlementsToMerge[0];
+        for(int i = 1; i < settlementsToMerge.length; i++){
+            baseSettlement.getPoints().addAll(settlementsToMerge[i].getPoints());
+            listOfSettlements.remove(settlementsToMerge[i]);
+        }
     }
 
-    // Overloaded method that merges to settlements given two points
-    public void mergeSettlement(Point pointInNewSettlement, Point pointInOldSettlememnt){
-        // Do nothing if the two points are the same
-        if(pointInNewSettlement.equals(pointInOldSettlememnt)){
+    // Overloaded method that merges settlements given a list of points
+    public void mergeSettlement(Point ... pointsToMerge){
+        // Do nothing if there is only one point given
+        if(pointsToMerge.length == 1){
             return;
         }
 
-        Settlement settlementToAddTo = null;
-        Settlement settlementToDelete = null;
-        for(Settlement s : listOfSettlements){
-            if(s.pointExistsInThisSettlement(pointInNewSettlement)){
-                settlementToAddTo = s;
-            }
-            if(s.pointExistsInThisSettlement(pointInOldSettlememnt)){
-                 settlementToDelete = s;
-            }
+        // This creates the set of all settlements that were found given
+        // the points we want to merge
+        Set<Settlement> correspondingSettlements = new HashSet<Settlement>();
+        for(Point p : pointsToMerge){
+            correspondingSettlements.add(getSettlementFromPoint(p));
         }
-        // If the settlements found in the list are the same, that means the points are in the same settlement
-        if(settlementToAddTo == settlementToDelete){
+
+        // If all the points were in the same settlement, then there is no need to merge
+        if(correspondingSettlements.size() <= 1){
             return;
         }
 
-        // This may throw an error if one of the settlements is not found
-        mergeSettlement(settlementToAddTo, settlementToDelete);
+        // Loop through the remaining settlements, add their points to
+        // the first list and then remove them from the total list of settlements
+        Settlement baseSettlement = getSettlementFromPoint(pointsToMerge[0]);
+        correspondingSettlements.remove(baseSettlement);
+        for(Settlement s : correspondingSettlements){
+            baseSettlement.getPoints().addAll(s.getPoints());
+            listOfSettlements.remove(s);
+        }
     }
 
     public void updateSettlements(Board board) {

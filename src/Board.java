@@ -20,8 +20,6 @@ public class Board {
     private int minBoardY = -3;
     private int maxBoardY = 3;
 
-    private ArrayList<Settlement> settlementList;
-
     public Board() {
         settlementManager = new SettlementManager();
 
