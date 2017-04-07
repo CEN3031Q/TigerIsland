@@ -81,7 +81,7 @@ public class Settlement {
         return false;
     }
 
-    public void addTotoro(){
+    public void setSettlementContainsTotoro(){
         containsTotoro = true;
     }
 
@@ -89,7 +89,7 @@ public class Settlement {
         return containsTotoro;
     }
 
-    public void addTiger(){
+    public void setSettlementContainsTiger(){
         containsTiger = true;
     }
 
