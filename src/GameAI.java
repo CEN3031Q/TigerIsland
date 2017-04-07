@@ -1,9 +1,12 @@
 /**
  * Created by gonzalonunez on 3/21/17.
  */
+import com.sun.scenario.effect.Offset;
+
 import java.awt.Point;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class GameAI implements GameActionPerformer {
     private int id;
@@ -14,7 +17,6 @@ public class GameAI implements GameActionPerformer {
         this.inventory = new Inventory(id);
     }
 
-    /** DO NOT MODIFY THE BOARD. I'M SORRY BUT DEADLINES ARE DEATH */
     public Point tileAction(Tile tile, Board board) {
         //TODO: Make stacking decisions
         /**** PLACE AT EDGE ****/
@@ -33,9 +35,93 @@ public class GameAI implements GameActionPerformer {
         /*********************/
     }
 
-    /** DO NOT MODIFY THE BOARD. I'M SORRY BUT DEADLINES ARE DEATH */
     public BuildAction buildAction(Board board) {
+        /** TRY TO PLACE A TOTORO **/
+        if (!inventory.isTotoroEmpty()) {
+            List<Settlement> settlements = board.getSettlementManager().getListOfSettlements()
+                    .stream()
+                    .filter(settlement -> {
+                        return board.hexagonAtPoint(board.boardPointForOffset((Point)settlement.getOffsets().toArray()[0])).getTileID() == id;
+                    })
+                    .collect(Collectors.toList());
+
+            Collections.sort(settlements, new Comparator<Settlement>() {
+                @Override
+                public int compare(Settlement lhs, Settlement rhs) {
+                    return lhs.getOffsets().size() - rhs.getOffsets().size();
+                }
+            });
+
+            for (Settlement settlement : settlements) {
+                if (settlement.size() >= 5) {
+                    Set<Point> offsets = board.offsetsAtEdgeOfSettlementAtOffset((Point)settlement.getOffsets().toArray()[0]).keySet();
+                    for (Point offset : offsets) {
+                        Hexagon hex = board.hexagonAtPoint(board.boardPointForOffset(offset));
+                        if (!hex.isOccupied() && hex.getTerrainType() != TerrainType.VOLCANO) {
+                            inventory.removeTotoroPiece();
+                            return new BuildAction(id, BuildActionType.TOTORO_SANCTUARY, offset);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        /** TRY TO PLACE A TIGER **/
+        if (!inventory.isTigerEmpty()) {
+            List<Settlement> settlements = board.getSettlementManager().getListOfSettlements().stream().filter(settlement -> {
+                return board.hexagonAtPoint(board.boardPointForOffset((Point)settlement.getOffsets().toArray()[0])).getTileID() == id;
+            }).collect(Collectors.toList());
+
+            for (Settlement settlement : settlements) {
+                if (settlement.size() >= 1) {
+                    List<Point> offsets = board.offsetsAtEdgeOfSettlementAtOffset((Point)settlement.getOffsets().toArray()[0])
+                            .keySet()
+                            .stream()
+                            .filter(offset -> {
+                                return board.hexagonAtPoint(board.boardPointForOffset(offset)).getLevel() >= 3;
+                            })
+                            .collect(Collectors.toList());
+
+                    for (Point offset : offsets) {
+                        Hexagon hex = board.hexagonAtPoint(board.boardPointForOffset(offset));
+                        if (!hex.isOccupied() && hex.getTerrainType() != TerrainType.VOLCANO) {
+                            inventory.removeTigerPiece();
+                            return new BuildAction(id, BuildActionType.TIGER_PLAYGROUND, offset);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        /** TRY TO EXPAND OR PLACE A MEEPLE **/
+        if (!inventory.isMeepleEmpty()) {
+            List<Settlement> settlements = board.getSettlementManager().getListOfSettlements().stream().filter(settlement -> {
+                return board.hexagonAtPoint(board.boardPointForOffset((Point)settlement.getOffsets().toArray()[0])).getTileID() == id;
+            }).collect(Collectors.toList());
+
+            if (settlements.isEmpty()) {
+                Set<Point> offsets = board.offsetsEligibleForSettlementFounding().keySet();
+                Integer random = ThreadLocalRandom.current().nextInt(0, offsets.size());
+                return new BuildAction(id, BuildActionType.FOUND_SETTLEMENT, (Point)offsets.toArray()[random]);
+            }
+
+            for (Settlement settlement : settlements) {
+
+
+            }
+
+            //Set<Point> edgeOffsets = board.offsetsAtEdgeOfSettlementAtOffset(offset).keySet();
+
+
+
+
+        }
+
         //TODO: I want to iterate over all of my settlements
+
+
 
         //TODO: I want to make a decision and pick an action
         /**

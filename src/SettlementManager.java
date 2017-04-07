@@ -4,214 +4,94 @@
  * It keeps a list of settlements - which are a list of Points
  */
 
+import java.awt.*;
 import java.util.ArrayList;
-import java.awt.Point;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 
 public class SettlementManager {
-    private Set<Settlement> listOfSettlements = new HashSet<>();
+    private Board board;
+    private HashSet<Settlement> listOfSettlements;
 
-    public SettlementManager() {
-
+    public SettlementManager(Board board) {
+        this.board = board;
+        listOfSettlements = new HashSet<>();
     }
 
-    /* TODO: BFS STUFF
-    public int calculateSettlementSizeAtPoint(Point pointToCheck){
-        TerrainType pointTerrainType = gameBoard.getTerrainTypeAtPoint(pointToCheck);
-
-        Queue<Point> adjacentSpaces = new LinkedList<Point>();
-        ArrayList<Point> visitedSpaces = new ArrayList<Point>();
-
-        adjacentSpaces.add(pointToCheck);
-        visitedSpaces.add(pointToCheck);
-
-        while(!adjacentSpaces.isEmpty()){
-
-        }
-    }
-    */
-
-    public void addNewSettlement(Settlement settlementToAdd){
-        listOfSettlements.add(settlementToAdd);
-    }
-
-    // Given a point, runs through every settlement and checks if the point is in a settlement
-    // and returns that size
-    public int calculateSettlementSizeAtPoint(Point pointToCheck){
-        for(Settlement s : listOfSettlements){
-            if (s.pointExistsInThisSettlement(pointToCheck)){
-                return s.getSettlementSize();
+    public int sizeOfSettlementAtOffset(Point offset) {
+        for(Settlement settlement : listOfSettlements) {
+            if (settlement.containsOffset(offset)) {
+                return settlement.size();
             }
         }
         return 0;
     }
 
-    // Given a point, checks the list of settlements and checks every settlement list of points
-    // for the point specified. Otherwise returns null.
-    public Settlement getSettlementFromPoint(Point pointTocheck){
-        for(Settlement s : listOfSettlements){
-            if(s.pointExistsInThisSettlement(pointTocheck)){
-                return s;
+    public Settlement getSettlementForOffset(Point offset) {
+        for (Settlement settlement : listOfSettlements) {
+            if (settlement.containsOffset(offset)) {
+                return settlement;
             }
         }
         return null;
     }
 
-    // Given two settlements, it takes the list of points in the second settlement
-    // and adds them to the list in the first settlement
-    public void mergeSettlement(Settlement settlementToAddTo, Settlement settlementToDelete){
-        settlementToAddTo.getPoints().addAll(settlementToDelete.getPoints());
-        listOfSettlements.remove(settlementToDelete);
-    }
+    public void updateSettlements() {
+        HashMap<Point, Boolean> visited = new HashMap<>();
+        HashSet<Settlement> updatedListOfSettlements = new HashSet<>();
 
-    // Overloaded method that merges to settlements given two points
-    public void mergeSettlement(Point pointInNewSettlement, Point pointInOldSettlememnt){
-        // Do nothing if the two points are the same
-        if(pointInNewSettlement.equals(pointInOldSettlememnt)){
-            return;
-        }
+        int minBoardX = board.getMinOffset().x;
+        int maxBoardX = board.getMaxOffset().x;
+        int minBoardY = board.getMinOffset().y;
+        int maxBoardY = board.getMaxOffset().y;
 
-        Settlement settlementToAddTo = null;
-        Settlement settlementToDelete = null;
-        for(Settlement s : listOfSettlements){
-            if(s.pointExistsInThisSettlement(pointInNewSettlement)){
-                settlementToAddTo = s;
-            }
-            if(s.pointExistsInThisSettlement(pointInOldSettlememnt)){
-                 settlementToDelete = s;
-            }
-        }
-        // If the settlements found in the list are the same, that means the points are in the same settlement
-        if(settlementToAddTo == settlementToDelete){
-            return;
-        }
+        for (int x = minBoardX; x < maxBoardX; x++) {
+            for (int y = minBoardY; y < maxBoardY; y++) {
 
-        // This may throw an error if one of the settlements is not found
-        mergeSettlement(settlementToAddTo, settlementToDelete);
-    }
+                Point rootOffset =  new Point(x, y);
+                Hexagon rootHex = board.hexagonAtPoint(board.boardPointForOffset(rootOffset));
 
-    public void updateSettlements(Board board) {
-        ArrayList<Hexagon> visited = new ArrayList<>();
-        Set<Settlement> updatedListOfSettlements = new HashSet<>();
+                if (visited.get(rootOffset) == null && rootHex.isOccupied()) {
 
-        int minBoardX = board.getMinX();
-        int maxBoardX = board.getMaxX();
-        int minBoardY = board.getMinY();
-        int maxBoardY = board.getMaxY();
+                    Settlement settlement = new Settlement();
 
-        for (int ii = minBoardX; ii < maxBoardX; ii++) {
-            for (int jj = minBoardY; jj < maxBoardY; jj++) {
-                if(board.hexagonAtPoint(new Point(ii,jj)).isOccupied() && !visited.contains(board.hexagonAtPoint(new Point(ii,jj)))) {
-                    Settlement newSettlement = new Settlement(new Point(jj, ii));
-                    Hexagon visitingHexagon = board.hexagonAtPoint(new Point(ii,jj));
-                    int visitingHexagonX = ii;
-                    int visitingHexagonY = jj;
+                    ArrayList<Point> queue = new ArrayList<>();
+                    queue.add(rootOffset);
 
+                    Integer settlementID = board.hexagonAtPoint(board.boardPointForOffset(rootOffset)).getOccupiedID();
 
+                    while (!queue.isEmpty()) {
+                        Point offset = queue.remove(0);
 
-                    Integer playerID = board.hexagonAtPoint(new Point(ii,jj)).getOccupiedID();
-                    ArrayList<Hexagon> queue = new ArrayList<>();
+                        settlement.addOffset(offset);
+                        visited.put(offset, true);
 
-                    queue.add(visitingHexagon);
-                    while(!queue.isEmpty()) {
-                        Hexagon hexUpRight = board.hexagonAtPoint(new Point((visitingHexagonY+1),(visitingHexagonX-1)));
-                        Hexagon hexUpLeft = board.hexagonAtPoint(new Point((visitingHexagonY),(visitingHexagonX-1)));
-                        Hexagon hexLeft = board.hexagonAtPoint(new Point ((visitingHexagonY),(visitingHexagonX-1)));
-                        Hexagon hexRight = board.hexagonAtPoint(new Point ((visitingHexagonY),(visitingHexagonX+1)));
-                        Hexagon hexDownLeft = board.hexagonAtPoint(new Point ((visitingHexagonY+1),(visitingHexagonX-1)));
-                        Hexagon hexDownRight = board.hexagonAtPoint(new Point ((visitingHexagonY+1),(visitingHexagonX+1)));
-                        //put all of its neighbors into the queue
-                            if(hexUpRight.isOccupied()) {
-                                if (!visited.contains(hexUpRight)){
-                                    if (hexUpRight.getOccupiedID() == playerID) {
-                                        queue.add(hexUpRight);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexUpRight);
-                            }
-                            if(hexLeft.isOccupied()) {
-                                if( !visited.contains(hexLeft)) {
-                                    if (hexLeft.getOccupiedID()== playerID) {
-                                        queue.add(hexLeft);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexLeft);
-                            }
-                            if(hexRight.isOccupied()) {
-                                if(!visited.contains(hexRight)) {
-                                    if (hexRight.getOccupiedID() == playerID) {
-                                        queue.add(hexRight);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexRight);
-                            }
-                            if(hexDownRight.isOccupied()) {
-                                if(!visited.contains(hexDownRight)) {
-                                    if (hexDownRight.getOccupiedID() == playerID) {
-                                        queue.add(hexDownRight);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexDownRight);
-                            }
-                            if(hexUpRight.isOccupied()) {
-                                if (!visited.contains(hexUpRight)){
-                                    if (hexDownLeft.getOccupiedID() == playerID) {
-                                        queue.add(hexUpRight);
-                                    }
-                                }
-                            }
-                            else{
-                                visited.add(hexUpRight);
-                            }
-
-                        //What we do when we visit
-                        //Add our visitingHexagon to the visited list
-                        visited.add(visitingHexagon);
-                        //update settlementCoordinates
-                        newSettlement.getPoints().add(new Point(visitingHexagonX, visitingHexagonY));
-                        //pop visitingHexagon out of our queue
-                        queue.remove(0);
-                        //update our visitingHexagon to the front of the queue
-                        visitingHexagon = queue.get(0);
-
-                        //update visitingHexagonX and visitingHexagonY
-                        if(visitingHexagon == hexLeft){
-                            visitingHexagonX--;
+                        ArrayList<Point> appliedNeighborOffsets = new ArrayList<>();
+                        for (Point neighborOffset : HexagonNeighborsCalculator.hexagonNeighborOffsets()) {
+                            appliedNeighborOffsets.add(Board.pointTranslatedByPoint(offset, neighborOffset));
                         }
-                        else if(visitingHexagon == hexRight){
-                            visitingHexagonX++;
+
+                        for (Point neighborOffset : appliedNeighborOffsets) {
+                            Point neighborPoint = board.boardPointForOffset(neighborOffset);
+                            Hexagon neighborHex = board.hexagonAtPoint(neighborPoint);
+
+                            if (visited.get(neighborOffset) == null && neighborHex.getOccupiedID().equals(settlementID)) {
+                                queue.add(neighborOffset);
+                            } else if (!neighborHex.isOccupied() || neighborHex.getTerrainType() == TerrainType.EMPTY) {
+                                visited.put(neighborOffset, true);
+                            }
                         }
-                        else if(visitingHexagon == hexDownLeft){
-                            visitingHexagonY++;
-                            visitingHexagonX--;
-                        }
-                        else if(visitingHexagon == hexDownRight){
-                            visitingHexagonY++;
-                        }
-                        else if(visitingHexagon == hexUpLeft){
-                            visitingHexagonY--;
-                        }
-                        else if(visitingHexagon == hexUpRight){
-                            visitingHexagonY--;
-                            visitingHexagonX++;
-                        }
+
                     }
-                    updatedListOfSettlements.add(newSettlement);
-                }
 
+                    updatedListOfSettlements.add(settlement);
+
+                }
             }
         }
-        this.listOfSettlements = updatedListOfSettlements;
 
+        listOfSettlements = updatedListOfSettlements;
     }
 
     public Set<Settlement> getListOfSettlements(){

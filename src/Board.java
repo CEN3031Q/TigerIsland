@@ -14,16 +14,14 @@ public class Board {
 
     private int dimensions = 200;
 
-    private int minBoardX = -3;
-    private int maxBoardX = 3;
+    private int minBoardXOffset = -3;
+    private int maxBoardXOffset = 3;
 
-    private int minBoardY = -3;
-    private int maxBoardY = 3;
-
-    private ArrayList<Settlement> settlementList;
+    private int minBoardYOffset = -3;
+    private int maxBoardYOffset = 3;
 
     public Board() {
-        settlementManager = new SettlementManager();
+        settlementManager = new SettlementManager(this);
 
         int dim = dimensions;
 
@@ -65,9 +63,6 @@ public class Board {
             hex.incrementLevel();
             hex.setTileID(nextTileID);
             hex.setOccupied(Integer.MIN_VALUE);
-
-            minBoardX = java.lang.Math.min(minBoardX, (int)p.getX());
-            minBoardY = java.lang.Math.min(minBoardY, (int)p.getY());
         }
 
         nextTileID++;
@@ -108,9 +103,18 @@ public class Board {
             hex.incrementLevel();
             hex.setTileID(nextTileID);
             hex.setOccupied(Integer.MIN_VALUE);
+        }
 
-            minBoardX = java.lang.Math.min(minBoardX, (int)point.getX());
-            minBoardY = java.lang.Math.min(minBoardY, (int)point.getY());
+        Point offsets[] = new Point[]{ axialOffset,
+                                        Board.pointTranslatedByPoint(axialOffset, abOffsets.get(HexagonPosition.A)),
+                                        Board.pointTranslatedByPoint(axialOffset, abOffsets.get(HexagonPosition.B))
+        };
+
+        for (Point offset : offsets) {
+            minBoardXOffset = java.lang.Math.min(minBoardXOffset, (int)offset.getX() - 2);
+            minBoardYOffset = java.lang.Math.min(minBoardYOffset, (int)offset.getY() - 2);
+            maxBoardXOffset = java.lang.Math.max(maxBoardXOffset, (int)offset.getX() + 2);
+            maxBoardYOffset = java.lang.Math.max(maxBoardYOffset, (int)offset.getY() + 2);
         }
 
         nextTileID++;
@@ -157,6 +161,50 @@ public class Board {
 
         return validOffsets;
     }
+
+    public HashMap<Point, Boolean> offsetsEligibleForSettlementFounding() {
+        // This does a BFS from the center of the board in order to find places where we can found a settlement.
+        HashMap<Point, Boolean> validOffsets = new HashMap<>();
+        HashMap<Point, Boolean> visited = new HashMap<>();
+
+        ArrayList<Point> queue = new ArrayList<>();
+        queue.add(new Point(0, 0));
+
+        while (!queue.isEmpty()) {
+            Point offset = queue.remove(0);
+
+            Point point = boardPointForOffset(offset);
+            Hexagon hex = hexagonAtPoint(point);
+
+            if (visited.get(offset) == null && !hex.isOccupied() && hex.getTerrainType() != TerrainType.VOLCANO) {
+                validOffsets.put(offset, true);
+            }
+
+            visited.put(offset, true);
+
+            ArrayList<Point> appliedNeighborOffsets = new ArrayList<>();
+            for (Point neighborOffset : HexagonNeighborsCalculator.hexagonNeighborOffsets()) {
+                appliedNeighborOffsets.add(Board.pointTranslatedByPoint(offset, neighborOffset));
+            }
+
+            for (Point neighborOffset : appliedNeighborOffsets) {
+                Point neighborPoint = boardPointForOffset(neighborOffset);
+                Hexagon neighborHex = hexagonAtPoint(neighborPoint);
+
+                if (!neighborHex.isOccupied() && neighborHex.getTerrainType() != TerrainType.VOLCANO) {
+                    validOffsets.put(neighborOffset, true);
+                    visited.put(neighborOffset, true);
+                } else if (neighborHex.getTerrainType() == TerrainType.EMPTY) {
+                    visited.put(neighborOffset, true);
+                } else if (visited.get(neighborOffset) == null) {
+                    queue.add(neighborOffset);
+                }
+            }
+        }
+
+        return validOffsets;
+    }
+
 
     public HashMap<Point, Boolean> volcanoesOnCurrentlyPlayedBoard() {
         // Finds all volcano points on the current board.
@@ -227,8 +275,11 @@ public class Board {
                 HexagonNeighborsCalculator calc = new HexagonNeighborsCalculator(orientation);
                 HashMap<HexagonPosition, Point> abOffsets = calc.offsetsForAB();
 
-                Point pointA = boardPointForOffset(Board.pointTranslatedByPoint(offset, abOffsets.get(HexagonPosition.A)));
-                Point pointB = boardPointForOffset(Board.pointTranslatedByPoint(offset, abOffsets.get(HexagonPosition.B)));
+                Point offsetA = Board.pointTranslatedByPoint(offset, abOffsets.get(HexagonPosition.A));
+                Point offsetB = Board.pointTranslatedByPoint(offset, abOffsets.get(HexagonPosition.B));
+
+                Point pointA = boardPointForOffset(offsetA);
+                Point pointB = boardPointForOffset(offsetB);
 
                 Hexagon volcanoHexagon = hexagonAtPoint(boardPointForOffset(offset));
                 Hexagon hexagonA = hexagonAtPoint(pointA);
@@ -242,11 +293,64 @@ public class Board {
                     continue;
                 }
 
-                if (hexagonA.getTileID() != hexagonB.getTileID() || hexagonA.getTileID() != volcanoHexagon.getTileID()) {
-                    if (volcanoHexagon.getLevel() == hexagonA.getLevel() && hexagonA.getLevel() == hexagonB.getLevel()) {
-                        //TODO: Get settlement size at point A and B, make sure that we don't completely kill it if it's of size 2.
+                if (volcanoHexagon.getTileID() == hexagonA.getTileID() && hexagonA.getTileID() == hexagonB.getTileID()) {
+                    continue;
+                }
+
+                if (volcanoHexagon.getLevel() != hexagonA.getLevel() || hexagonA.getLevel() != hexagonB.getLevel()) {
+                    continue;
+                }
+
+                if (settlementManager.getSettlementForOffset(offsetA) != null) {
+                    Settlement settlementA = settlementManager.getSettlementForOffset(offsetA);
+                    if (settlementA.size() == 1) {
+                        continue;
+                    }
+
+                    if (settlementA.size() == 2) {
+                        Point otherOffset = offsetB;
+                        for (Point candidate : settlementA.getOffsets()) {
+                            if (!candidate.equals(offsetA)) {
+                                otherOffset = candidate;
+                                break;
+                            }
+                        }
+
+                        if (!otherOffset.equals(offsetB)) {
+                            RequirementsToStack stackReqs = new RequirementsToStack(offset, orientation);
+                            stackInfo.put(stackReqs, true);
+                        }
+                    } else if (settlementA.size() > 2) {
+                        RequirementsToStack stackReqs = new RequirementsToStack(offset, orientation);
+                        stackInfo.put(stackReqs, true);
                     }
                 }
+
+                if (settlementManager.getSettlementForOffset(offsetB) != null) {
+                    Settlement settlementB = settlementManager.getSettlementForOffset(offsetB);
+                    if (settlementB.size() == 1) {
+                        continue;
+                    }
+
+                    if (settlementB.size() == 2) {
+                        Point otherOffset = offsetA;
+                        for (Point candidate : settlementB.getOffsets()) {
+                            if (!candidate.equals(offsetB)) {
+                                otherOffset = candidate;
+                                break;
+                            }
+                        }
+
+                        if (!otherOffset.equals(offsetA)) {
+                            RequirementsToStack stackReqs = new RequirementsToStack(offset, orientation);
+                            stackInfo.put(stackReqs, true);
+                        }
+                    } else if (settlementB.size() > 2) {
+                        RequirementsToStack stackReqs = new RequirementsToStack(offset, orientation);
+                        stackInfo.put(stackReqs, true);
+                    }
+                }
+
             }
         }
 
@@ -429,46 +533,17 @@ public class Board {
         return nextTileID;
     }
 
-    public int getMinX() {
-        return minBoardX;
+    public Point getMinOffset() {
+        return new Point(minBoardXOffset, minBoardYOffset);
     }
 
-    public int getMinY() {
-        return minBoardY;
+    public Point getMaxOffset() {
+        return new Point(maxBoardXOffset, maxBoardYOffset);
     }
 
-    public int getMaxX() {
-        return maxBoardX;
-    }
-
-    public int getMaxY() {
-        return maxBoardY;
-    }
     public SettlementManager getSettlementManager(){
         return settlementManager;
     }
-
-    /*
-    public Point getPointOfHexagon(Hexagon hexagon){
-        for (int ii = minBoardX - 3; ii < maxBoardX + 3; ii++) {
-            for (int jj = minBoardY - 3; jj < maxBoardY + 3; jj++) {
-                if (gameBoard.get(jj).get(ii) == hexagon) {
-                    Point point = new Point(ii, jj);
-                    return point;
-                }
-            }
-        }
-        Point fakePoint = new Point(0,0);
-        return fakePoint;
-    }
-
-    public Point getPointOfWhereVolcanoWillBePlaced(Tile tile){
-        TileOrientation tileOrientation = tile.getOrientation();
-        //if(tileOrientation ==  tileOrientation.BOTTOMHEAVY && )
-        //TODO: how do I do this
-        return new Point(0, 0);
-    }
-    */
 
     /***** ACTIONS *****/
 
@@ -526,8 +601,8 @@ public class Board {
 
         // Find the particular settlement this point belongs to and add the point to the settlement
         // as well as setting the Totoro to be true;
-        Settlement settlementToUpdate = settlementManager.getSettlementFromPoint(offset);
-        settlementToUpdate.addPointToSettlement(offset);
+        Settlement settlementToUpdate = settlementManager.getSettlementForOffset(offset);
+        settlementToUpdate.addOffset(offset);
         settlementToUpdate.addTotoro();
     }
 
@@ -536,8 +611,8 @@ public class Board {
 
         // Find the particular settlement this point belongs to and add the point to the settlement
         // as well as setting the Tiger to be true;
-        Settlement settlementToUpdate = settlementManager.getSettlementFromPoint(offset);
-        settlementToUpdate.addPointToSettlement(offset);
+        Settlement settlementToUpdate = settlementManager.getSettlementForOffset(offset);
+        settlementToUpdate.addOffset(offset);
         settlementToUpdate.addTiger();
     }
 }

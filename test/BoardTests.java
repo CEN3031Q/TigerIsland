@@ -34,6 +34,25 @@ public class BoardTests {
     }
 
     @Test
+    public void testPlayableBoardBounds() {
+        Board board = new Board();
+
+        Tile firstTile = new Tile(TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        Point settlementOffset = new Point(-1, 0);
+        board.placeTile(firstTile, Board.axialToCube(settlementOffset));
+
+        Point minOffset = board.getMinOffset();
+        Point maxOffset = board.getMaxOffset();
+
+        Assert.assertEquals(-4, minOffset.x);
+        Assert.assertEquals(-3, minOffset.y);
+        Assert.assertEquals(3, board.getMaxOffset().x);
+        Assert.assertEquals(3, board.getMaxOffset().y);
+    }
+
+    @Test
     public void testBoardExpectedFirstValidSpots() {
         Board board = new Board();
         Set<Point> offsets = board.offsetsAtEdgeOfCurrentlyPlayedBoard().keySet();
@@ -175,8 +194,6 @@ public class BoardTests {
                 new Point(-1, 1)
         ));
 
-        System.out.println(offsetsOfTerrain);
-
         Assert.assertTrue(expected.equals(offsetsOfTerrain));
     }
 
@@ -249,4 +266,194 @@ public class BoardTests {
         }
     }
 
+    @Test
+    public void testCannotStackWithTotalOverlap() {
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
+
+        Set<RequirementsToStack> stackPossibilities = board.requirementsToStack().keySet();
+
+        RequirementsToStack illegalReqs = new RequirementsToStack(new Point(-1, 0), 5);
+        Assert.assertTrue(!stackPossibilities.contains(illegalReqs));
+    }
+
+    @Test
+    public void testCannotStackWithOverhang() {
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
+
+        Set<RequirementsToStack> stackPossibilities = board.requirementsToStack().keySet();
+
+        RequirementsToStack illegalReqs1 = new RequirementsToStack(new Point(-1, 0), 1);
+        RequirementsToStack illegalReqs2 = new RequirementsToStack(new Point(-1, 0), 6);
+
+        Assert.assertTrue(!stackPossibilities.contains(illegalReqs1));
+        Assert.assertTrue(!stackPossibilities.contains(illegalReqs2));
+    }
+
+    @Test
+    public void testCannotStackOnTotoro(){
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setTotoroOnTop(true);
+
+        Set<RequirementsToStack> stackPossibilities = board.requirementsToStack().keySet();
+
+        RequirementsToStack illegalReqs1 = new RequirementsToStack(new Point(-1, 0), 4);
+        Assert.assertTrue(!stackPossibilities.contains(illegalReqs1));
+    }
+
+    @Test
+    public void testCannotStackOnTiger(){
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setTigerOnTop(true);
+
+        Set<RequirementsToStack> stackPossibilities = board.requirementsToStack().keySet();
+
+        RequirementsToStack illegalReqs1 = new RequirementsToStack(new Point(-1, 0), 4);
+        Assert.assertTrue(!stackPossibilities.contains(illegalReqs1));
+    }
+
+    @Test
+    public void testCannotCrushSettlementWithAB(){
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
+
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(1);
+
+        board.getSettlementManager().updateSettlements();
+
+        Set<RequirementsToStack> stackPossibilities = board.requirementsToStack().keySet();
+
+        RequirementsToStack illegalReqs1 = new RequirementsToStack(new Point(-1, 0), 4);
+        Assert.assertTrue(!stackPossibilities.contains(illegalReqs1));
+    }
+
+    @Test
+    public void testCannotCrushSettlementWithA(){
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
+
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(1);
+
+        board.getSettlementManager().updateSettlements();
+
+        Set<RequirementsToStack> stackPossibilities = board.requirementsToStack().keySet();
+
+        RequirementsToStack illegalReqs1 = new RequirementsToStack(new Point(-1, 0), 4);
+        Assert.assertTrue(!stackPossibilities.contains(illegalReqs1));
+    }
+
+    @Test
+    public void testCannotCrushSettlementWithB(){
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
+
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
+
+        board.getSettlementManager().updateSettlements();
+
+        Set<RequirementsToStack> stackPossibilities = board.requirementsToStack().keySet();
+
+        RequirementsToStack illegalReqs1 = new RequirementsToStack(new Point(-1, 0), 4);
+        Assert.assertTrue(!stackPossibilities.contains(illegalReqs1));
+    }
+
+    @Test
+    public void testCanCrushSettlementWithABAndExtra(){
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
+
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(0, 1))).setOccupied(1);
+
+        board.getSettlementManager().updateSettlements();
+
+        Set<RequirementsToStack> stackPossibilities = board.requirementsToStack().keySet();
+
+        RequirementsToStack reqs = new RequirementsToStack(new Point(-1, 0), 4);
+        Assert.assertTrue(stackPossibilities.contains(reqs));
+    }
+
+    @Test
+    public void testCannotCrushTwoSettlementsWithAB(){
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
+
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(2);
+
+        board.getSettlementManager().updateSettlements();
+
+        Set<RequirementsToStack> stackPossibilities = board.requirementsToStack().keySet();
+
+        RequirementsToStack illegalReqs1 = new RequirementsToStack(new Point(-1, 0), 4);
+        Assert.assertTrue(!stackPossibilities.contains(illegalReqs1));
+    }
+
+    @Test
+    public void testCanCrushTwoDifferentSettlementsWithABAndExtra(){
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+
+        board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
+
+        Tile secondTile = new Tile (TerrainType.GRASSLANDS, TerrainType.ROCKY);
+        secondTile.setOrientation(4);
+
+        board.placeTile(secondTile, Board.axialToCube(new Point(-3, 0)));
+
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-3, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(2);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(0, 1))).setOccupied(2);
+
+        board.getSettlementManager().updateSettlements();
+
+        Set<RequirementsToStack> stackPossibilities = board.requirementsToStack().keySet();
+
+        RequirementsToStack reqs = new RequirementsToStack(new Point(-1, 0), 4);
+        Assert.assertTrue(stackPossibilities.contains(reqs));
+    }
 }

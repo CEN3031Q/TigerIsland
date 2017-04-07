@@ -4,5 +4,5 @@ class Piece {
         this.playerID = playerID;
     }
 
-    public int getPlayerID() {return  playerID; }
+    public int getPlayerID() {return playerID; }
 }
