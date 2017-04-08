@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
  * Created by taylo on 4/3/2017.
  */
 public class TigerIslandClient {
-    private static ServerProtocol[] serverProtocols(ServerProtocolInfoCommunicator comm,
+    public static ServerProtocol[] serverProtocols(ServerProtocolInfoCommunicator comm,
                                                     String username,
                                                     String password,
                                                     String tournamentPassword) {

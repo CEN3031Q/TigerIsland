@@ -16,7 +16,9 @@ public class TournamentDriver implements ServerProtocolInfoCommunicator {
     public TournamentDriver() { }
 
     public void receiveInfo(ServerProtocol sender, String message, HashMap<String, String> info) {
-        receivedInfo = info;
+        synchronized (this) {
+            receivedInfo = info;
+        }
 
         String[] split = message.split("\\s+");
 
@@ -104,15 +106,17 @@ public class TournamentDriver implements ServerProtocolInfoCommunicator {
 
     public String replyForMessage(ServerProtocol sender, String str) {
         if (sender instanceof MoveProtocol) {
-            if (str.startsWith("MAKE YOUR MOVE IN GAME")) {
-                String gid = receivedInfo.get("gid");
-                String time = receivedInfo.get("time");
-                String moveNumber = receivedInfo.get("moveNumber");
+            synchronized (this) {
+                if (str.startsWith("MAKE YOUR MOVE IN GAME")) {
+                    String gid = receivedInfo.get("gid");
+                    String time = receivedInfo.get("time");
+                    String moveNumber = receivedInfo.get("moveNumber");
 
-                String tileString = receivedInfo.get("tile");
-                Tile tile = new Tile(tileString);
+                    String tileString = receivedInfo.get("tile");
+                    Tile tile = new Tile(tileString);
 
-                return tournament.makeMoveForGame(gid, time, moveNumber, tile);
+                    return tournament.makeMoveForGame(gid, time, moveNumber, tile);
+                }
             }
         }
         return null;
