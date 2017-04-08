@@ -90,8 +90,6 @@ class MatchStartReaderWriter implements ReaderWriter {
     }
 }
 
-//TODO: MatchEndReaderWriterTests
-
 public class TigerClientProtocolTests {
     @Test
     public void testAuthenticationProtocol() {

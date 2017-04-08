@@ -23,13 +23,13 @@ public class Player {
 
     public Point performTileAction(Tile tile) {
         Point chosenPoint = gameActionPerformer.tileAction(tile, game.getGameBoard());
-        game.applyTileAction(tile, chosenPoint);
+        //game.applyTileAction(tile, chosenPoint);
         return chosenPoint;
     }
 
     public BuildAction performBuildAction() {
         BuildAction chosenBuildAction = gameActionPerformer.buildAction(game.getGameBoard());
-        game.applyBuildAction(chosenBuildAction);
+        //game.applyBuildAction(chosenBuildAction);
         return chosenBuildAction;
     }
 

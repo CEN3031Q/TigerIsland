@@ -1,16 +1,23 @@
-import javafx.geometry.Point3D;
-import java.util.HashMap;
-
 public class Tile {
     private Hexagon aHex;
     private Hexagon bHex;
 
     private Integer orientation;
 
-    public Tile(TerrainType leftType, TerrainType rightType) {
-        aHex = new Hexagon(leftType);
-        bHex = new Hexagon(rightType);
+    public Tile(TerrainType aType, TerrainType bType) {
+        aHex = new Hexagon(aType);
+        bHex = new Hexagon(bType);
         orientation = 1;
+    }
+
+    public Tile(String serverString) {
+        String[] split = serverString.split("\\+");
+
+        TerrainType aType = TerrainType.valueOf(split[0]);
+        TerrainType bType = TerrainType.valueOf(split[1]);
+
+        aHex = new Hexagon(aType);
+        bHex = new Hexagon(bType);
     }
 
     public TerrainType getTerrainTypeForPosition(HexagonPosition position) {

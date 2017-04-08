@@ -114,9 +114,6 @@ public class TigerClientProtocols {
         return gameID;
     }
 
-
-
-    /*
     // Get move conditions
     public String[] getMoveConditions() throws IOException {  //Gets info for the move
         String response;
@@ -145,7 +142,6 @@ public class TigerClientProtocols {
 
         return info;
     }
-    */
 
     // Send server our move
     public void moveSender(String gid, int moveNumber, String place, String build) {
