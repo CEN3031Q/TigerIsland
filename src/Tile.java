@@ -39,4 +39,7 @@ public class Tile {
         this.orientation = orientation;
     }
 
+    public String toString(Tile tile) {
+        return String.valueOf(tile.getTerrainTypeForPosition(HexagonPosition.A)) + "+" + String.valueOf(tile.getTerrainTypeForPosition(HexagonPosition.B));
+    }
 }

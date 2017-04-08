@@ -151,8 +151,10 @@ public class TournamentDriver implements ServerProtocolInfoCommunicator {
             buildActionType = BuildActionType.TIGER_PLAYGROUND;
         }
 
-        TerrainType terrainType = TerrainType.valueOf(info.get("terrain"));
-        if (terrainType == null) { terrainType = TerrainType.EMPTY; }
+        TerrainType terrainType = TerrainType.EMPTY;
+        if (expanded) {
+            terrainType = TerrainType.valueOf(info.get("terrain"));
+        }
 
         Integer buildX = Integer.parseInt(info.get("buildX"));
         Integer buildY = Integer.parseInt(info.get("buildY"));
