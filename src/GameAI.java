@@ -213,25 +213,10 @@ public class GameAI implements GameActionPerformer {
                     }
                 }
             }
-            else{
-                //WE CAN'T BUILD
-                //TODO: Write in can't build
-            }
         }
+        
+        return new BuildAction(id, BuildActionType.UNABLE_TO_BUILD, new Point(0, 0));
 
-
-
-        //TODO: I want to make a decision and pick an action
-        /**
-         So we go to each settlement and do a few checks:
-         If no Totoros and size >= 5, place a Totoro
-         If no Tigers and there is an adjacent level 3, place a Tiger
-         Check all possible expansions for each type of adjacent terrain type and pick highest of those
-         If none of the above place a single villager adjacent to a settlement of size < 5 if one exists, otherwise just put it anywhere
-         **/
-
-        //TODO: We want to make sure we can actually perform the action before we pick it! Aka check Inventory.
-        return new BuildAction(id, BuildActionType.FOUND_SETTLEMENT, new Point(-1, 0));
     }
     public List<Settlement> ourSettlementsOnBoard(Board board) {
         List<Settlement> results = new ArrayList<>();
