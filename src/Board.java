@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.List;
 
 public class Board {
     private Hexagon[][] boardStorage;
@@ -389,7 +390,9 @@ public class Board {
                 Hexagon neighborHex = hexagonAtPoint(neighborPoint);
 
                 if (!neighborHex.getOccupiedID().equals(settlementID)) {
-                    validOffsets.put(neighborOffset, true);
+                    if (!neighborHex.isOccupied()) {
+                        validOffsets.put(neighborOffset, true);
+                    }
                     visited.put(neighborOffset, true);
                 } else if (visited.get(neighborOffset) == null) {
                     queue.add(neighborOffset);
@@ -477,8 +480,8 @@ public class Board {
                 if (visited.get(neighborOffset) == null && neighborHex.getTerrainType() == desiredTerrainType) {
                     if (!neighborHex.isOccupied()) {
                         meepleCount += hex.getLevel();
+                        queue.add(neighborOffset);
                     }
-                    queue.add(neighborOffset);
                 }
 
                 visited.put(neighborOffset, true);
@@ -596,6 +599,8 @@ public class Board {
         return meepleCount;
     }
 
+
+
     public void buildTotoroSanctuaryAtOffset(Point offset, int id) {
         Hexagon hex = hexagonAtPoint(boardPointForOffset(offset));
         hex.setTotoroOnTop(true);
@@ -606,5 +611,140 @@ public class Board {
         Hexagon hex = hexagonAtPoint(boardPointForOffset(offset));
         hex.setTigerOnTop(true);
         hex.setOccupied(id);
+    }
+    public HashMap<Point, Boolean> offsetsAroundAllSettlementsButOneSpecified(Settlement expansionSettlement, List<Settlement> ourSettlements){
+// This does a BFS from settlementOffset and finds the offsets at the edge of each settlement given a settlement we're expanding from.
+        HashMap<Point, Boolean> validOffsets = new HashMap<>();
+        HashMap<Point, Boolean> visited = new HashMap<>();
+        for(Settlement settlement: ourSettlements) {
+
+            if(settlement == expansionSettlement){
+                continue;
+            }
+
+            //boardPointForOffset being instantiated. Use this as the offset to bfs from each time
+            Point firstOffsetInSettlement = (Point)settlement.getOffsets().toArray()[0];
+            Point boardPointForOffset = boardPointForOffset(firstOffsetInSettlement);
+
+            ArrayList<Point> queue = new ArrayList<>();
+            queue.add(boardPointForOffset);
+
+            Integer settlementID = hexagonAtPoint(boardPointForOffset(boardPointForOffset)).getOccupiedID();
+
+            if (settlementID == Integer.MIN_VALUE) {
+                return validOffsets;
+            }
+
+            while (!queue.isEmpty()) {
+                Point otherOffset = queue.remove(0);
+
+                Point point = boardPointForOffset(boardPointForOffset);
+                Hexagon hex = hexagonAtPoint(point);
+
+                visited.put(otherOffset, true);
+
+                ArrayList<Point> appliedNeighborOffsets = new ArrayList<>();
+                for (Point neighborOffset : HexagonNeighborsCalculator.hexagonNeighborOffsets()) {
+                    appliedNeighborOffsets.add(Board.pointTranslatedByPoint(boardPointForOffset, neighborOffset));
+                }
+
+                for (Point neighborOffset : appliedNeighborOffsets) {
+                    Point neighborPoint = boardPointForOffset(neighborOffset);
+                    Hexagon neighborHex = hexagonAtPoint(neighborPoint);
+
+                    if (!neighborHex.getOccupiedID().equals(settlementID)) {
+                        if (!neighborHex.isOccupied()) {
+                            validOffsets.put(neighborOffset, true);
+                        }
+                        visited.put(neighborOffset, true);
+                    } else if (visited.get(neighborOffset) == null) {
+                        queue.add(neighborOffset);
+                    }
+                }
+            }
+        }
+
+        return validOffsets;
+    }
+    public boolean doesExpansionConnectTwoSettlements(Point offset, TerrainType type, List<Settlement> settlements, Settlement settlement){
+        Set<Point> edgeOffsets = offsetsAroundAllSettlementsButOneSpecified(settlement, settlements).keySet();
+        Set<Point> edgeOffsetsForExpansion = offsetsAtEdgeOfSettlementAtOffset(offset).keySet();
+
+        if (edgeOffsetsForExpansion.isEmpty()) {
+            return false;
+        }
+
+        Set<Point> offsetsOfTerrain = edgeOffsetsForExpansion.stream().filter( edgeOffset -> {
+            Hexagon hex = hexagonAtPoint(boardPointForOffset(edgeOffset));
+            return hex.getTerrainType() == type;
+        }).collect(Collectors.toSet());
+
+        if (offsetsOfTerrain.isEmpty()) {
+            return false;
+        }
+
+
+        int meepleCount = 0;
+        for (Point terrainOffset : offsetsOfTerrain) {
+            //for each Point compareOffset within edgeOffsets
+            for(Point compareOffset: edgeOffsets) {
+                //if terrainOffset Point equals that compareOffset at that terrainOffset, return true
+                if (terrainOffset == compareOffset) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
+    public HashMap<Point, Boolean> offsetsAroundAllOurSettlements( List<Settlement> ourSettlements){
+// This does a BFS from settlementOffset and finds the offsets at the edge of each settlement given a settlement we're expanding from.
+        HashMap<Point, Boolean> validOffsets = new HashMap<>();
+        HashMap<Point, Boolean> visited = new HashMap<>();
+        for(Settlement settlement: ourSettlements) {
+
+            //boardPointForOffset being instantiated. Use this as the offset to bfs from each time
+            Point firstOffsetInSettlement = (Point)settlement.getOffsets().toArray()[0];
+            Point boardPointForOffset = boardPointForOffset(firstOffsetInSettlement);
+
+            ArrayList<Point> queue = new ArrayList<>();
+            queue.add(boardPointForOffset);
+
+            Integer settlementID = hexagonAtPoint(boardPointForOffset(boardPointForOffset)).getOccupiedID();
+
+            if (settlementID == Integer.MIN_VALUE) {
+                return validOffsets;
+            }
+
+            while (!queue.isEmpty()) {
+                Point otherOffset = queue.remove(0);
+
+                Point point = boardPointForOffset(boardPointForOffset);
+                Hexagon hex = hexagonAtPoint(point);
+
+                visited.put(otherOffset, true);
+
+                ArrayList<Point> appliedNeighborOffsets = new ArrayList<>();
+                for (Point neighborOffset : HexagonNeighborsCalculator.hexagonNeighborOffsets()) {
+                    appliedNeighborOffsets.add(Board.pointTranslatedByPoint(boardPointForOffset, neighborOffset));
+                }
+
+                for (Point neighborOffset : appliedNeighborOffsets) {
+                    Point neighborPoint = boardPointForOffset(neighborOffset);
+                    Hexagon neighborHex = hexagonAtPoint(neighborPoint);
+
+                    if (!neighborHex.getOccupiedID().equals(settlementID)) {
+                        if (!neighborHex.isOccupied()) {
+                            validOffsets.put(neighborOffset, true);
+                        }
+                        visited.put(neighborOffset, true);
+                    } else if (visited.get(neighborOffset) == null) {
+                        queue.add(neighborOffset);
+                    }
+                }
+            }
+        }
+
+        return validOffsets;
     }
 }
