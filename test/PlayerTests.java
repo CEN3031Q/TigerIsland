@@ -16,7 +16,7 @@ public class PlayerTests {
 
     @Before
     public void setUp() {
-        game = new Game();
+        game = new Game("1");
         firstPlayer = new Player("1", game);
         secondPlayer = new Player("2", game);
     }
