@@ -21,10 +21,10 @@ public class Player {
 
     // Make our move
 
-    public Point performTileAction(Tile tile) {
-        Point chosenPoint = gameActionPerformer.tileAction(tile, game.getGameBoard());
-        game.applyTileAction(tile, chosenPoint);
-        return chosenPoint;
+    public TileAction performTileAction(Tile tile) {
+        TileAction chosenAction = gameActionPerformer.tileAction(tile, game.getGameBoard());
+        game.applyTileAction(chosenAction);
+        return chosenAction;
     }
 
     public BuildAction performBuildAction() {
@@ -35,8 +35,8 @@ public class Player {
 
     // Apply opponents move
 
-    public void applyOtherTileAction(Tile tile, Point point) {
-        game.applyTileAction(tile, point);
+    public void applyOtherTileAction(TileAction action) {
+        game.applyTileAction(action);
     }
 
     public void applyOtherBuildAction(BuildAction action) {

@@ -17,8 +17,9 @@ public class Game {
         board = new Board();
     }
 
-    public void applyTileAction(Tile tile, Point point) {
-        board.placeTile(tile, Board.axialToCube(point));
+    public void applyTileAction(TileAction tileAction) {
+        tileAction.getTile().setOrientation(tileAction.getOrientation());
+        board.placeTile(tileAction.getTile(), Board.axialToCube(tileAction.getOffset()));
         board.getSettlementManager().updateSettlements();
     }
 
