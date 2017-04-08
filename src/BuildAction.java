@@ -28,6 +28,51 @@ public class BuildAction {
         }
     }
 
+    public BuildAction(String serverString) {
+        String[] split = serverString.split("\\s+");
+        int x, y, z;
+        switch (split.length) {
+            case 6:
+                // FOUND SETTLEMENT
+                this.type = BuildActionType.FOUND_SETTLEMENT;
+                x = Integer.parseInt(split[3]);
+                y = Integer.parseInt(split[4]);
+                z = Integer.parseInt(split[5]);
+                this.coordinates = Board.cubeToAxial(new Point3D(x, y, z));
+                break;
+            case 7:
+                // EXPAND SETTLEMENT
+                if (split[0].equals("EXPANDED")) {
+                    this.type = BuildActionType.EXPAND_SETTLEMENT;
+                    this.terrainType = getTerrainTypeFromString(serverString);
+                    x = Integer.parseInt(split[3]);
+                    y = Integer.parseInt(split[4]);
+                    z = Integer.parseInt(split[5]);
+                    this.coordinates = Board.cubeToAxial(new Point3D(x, y, z));
+                    this.terrainType = getTerrainTypeFromString(split[6]);
+                }
+                // BUILD TOTORO SANCTUARY
+                else if (split[1].equals("TOTORO")) {
+                    this.type = BuildActionType.TOTORO_SANCTUARY;
+                    x = Integer.parseInt(split[4]);
+                    y = Integer.parseInt(split[5]);
+                    z = Integer.parseInt(split[6]);
+                    this.coordinates = Board.cubeToAxial(new Point3D(x, y, z));
+                }
+                // BUILD TIGER PLAYGROUND
+                else if (split[1].equals("TIGER")) {
+                    this.type = BuildActionType.TIGER_PLAYGROUND;
+                    x = Integer.parseInt(split[4]);
+                    y = Integer.parseInt(split[5]);
+                    z = Integer.parseInt(split[6]);
+                    this.coordinates = Board.cubeToAxial(new Point3D(x, y, z));
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     public Integer getID() {
         return id;
     }
@@ -52,8 +97,38 @@ public class BuildAction {
         this.terrainType = terrainType;
     }
 
+    public TerrainType getTerrainTypeFromString(String terrainString) {
+        if (terrainString.equals("GRASSLANDS"))
+            return TerrainType.GRASSLANDS;
+        if (terrainString.equals("JUNGLE"))
+            return TerrainType.JUNGLE;
+        if (terrainString.equals("LAKE"))
+            return TerrainType.LAKE;
+        if (terrainString.equals("ROCKY"))
+            return TerrainType.ROCKY;
+        if (terrainString.equals("VOLCANO"))
+            return TerrainType.VOLCANO;
+        return null;
+    }
+
     public String coordinatesToString() {
         Point3D point = Board.axialToCube(this.coordinates);
-        return point.getX() + " " + point.getY() + " " + point.getZ();
+        return (int)point.getX() + " " + (int)point.getY() + " " + (int)point.getZ();
     }
+
+    public String createServerStringFromBuildAction() {
+        switch(this.type) {
+            case FOUND_SETTLEMENT:
+                return "FOUND SETTLEMENT AT " + coordinatesToString();
+            case EXPAND_SETTLEMENT:
+                return "EXPAND SETTLEMENT AT " + coordinatesToString() + " " + this.terrainType;
+            case TOTORO_SANCTUARY:
+                return "BUILD TOTORO SANCTUARY AT " + coordinatesToString();
+            case TIGER_PLAYGROUND:
+                return "BUILD TIGER PLAYGROUND AT " + coordinatesToString();
+            default:
+                return "UNABLE TO BUILD";
+        }
+    }
+
 }
