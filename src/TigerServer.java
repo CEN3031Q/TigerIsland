@@ -24,35 +24,72 @@ public class TigerServer {
                 Socket clientSocket = serverSocket.accept();
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
         ) {
 
-            String inputLine, outputLine;
+            String inputLine;
+            Deck gameDeck = new Deck();
 
             // Initiate conversation with client
-            TigerServerProtocols kkp = new TigerServerProtocols(serverSocket, in, out);
-            out.println("WELCOME TO ANOTHER EDITION OF THE THUNDERDOME!");
-            outputLine = kkp.authenticate(null);
-            out.println(outputLine);
+            out.println("WELCOME TO ANOTHER EDITION OF THUNDERDOME!");
+            in.readLine();
+            out.println("TWO SHALL ENTER, ONE SHALL LEAVE");
+            in.readLine();
+            out.println("WAIT FOR THE TOURNAMENT TO BEGIN PLAYER1");
+            int challenges = 1;
+            out.println("NEW CHALLENGE CID YOU WILL PLAY " + challenges + " MATCHES");
+            for (int ii = 0; ii < challenges; ii++) {
+                int rounds = 2;
+                out.println("BEGIN ROUND 1 OF " + rounds);
+                for (int jj = 0; jj < rounds; jj++) {
+                    out.println("NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER PLAYER2");
 
-            while ((inputLine = in.readLine()) != null) {
-                outputLine = kkp.authenticate(inputLine);
-                out.println(outputLine);
-                for (int round = 0; round < 3; round++) {
-                    outputLine = kkp.challenge(23, false, true);
-                    out.println(outputLine);
+                    boolean active = true;
+                    for (int kk = 0; kk < 48; kk++) {
+                        Tile tile = gameDeck.drawTile();
+                        String nextTile = tile.toString(tile);
+                        if (!active) {
+                            out.println("MAKE YOUR MOVE IN GAME A WITHIN 1.5 SECOND: MOVE " + (kk+1) + " PLACE " + nextTile);
+                            inputLine = in.readLine();
+
+                            if (inputLine.contains("FOUND")) {
+                                inputLine.replace("FOUND", "FOUNDED");
+                            } else if (inputLine.contains("EXPAND")) {
+                                inputLine.replace("EXPAND", "EXPANDED");
+                            } else if (inputLine.contains("BUILD")) {
+                                inputLine.replace("BUILD", "BUILT");
+                            }
+                            out.println(inputLine.replace("PLACE", "PLAYER PLAYER1 PLACE"));
+                        } else {
+                            out.println(stdIn.readLine());
+                        }
+                        active = !active;
+                    }
 
 
+                    out.println("GAME A OVER PLAYER PLAYER1 SCORE1 PLAYER PLAYER2 SCORE2");
+                    out.println("GAME B OVER PLAYER PLAYER1 SCORE1 PLAYER PLAYER2 SCORE2");
 
-
-
-                    outputLine = kkp.challenge(23, round == 2, false);
-                    out.println(outputLine);
+                    if (jj+1 == rounds) {
+                        out.println("END OF ROUND " + jj + " OF " + rounds);
+                    } else {
+                        out.println("END OF ROUND " + rounds + " OF " + rounds + " WAIT FOR THE NEXT MATCH");
+                    }
                 }
 
 
 
-                out.println("THANK YOU FOR PLAYING! GOODBYE");
+                if (ii+1 != challenges) {
+                    out.println("WAIT FOR THE NEXT CHALLENGE TO BEGIN");
+                }
             }
+
+            out.println("END OF CHALLENGES");
+            out.println("THANK YOU FOR PLAYING! GOODBYE");
+
+
+
+
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                     + portNumber + " or listening for a connection");
