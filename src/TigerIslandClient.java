@@ -9,7 +9,6 @@ import java.net.UnknownHostException;
  * Created by taylo on 4/3/2017.
  */
 public class TigerIslandClient {
-
     private static ServerProtocol[] serverProtocols(ServerProtocolInfoCommunicator comm,
                                                     String username,
                                                     String password,
@@ -38,18 +37,14 @@ public class TigerIslandClient {
 
         TournamentDriver driver = new TournamentDriver();
 
-        ServerProtocol[] protocols = TigerIslandClient.serverProtocols(driver, username, password, tournamentPassword);
-        MessageDispatcher messageDispatcher = new MessageDispatcher(protocols);
-
         try {
-            SocketReaderWriter socketReaderWriter = new SocketReaderWriter(hostName, portNumber);
+            final ServerProtocol[] protocols = TigerIslandClient.serverProtocols(driver, username, password, tournamentPassword);
+            final SocketReaderWriter socketReaderWriter = new SocketReaderWriter(hostName, portNumber);
 
             String messageFromServer;
             while ((messageFromServer = socketReaderWriter.readLine()) != null) {
-                String response = messageDispatcher.processInput(messageFromServer);
-                if (response != null) {
-                    socketReaderWriter.println(response);
-                }
+                Thread thread = new Thread(new ServerWritingRunnable(socketReaderWriter, protocols, messageFromServer));
+                thread.run();
             }
         } catch (UnknownHostException e) {
             System.err.println("[ERROR] Unknown host: " + hostName);

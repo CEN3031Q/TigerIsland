@@ -30,7 +30,7 @@ public class PlayerTests {
             for (Player player : new Player[]{ firstPlayer, secondPlayer }) {
                 Tile tile = deck.drawTile();
 
-                TileAction tileAction = player.desiredTileAction(tile);
+                TileAction tileAction = player.performTileAction(tile);
 
                 HexagonNeighborsCalculator calc = new HexagonNeighborsCalculator(tile.getOrientation());
                 HashMap<HexagonPosition, Point> abOffsets = calc.offsetsForAB();
@@ -48,7 +48,7 @@ public class PlayerTests {
     @Test(timeout=1500)
     public void testOneTurnInUnderOneAndAHalfSeconds() {
         Tile tile = new Tile(TerrainType.JUNGLE, TerrainType.ROCKY);
-        Point offset = firstPlayer.desiredTileAction(tile).getOffset();
-        BuildAction action = firstPlayer.desiredBuildAction();
+        Point offset = firstPlayer.performTileAction(tile).getOffset();
+        BuildAction action = firstPlayer.performBuildAction();
     }
 }

@@ -1,3 +1,4 @@
+import javax.management.StringValueExp;
 import java.util.HashMap;
 
 /**
@@ -32,6 +33,7 @@ public class RoundProtocol implements ServerProtocol {
             }
         }
 
+        info.put("beginRound", String.valueOf(str.startsWith("BEGIN ROUND")));
         info.put("waitForNextMatch", String.valueOf(split.length > 6));
 
         communicator.receiveInfo(this, str, info);

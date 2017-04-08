@@ -5,15 +5,11 @@ import java.awt.Point;
  */
 
 public class Game {
+    String id;
     private Board board;
-    private Deck tileDeck = new Deck();
 
-    public Game(Deck deck) {
-        board = new Board();
-        tileDeck = deck;
-    }
-
-    public Game() {
+    public Game(String id) {
+        this.id = id;
         board = new Board();
     }
 
