@@ -18,7 +18,8 @@ public class BuildAction {
         this.coordinates = coordinates;
     }
 
-    public BuildAction(BuildActionType type, Point coordinates, TerrainType terrainType) throws IllegalArgumentException {
+    public BuildAction(int id, BuildActionType type, Point coordinates, TerrainType terrainType) throws IllegalArgumentException {
+        this.id = id;
         this.type = type;
         this.coordinates = coordinates;
         this.terrainType = terrainType;
