@@ -34,7 +34,6 @@ public class BuildAction {
         switch (split.length) {
             case 6:
                 // FOUND SETTLEMENT
-                // Definitely a better way to write all of this
                 this.type = BuildActionType.FOUND_SETTLEMENT;
                 x = Integer.parseInt(split[3]);
                 y = Integer.parseInt(split[4]);
@@ -53,7 +52,7 @@ public class BuildAction {
                     this.terrainType = getTerrainTypeFromString(split[6]);
                 }
                 // BUILD TOTORO SANCTUARY
-                else if(split[1].equals("TOTORO")){
+                else if (split[1].equals("TOTORO")) {
                     this.type = BuildActionType.TOTORO_SANCTUARY;
                     x = Integer.parseInt(split[4]);
                     y = Integer.parseInt(split[5]);
@@ -61,7 +60,7 @@ public class BuildAction {
                     this.coordinates = Board.cubeToAxial(new Point3D(x, y, z));
                 }
                 // BUILD TIGER PLAYGROUND
-                else if(split[1].equals("TIGER")){
+                else if (split[1].equals("TIGER")) {
                     this.type = BuildActionType.TIGER_PLAYGROUND;
                     x = Integer.parseInt(split[4]);
                     y = Integer.parseInt(split[5]);
@@ -69,7 +68,6 @@ public class BuildAction {
                     this.coordinates = Board.cubeToAxial(new Point3D(x, y, z));
                 }
                 break;
-                // Else the server message does not much the expected format
             default:
                 break;
         }
@@ -99,18 +97,17 @@ public class BuildAction {
         this.terrainType = terrainType;
     }
 
-    public TerrainType getTerrainTypeFromString(String terrainString){
-        if(terrainString.equals("GRASSLANDS"))
+    public TerrainType getTerrainTypeFromString(String terrainString) {
+        if (terrainString.equals("GRASSLANDS"))
             return TerrainType.GRASSLANDS;
-        if(terrainString.equals("JuNGLE"))
+        if (terrainString.equals("JUNGLE"))
             return TerrainType.JUNGLE;
-        if(terrainString.equals("LAKE"))
+        if (terrainString.equals("LAKE"))
             return TerrainType.LAKE;
-        if(terrainString.equals("ROCKY"))
+        if (terrainString.equals("ROCKY"))
             return TerrainType.ROCKY;
-        if(terrainString.equals("VOLCANO"))
+        if (terrainString.equals("VOLCANO"))
             return TerrainType.VOLCANO;
-
         return null;
     }
 
@@ -119,8 +116,8 @@ public class BuildAction {
         return (int)point.getX() + " " + (int)point.getY() + " " + (int)point.getZ();
     }
 
-    public String createServerStringFromBuildAction(){
-        switch(this.type){
+    public String createServerStringFromBuildAction() {
+        switch(this.type) {
             case FOUND_SETTLEMENT:
                 return "FOUND SETTLEMENT AT " + coordinatesToString();
             case EXPAND_SETTLEMENT:
@@ -130,7 +127,6 @@ public class BuildAction {
             case TIGER_PLAYGROUND:
                 return "BUILD TIGER PLAYGROUND AT " + coordinatesToString();
             default:
-                // Might need to change the default behavior
                 return "UNABLE TO BUILD";
         }
     }
