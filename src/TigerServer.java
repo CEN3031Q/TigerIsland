@@ -48,6 +48,7 @@ public class TigerServer {
                     for (int kk = 0; kk < 48; kk++) {
                         Tile tile = gameDeck.drawTile();
                         String nextTile = tile.toString(tile);
+
                         if (!active) {
                             out.println("MAKE YOUR MOVE IN GAME A WITHIN 1.5 SECOND: MOVE " + (kk+1) + " PLACE " + nextTile);
                             inputLine = in.readLine();

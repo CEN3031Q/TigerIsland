@@ -14,9 +14,11 @@ public class ServerWritingRunnable implements Runnable {
     }
 
     public void run() {
+        System.out.println(messageFromServer);
         String response = messageDispatcher.processInput(messageFromServer);
         if (response != null) {
             socketReaderWriter.println(response);
+            System.out.println(response);
         }
     }
 }
