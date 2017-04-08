@@ -15,24 +15,24 @@ public class BuildActionTests {
         Point newSettlementPoint = new Point (-1, 0);
         Point3D cubePoint = Board.axialToCube(newSettlementPoint);
         String cubePointString = (int)cubePoint.getX() + " " + (int)cubePoint.getY() + " " + (int)cubePoint.getZ();
-        BuildAction buildAction = new BuildAction(BuildActionType.FOUND_SETTLEMENT, newSettlementPoint, TerrainType.GRASSLANDS);
+        BuildAction buildAction = new BuildAction(1, BuildActionType.FOUND_SETTLEMENT, newSettlementPoint, TerrainType.GRASSLANDS);
 
         String serverString = "FOUND SETTLEMENT AT " + cubePointString;
         Assert.assertEquals(serverString, buildAction.createServerStringFromBuildAction());
 
-        buildAction = new BuildAction(BuildActionType.EXPAND_SETTLEMENT, newSettlementPoint, TerrainType.GRASSLANDS);
+        buildAction = new BuildAction(1, BuildActionType.EXPAND_SETTLEMENT, newSettlementPoint, TerrainType.GRASSLANDS);
         serverString = "EXPAND SETTLEMENT AT "  + cubePointString + " GRASSLANDS";
         Assert.assertEquals(serverString, buildAction.createServerStringFromBuildAction());
 
-        buildAction = new BuildAction(BuildActionType.TOTORO_SANCTUARY, newSettlementPoint, TerrainType.GRASSLANDS);
+        buildAction = new BuildAction(1, BuildActionType.TOTORO_SANCTUARY, newSettlementPoint, TerrainType.GRASSLANDS);
         serverString = "BUILD TOTORO SANCTUARY AT "  + cubePointString;
         Assert.assertEquals(serverString, buildAction.createServerStringFromBuildAction());
 
-        buildAction = new BuildAction(BuildActionType.TIGER_PLAYGROUND, newSettlementPoint, TerrainType.GRASSLANDS);
+        buildAction = new BuildAction(1, BuildActionType.TIGER_PLAYGROUND, newSettlementPoint, TerrainType.GRASSLANDS);
         serverString = "BUILD TIGER PLAYGROUND AT "  + cubePointString;
         Assert.assertEquals(serverString, buildAction.createServerStringFromBuildAction());
 
-        buildAction = new BuildAction(BuildActionType.UNABLE_TO_BUILD, newSettlementPoint, TerrainType.VOLCANO);
+        buildAction = new BuildAction(1, BuildActionType.UNABLE_TO_BUILD, newSettlementPoint, TerrainType.VOLCANO);
         serverString = "UNABLE TO BUILD";
         Assert.assertEquals(serverString, buildAction.createServerStringFromBuildAction());
     }
