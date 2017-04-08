@@ -51,4 +51,34 @@ public class PlayerTests {
         Point offset = firstPlayer.performTileAction(tile).getOffset();
         BuildAction action = firstPlayer.performBuildAction();
     }
+    @Test
+    public void testPlaceTotoroIfWeCan(){
+        Board board = game.getGameBoard();
+
+        Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
+        firstTile.setOrientation(5);
+        Point settlementOffset = new Point(-1, 0);
+        board.placeTile(firstTile, Board.axialToCube(settlementOffset));
+
+        Tile secondTile = new Tile (TerrainType.GRASSLANDS, TerrainType.GRASSLANDS);
+        secondTile.setOrientation(5);
+        Point secondSettlementOffset = new Point(2, 0);
+        board.placeTile(firstTile, Board.axialToCube(secondSettlementOffset));
+
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 0))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(0, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(1, 1))).setOccupied(1);
+
+
+        board.getSettlementManager().updateSettlements();
+
+        BuildAction buildAction = firstPlayer.desiredBuildAction();
+
+        Hexagon totoroHex = board.hexagonAtPoint(board.boardPointForOffset(new Point(1,0)));
+
+
+        Assert.assertTrue(totoroHex.isTotoroOnTop());
+    }
 }
