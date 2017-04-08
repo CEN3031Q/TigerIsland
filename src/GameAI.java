@@ -17,13 +17,10 @@ public class GameAI implements GameActionPerformer {
     }
 
     public TileAction tileAction(Tile tile, Board board) {
-        //TODO: Make stacking decisions
         Set<RequirementsToStack> stackReqs = board.requirementsToStack().keySet();
         for (RequirementsToStack req : stackReqs) {
             Point offset = req.getOffset();
             int orientation = req.getOrientation();
-            boolean nukeAtOffset;
-            boolean ettlementBIsNukable;
 
             HexagonNeighborsCalculator calc = new HexagonNeighborsCalculator(orientation);
             HashMap<HexagonPosition, Point> offsetsForAB = calc.offsetsForAB();
@@ -37,20 +34,17 @@ public class GameAI implements GameActionPerformer {
             if (settlementForA != null) {
 
                 // There is a settlement here. See if we want to stack and fuck it up.
-
                 if(settlementForB != null){
 
                     //There are settlements on both of them
                     if(settlementForA.size() <= 6){
                         return new TileAction(id, tile, offset, orientation);
-                        //return the tile nuking placement at that offset and that orientation
                     }
                 }
                 else{
                     //There is just a settlement on A
                     if(settlementForA.size() <= 5){
                         return new TileAction(id,tile,offset, orientation);
-                        //return the tile nuking placement at that offset and that orientation
                     }
 
                 }
@@ -60,31 +54,27 @@ public class GameAI implements GameActionPerformer {
             if (settlementForB != null) {
                 // There is just a settlement here at B
                 if(settlementForB.size() <= 5){
-
                     return new TileAction(id,tile,offset,orientation);
-                    //return the tile nuking placement at that offset and that orientation
                 }
             }
 
 
         }
 
-        /**** PLACE AT EDGE ****/
-        Set<Point> edgePoints = board.offsetsAtEdgeOfCurrentlyPlayedBoard().keySet();
+        /** TRY TO PLACE BECAUSE WE DIDN'T STACK **/
 
-        int orientation = ThreadLocalRandom.current().nextInt(1,7);
-        tile.setOrientation(orientation);
+        Set<Point> edgePoints = board.offsetsAtEdgeOfCurrentlyPlayedBoard().keySet();
+        tile.setOrientation(ThreadLocalRandom.current().nextInt(1,7));
 
         while (true) {
             for (Point edgeOffset : edgePoints) {
                 if (board.canPlaceTileAtEdgeOffset(tile, edgeOffset)) {
-                    return new TileAction(id, tile, edgeOffset, orientation);
+                    return new TileAction(id, tile, edgeOffset, tile.getOrientation());
                 }
             }
             int currentOrientation = tile.getOrientation();
             tile.setOrientation(currentOrientation + 1);
         }
-        /*********************/
     }
 
     public BuildAction buildAction(Board board) {

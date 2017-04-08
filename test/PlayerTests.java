@@ -27,17 +27,19 @@ public class PlayerTests {
         Board board = game.getGameBoard();
 
         for (int i = 0; i < 24; i++) {
-            for (Player player : new Player[]{firstPlayer, secondPlayer}) {
+            for (Player player : new Player[]{ firstPlayer, secondPlayer }) {
                 Tile tile = deck.drawTile();
-                Point offset = player.performTileAction(tile);
+
+                TileAction tileAction = player.desiredTileAction(tile);
+                player.applyOtherTileAction(tileAction);
 
                 HexagonNeighborsCalculator calc = new HexagonNeighborsCalculator(tile.getOrientation());
                 HashMap<HexagonPosition, Point> abOffsets = calc.offsetsForAB();
 
-                Point offsetA = Board.pointTranslatedByPoint(offset, abOffsets.get(HexagonPosition.A));
-                Point offsetB = Board.pointTranslatedByPoint(offset, abOffsets.get(HexagonPosition.B));
+                Point offsetA = Board.pointTranslatedByPoint(tileAction.getOffset(), abOffsets.get(HexagonPosition.A));
+                Point offsetB = Board.pointTranslatedByPoint(tileAction.getOffset(), abOffsets.get(HexagonPosition.B));
 
-                Assert.assertEquals(board.hexagonAtPoint(board.boardPointForOffset(offset)).getTerrainType(), TerrainType.VOLCANO);
+                Assert.assertEquals(TerrainType.VOLCANO, board.hexagonAtPoint(board.boardPointForOffset(tileAction.getOffset())).getTerrainType());
                 Assert.assertEquals(tile.getTerrainTypeForPosition(HexagonPosition.A), board.getTerrainTypeAtPoint(board.boardPointForOffset(offsetA)));
                 Assert.assertEquals(tile.getTerrainTypeForPosition(HexagonPosition.B), board.getTerrainTypeAtPoint(board.boardPointForOffset(offsetB)));
             }
@@ -47,7 +49,7 @@ public class PlayerTests {
     @Test(timeout=1500)
     public void testOneTurnInUnderOneAndAHalfSeconds() {
         Tile tile = new Tile(TerrainType.JUNGLE, TerrainType.ROCKY);
-        Point offset = firstPlayer.performTileAction(tile);
-        BuildAction action = firstPlayer.performBuildAction();
+        Point offset = firstPlayer.desiredTileAction(tile).getOffset();
+        BuildAction action = firstPlayer.desiredBuildAction();
     }
 }

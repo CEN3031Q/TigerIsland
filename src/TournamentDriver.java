@@ -6,6 +6,8 @@ import java.util.HashMap;
 /**
  * Created by gonzalonunez on 4/7/17.
  */
+
+//TODO: Do all of these TODOs!!
 public class TournamentDriver implements ServerProtocolInfoCommunicator {
     private HashMap<String, String> receivedInfo;
 
