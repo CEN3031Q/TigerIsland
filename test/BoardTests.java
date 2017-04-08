@@ -144,9 +144,9 @@ public class BoardTests {
         Point settlementOffset = new Point(-1, 0);
         board.placeTile(firstTile, Board.axialToCube(settlementOffset));
 
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 0))).setOccupied(1);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 0))).setOccupied(1);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 0))).setOccupied("1");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 0))).setOccupied("1");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied("1");
 
         Set<Point> offsets = board.offsetsAtEdgeOfSettlementAtOffset(settlementOffset).keySet();
 
@@ -172,9 +172,9 @@ public class BoardTests {
         Tile firstTile = new Tile (TerrainType.LAKE, TerrainType.LAKE);
         firstTile.setOrientation(5);
 
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 0))).setOccupied(1);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 0))).setOccupied(1);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 0))).setOccupied("1");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 0))).setOccupied("1");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied("1");
 
         Tile secondTile = new Tile (TerrainType.ROCKY, TerrainType.ROCKY);
         secondTile.setOrientation(2);
@@ -207,7 +207,7 @@ public class BoardTests {
         Point settlementOffset = new Point(-1, 0);
         board.placeTile(firstTile, Board.axialToCube(settlementOffset));
 
-        Integer settlementID = 1;
+        String settlementID = "1";
 
         board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 0))).setOccupied(settlementID);
         board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 0))).setOccupied(settlementID);
@@ -241,7 +241,7 @@ public class BoardTests {
         Point settlementOffset = new Point(-1, 0);
         board.placeTile(firstTile, Board.axialToCube(settlementOffset));
 
-        Integer settlementID = 1;
+        String settlementID = "1";
 
         board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 0))).setOccupied(settlementID);
         board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 0))).setOccupied(settlementID);
@@ -340,8 +340,8 @@ public class BoardTests {
 
         board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
 
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied("1");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied("1");
 
         board.getSettlementManager().updateSettlements();
 
@@ -360,7 +360,7 @@ public class BoardTests {
 
         board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
 
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied("1");
 
         board.getSettlementManager().updateSettlements();
 
@@ -379,7 +379,7 @@ public class BoardTests {
 
         board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
 
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied("1");
 
         board.getSettlementManager().updateSettlements();
 
@@ -398,9 +398,9 @@ public class BoardTests {
 
         board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
 
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(1);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(0, 1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied("1");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied("1");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(0, 1))).setOccupied("1");
 
         board.getSettlementManager().updateSettlements();
 
@@ -419,8 +419,8 @@ public class BoardTests {
 
         board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
 
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(2);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied("1");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied("2");
 
         board.getSettlementManager().updateSettlements();
 
@@ -444,10 +444,10 @@ public class BoardTests {
 
         board.placeTile(secondTile, Board.axialToCube(new Point(-3, 0)));
 
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-3, 1))).setOccupied(1);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(1);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(2);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(0, 1))).setOccupied(2);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-3, 1))).setOccupied("1");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied("1");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied("2");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(0, 1))).setOccupied("2");
 
         board.getSettlementManager().updateSettlements();
 

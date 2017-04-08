@@ -1,5 +1,5 @@
 public class Totoro extends Piece {
-    public Totoro(int playerID) {
+    public Totoro(String playerID) {
         super(playerID);
     }
 }

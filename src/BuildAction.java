@@ -7,18 +7,18 @@ import javafx.geometry.Point3D;
 import java.awt.*;
 
 public class BuildAction {
-    private int id;
+    private String id;
     private BuildActionType type;
     private Point coordinates;
     private TerrainType terrainType = TerrainType.EMPTY;
 
-    public BuildAction(int id, BuildActionType type, Point coordinates) {
+    public BuildAction(String id, BuildActionType type, Point coordinates) {
         this.id = id;
         this.type = type;
         this.coordinates = coordinates;
     }
 
-    public BuildAction(int id, BuildActionType type, Point coordinates, TerrainType terrainType) throws IllegalArgumentException {
+    public BuildAction(String id, BuildActionType type, Point coordinates, TerrainType terrainType) throws IllegalArgumentException {
         this.id = id;
         this.type = type;
         this.coordinates = coordinates;
@@ -74,7 +74,7 @@ public class BuildAction {
         }
     }
 
-    public Integer getID() {
+    public String getID() {
         return id;
     }
 

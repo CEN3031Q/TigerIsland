@@ -7,7 +7,7 @@ public class Hexagon {
     private int tileID;
     private int level;
 
-    private Integer occupiedID = Integer.MIN_VALUE;
+    private String occupiedID = Integer.toString(Integer.MIN_VALUE);
 
     private boolean totoroOnTop;
     private boolean tigerOnTop;
@@ -59,14 +59,14 @@ public class Hexagon {
     }
 
     public boolean isOccupied() {
-        return occupiedID != Integer.MIN_VALUE;
+        return !occupiedID.equals(Integer.toString(Integer.MIN_VALUE));
     }
 
-    public Integer getOccupiedID() {
+    public String getOccupiedID() {
         return occupiedID;
     }
 
-    public void setOccupied(Integer occupiedID) {
+    public void setOccupied(String occupiedID) {
         this.occupiedID = occupiedID;
     }
 

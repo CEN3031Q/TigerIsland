@@ -3,12 +3,12 @@ import javafx.geometry.Point3D;
 import java.awt.*;
 
 public class TileAction {
-    private int id;
+    private String id;
     private Tile tile;
     private Point offset;
     private int orientation;
 
-    public TileAction(int id, Tile tile, Point offset, int orientation) {
+    public TileAction(String id, Tile tile, Point offset, int orientation) {
         this.id = id;
         this.tile = tile;
         this.offset = offset;
@@ -18,7 +18,7 @@ public class TileAction {
     }
 
     public String getIDString() {
-        return Integer.toString(id);
+        return id;
     }
 
     //converts Tile's terrains A+B into String

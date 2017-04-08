@@ -1,8 +1,8 @@
 class Piece {
-    int playerID;
-    public Piece(int playerID) {
+    String playerID;
+    public Piece(String playerID) {
         this.playerID = playerID;
     }
 
-    public int getPlayerID() {return playerID; }
+    public String getPlayerID() { return playerID; }
 }

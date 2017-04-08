@@ -59,7 +59,7 @@ public class SettlementManager {
                     ArrayList<Point> queue = new ArrayList<>();
                     queue.add(rootOffset);
 
-                    Integer settlementID = board.hexagonAtPoint(board.boardPointForOffset(rootOffset)).getOccupiedID();
+                    String settlementID = board.hexagonAtPoint(board.boardPointForOffset(rootOffset)).getOccupiedID();
 
                     while (!queue.isEmpty()) {
                         Point offset = queue.remove(0);

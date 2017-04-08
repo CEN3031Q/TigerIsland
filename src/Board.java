@@ -63,7 +63,7 @@ public class Board {
             Hexagon hex = hexagonAtPoint(p);
             hex.incrementLevel();
             hex.setTileID(nextTileID);
-            hex.setOccupied(Integer.MIN_VALUE);
+            hex.setOccupied(Integer.toString(Integer.MIN_VALUE));
         }
 
         nextTileID++;
@@ -103,7 +103,7 @@ public class Board {
             Hexagon hex = hexagonAtPoint(point);
             hex.incrementLevel();
             hex.setTileID(nextTileID);
-            hex.setOccupied(Integer.MIN_VALUE);
+            hex.setOccupied(Integer.toString(Integer.MIN_VALUE));
         }
 
         Point offsets[] = new Point[]{ axialOffset,
@@ -366,9 +366,9 @@ public class Board {
         ArrayList<Point> queue = new ArrayList<>();
         queue.add(settlementOffset);
 
-        Integer settlementID =  hexagonAtPoint(boardPointForOffset(settlementOffset)).getOccupiedID();
+        String settlementID =  hexagonAtPoint(boardPointForOffset(settlementOffset)).getOccupiedID();
 
-        if (settlementID == Integer.MIN_VALUE) {
+        if (settlementID.equals(Integer.toString(Integer.MIN_VALUE))) {
             return validOffsets;
         }
 
@@ -403,7 +403,7 @@ public class Board {
         return validOffsets;
     }
 
-    private void expandAndConquerFromRootOffset(Point rootOffset, Integer settlementID) {
+    private void expandAndConquerFromRootOffset(Point rootOffset, String settlementID) {
         HashMap<Point, Boolean> visited = new HashMap<>();
 
         ArrayList<Point> queue = new ArrayList<>();
@@ -445,7 +445,7 @@ public class Board {
         }
     }
 
-    private int meepleCountForExpansionFromOffset(Point rootOffset, Integer settlementID) {
+    private int meepleCountForExpansionFromOffset(Point rootOffset) {
         Integer meepleCount = 0;
 
         HashMap<Point, Boolean> visited = new HashMap<>();
@@ -550,11 +550,11 @@ public class Board {
 
     /***** ACTIONS *****/
 
-    public void foundSettlementAtOffset(Point offset, int id) {
+    public void foundSettlementAtOffset(Point offset, String id) {
         hexagonAtPoint(boardPointForOffset(offset)).setOccupied(id);
     }
 
-    public void expandSettlementAtOffset(Point offset, TerrainType type, int id) {
+    public void expandSettlementAtOffset(Point offset, TerrainType type, String id) {
         Set<Point> edgeOffsets = offsetsAtEdgeOfSettlementAtOffset(offset).keySet();
 
         if (edgeOffsets.isEmpty()) {
@@ -575,7 +575,7 @@ public class Board {
         }
     }
 
-    public int numberOfMeeplesNeededForExpansion(Point offset, TerrainType type, int id) {
+    public int numberOfMeeplesNeededForExpansion(Point offset, TerrainType type, String id) {
         Set<Point> edgeOffsets = offsetsAtEdgeOfSettlementAtOffset(offset).keySet();
 
         if (edgeOffsets.isEmpty()) {
@@ -593,7 +593,7 @@ public class Board {
 
         int meepleCount = 0;
         for (Point terrainOffset : offsetsOfTerrain) {
-            meepleCount += meepleCountForExpansionFromOffset(terrainOffset, id);
+            meepleCount += meepleCountForExpansionFromOffset(terrainOffset);
         }
 
         return meepleCount;
@@ -601,13 +601,13 @@ public class Board {
 
 
 
-    public void buildTotoroSanctuaryAtOffset(Point offset, int id) {
+    public void buildTotoroSanctuaryAtOffset(Point offset, String id) {
         Hexagon hex = hexagonAtPoint(boardPointForOffset(offset));
         hex.setTotoroOnTop(true);
         hex.setOccupied(id);
     }
 
-    public void buildTigerPlaygroundAtOffset(Point offset, int id) {
+    public void buildTigerPlaygroundAtOffset(Point offset, String id) {
         Hexagon hex = hexagonAtPoint(boardPointForOffset(offset));
         hex.setTigerOnTop(true);
         hex.setOccupied(id);
@@ -629,9 +629,9 @@ public class Board {
             ArrayList<Point> queue = new ArrayList<>();
             queue.add(boardPointForOffset);
 
-            Integer settlementID = hexagonAtPoint(boardPointForOffset(boardPointForOffset)).getOccupiedID();
+            String settlementID = hexagonAtPoint(boardPointForOffset(boardPointForOffset)).getOccupiedID();
 
-            if (settlementID == Integer.MIN_VALUE) {
+            if (settlementID.equals(Integer.toString(Integer.MIN_VALUE))) {
                 return validOffsets;
             }
 
@@ -710,9 +710,9 @@ public class Board {
             ArrayList<Point> queue = new ArrayList<>();
             queue.add(boardPointForOffset);
 
-            Integer settlementID = hexagonAtPoint(boardPointForOffset(boardPointForOffset)).getOccupiedID();
+            String settlementID = hexagonAtPoint(boardPointForOffset(boardPointForOffset)).getOccupiedID();
 
-            if (settlementID == Integer.MIN_VALUE) {
+            if (settlementID.equals(Integer.toString(Integer.MIN_VALUE))) {
                 return validOffsets;
             }
 
