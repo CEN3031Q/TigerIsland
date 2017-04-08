@@ -13,6 +13,8 @@ public class TileAction {
         this.tile = tile;
         this.offset = offset;
         this.orientation = orientation;
+
+        tile.setOrientation(orientation);
     }
 
     public String getIDString() {
@@ -30,7 +32,9 @@ public class TileAction {
         return offset;
     }
 
-    public String orientationToString() { return Integer.toString(orientation); }
+    public String orientationToString() {
+        return Integer.toString(orientation);
+    }
 
     //converts Point offset x,z into x,y,z (also casted int from double)
     public String offsetToString() {
@@ -42,4 +46,7 @@ public class TileAction {
     public String tileActionToString() {
         return "PLACE " + tileToString() + " AT " + offsetToString() + " " + orientationToString();
     }
+
+    public Tile getTile() { return tile; }
+    public int getOrientation(){ return orientation;}
 }

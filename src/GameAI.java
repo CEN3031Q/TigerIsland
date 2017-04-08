@@ -1,7 +1,6 @@
 /**
  * Created by gonzalonunez on 3/21/17.
  */
-import com.sun.scenario.effect.Offset;
 
 import java.awt.Point;
 import java.util.*;
@@ -17,7 +16,7 @@ public class GameAI implements GameActionPerformer {
         this.inventory = new Inventory(id);
     }
 
-    public Point tileAction(Tile tile, Board board) {
+    public TileAction tileAction(Tile tile, Board board) {
         //TODO: Make stacking decisions
         Set<RequirementsToStack> stackReqs = board.requirementsToStack().keySet();
         for (RequirementsToStack req : stackReqs) {
@@ -43,12 +42,14 @@ public class GameAI implements GameActionPerformer {
 
                     //There are settlements on both of them
                     if(settlementForA.size() <= 6){
+                        return new TileAction(id, tile, offset, orientation);
                         //return the tile nuking placement at that offset and that orientation
                     }
                 }
                 else{
                     //There is just a settlement on A
                     if(settlementForA.size() <= 5){
+                        return new TileAction(id,tile,offset, orientation);
                         //return the tile nuking placement at that offset and that orientation
                     }
 
@@ -59,8 +60,9 @@ public class GameAI implements GameActionPerformer {
             if (settlementForB != null) {
                 // There is just a settlement here at B
                 if(settlementForB.size() <= 5){
+
+                    return new TileAction(id,tile,offset,orientation);
                     //return the tile nuking placement at that offset and that orientation
-                    //TODO: return a proper tile placement action
                 }
             }
 
@@ -69,17 +71,18 @@ public class GameAI implements GameActionPerformer {
 
         /**** PLACE AT EDGE ****/
         Set<Point> edgePoints = board.offsetsAtEdgeOfCurrentlyPlayedBoard().keySet();
-        tile.setOrientation(ThreadLocalRandom.current().nextInt(1,7));
+
+        int orientation = ThreadLocalRandom.current().nextInt(1,7);
+        tile.setOrientation(orientation);
 
         while (true) {
             for (Point edgeOffset : edgePoints) {
                 if (board.canPlaceTileAtEdgeOffset(tile, edgeOffset)) {
-                    return edgeOffset;
-                    //TODO: return a proper tile placement action
+                    return new TileAction(id, tile, edgeOffset, orientation);
                 }
             }
-            int orientation = tile.getOrientation();
-            tile.setOrientation(orientation + 1);
+            int currentOrientation = tile.getOrientation();
+            tile.setOrientation(currentOrientation + 1);
         }
         /*********************/
     }
