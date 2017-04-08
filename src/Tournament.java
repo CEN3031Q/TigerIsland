@@ -56,15 +56,21 @@ public class Tournament {
         }
     }
 
-    public void makeMoveForGame(String gid, String time, String moveNumber, Tile tile) {
+    public String makeMoveForGame(String gid, String time, String moveNumber, Tile tile) {
         Game game = createGameIfNeeded(gid);
         synchronized (game) {
             Player player;
             synchronized (players) {
                 player = players.get(gid);
             }
-            player.performTileAction(tile);
-            player.performBuildAction();
+
+            TileAction tileAction = player.performTileAction(tile);
+            BuildAction buildAction = player.performBuildAction();
+
+            return "GAME " + gid +
+                    " MOVE " + moveNumber + " " +
+                    tileAction.tileActionToString() + " " +
+                    buildAction.createServerStringFromBuildAction();
         }
     }
 

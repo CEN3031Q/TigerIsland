@@ -112,10 +112,9 @@ public class TournamentDriver implements ServerProtocolInfoCommunicator {
                 String tileString = receivedInfo.get("tile");
                 Tile tile = new Tile(tileString);
 
-                tournament.makeMoveForGame(gid, time, moveNumber, tile);
+                return tournament.makeMoveForGame(gid, time, moveNumber, tile);
             }
         }
-
         return null;
     }
 
