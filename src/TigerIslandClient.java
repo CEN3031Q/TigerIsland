@@ -44,7 +44,7 @@ public class TigerIslandClient {
             String messageFromServer;
             while ((messageFromServer = socketReaderWriter.readLine()) != null) {
                 Thread thread = new Thread(new ServerWritingRunnable(socketReaderWriter, protocols, messageFromServer));
-                thread.run();
+                thread.start();
             }
         } catch (UnknownHostException e) {
             System.err.println("[ERROR] Unknown host: " + hostName);
