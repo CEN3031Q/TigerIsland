@@ -7,11 +7,11 @@ import org.junit.Assert;
  */
 public class InventoryTests {
 
-    private static int playerID;
+    private static String playerID;
 
     @BeforeClass
     public static void initInventoryTest() {
-        playerID = 1;
+        playerID = "1";
     }
 
     @Test
@@ -32,7 +32,7 @@ public class InventoryTests {
     @Test
     public void getPlayerIDTest() {
         Inventory inventory = new Inventory(playerID);
-        Assert.assertEquals(1, inventory.getPlayerID());
+        Assert.assertEquals("1", inventory.getPlayerID());
     }
     @Test
     public void meepleRemovedTest(){

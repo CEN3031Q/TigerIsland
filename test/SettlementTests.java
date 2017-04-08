@@ -52,12 +52,12 @@ public class SettlementTests {
         board.placeTile(tile1, Board.axialToCube(new Point(-1, -1)));
         board.placeTile(tile2, Board.axialToCube(new Point(-1, 0)));
 
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, -2))).setOccupied(1);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, -1))).setOccupied(1);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, -2))).setOccupied("1");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, -1))).setOccupied("1");
 
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(2);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied(2);
-        board.hexagonAtPoint(board.boardPointForOffset(new Point(0, 1))).setOccupied(2);
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied("2");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied("2");
+        board.hexagonAtPoint(board.boardPointForOffset(new Point(0, 1))).setOccupied("2");
 
         board.getSettlementManager().updateSettlements();
 

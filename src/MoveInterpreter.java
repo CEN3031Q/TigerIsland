@@ -43,7 +43,7 @@ public class MoveInterpreter {
                 break;
         }
 
-        this.gameBuildAction = new BuildAction(Integer.parseInt(pid),buildActionType,gamePiece);
+        this.gameBuildAction = new BuildAction(pid, buildActionType, gamePiece);
         this.gameBuildAction.setTerrainType(terrain);
     }
 

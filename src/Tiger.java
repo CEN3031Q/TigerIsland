@@ -1,5 +1,5 @@
 public class Tiger extends Piece {
-    public Tiger(int playerID) {
+    public Tiger(String playerID) {
         super(playerID);
     }
 }

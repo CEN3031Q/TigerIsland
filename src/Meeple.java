@@ -1,5 +1,5 @@
 public class Meeple extends Piece {
-    public Meeple(int playerID) {
+    public Meeple(String playerID) {
         super(playerID);
     }
 }

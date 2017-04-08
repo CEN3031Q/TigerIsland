@@ -25,7 +25,7 @@ public class Game {
 
     public void applyBuildAction(BuildAction buildAction) {
         Point offset = buildAction.getCoordinates();
-        Integer id = buildAction.getID();
+        String id = buildAction.getID();
         TerrainType terrainType = buildAction.getTerrainType();
 
         switch (buildAction.getType()) {

@@ -8,10 +8,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class GameAI implements GameActionPerformer {
-    private int id;
+    private String id;
     private Inventory inventory;
 
-    public GameAI(int id) {
+    public GameAI(String id) {
         this.id = id;
         this.inventory = new Inventory(id);
     }
@@ -219,7 +219,7 @@ public class GameAI implements GameActionPerformer {
 
             Point boardPointForOffset = board.boardPointForOffset(firstOffsetInSettlement);
 
-            if (board.hexagonAtPoint(boardPointForOffset).getOccupiedID() == id) {
+            if (board.hexagonAtPoint(boardPointForOffset).getOccupiedID().equals(id)) {
                 results.add(settlement);
             }
         }

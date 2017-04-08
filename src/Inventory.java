@@ -3,13 +3,13 @@
  */
 import java.util.ArrayList;
 public class Inventory {
-    private int playerID;
+    private String playerID;
 
     private ArrayList<Meeple> meepleList;
     private ArrayList<Totoro> totoroList;
     private ArrayList<Tiger> tigerList;
 
-    public Inventory (int playerID){
+    public Inventory (String playerID){
         this.playerID = playerID;
 
         initMeepleList();
@@ -38,7 +38,7 @@ public class Inventory {
         }
 
     }
-    public int getPlayerID() {
+    public String getPlayerID() {
         return playerID;
     }
 

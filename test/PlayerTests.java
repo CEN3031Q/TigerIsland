@@ -17,8 +17,8 @@ public class PlayerTests {
     @Before
     public void setUp() {
         game = new Game();
-        firstPlayer = new Player(1, game);
-        secondPlayer = new Player(2, game);
+        firstPlayer = new Player("1", game);
+        secondPlayer = new Player("2", game);
     }
 
     @Test
@@ -31,7 +31,6 @@ public class PlayerTests {
                 Tile tile = deck.drawTile();
 
                 TileAction tileAction = player.desiredTileAction(tile);
-                player.applyOtherTileAction(tileAction);
 
                 HexagonNeighborsCalculator calc = new HexagonNeighborsCalculator(tile.getOrientation());
                 HashMap<HexagonPosition, Point> abOffsets = calc.offsetsForAB();
