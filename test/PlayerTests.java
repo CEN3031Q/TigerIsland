@@ -111,6 +111,7 @@ public class PlayerTests {
 
         Assert.assertTrue(totoroHex.isTotoroOnTop());
     }
+  
     @Test
     public void testAIChooseTigerPlacement(){
         Board board = game.getGameBoard();
