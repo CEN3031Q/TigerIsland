@@ -121,14 +121,39 @@ public class PlayerTests {
         board.placeTile(firstTile, Board.axialToCube(settlementOffset));
 
         Tile secondTile = new Tile (TerrainType.GRASSLANDS, TerrainType.GRASSLANDS);
-        secondTile.setOrientation(5);
-        Point secondSettlementOffset = new Point(1, 0);
+        secondTile.setOrientation(2);
+        Point secondSettlementOffset = new Point(-2, -1);
         board.placeTile(secondTile, Board.axialToCube(secondSettlementOffset));
 
         Tile thirdTile = new Tile (TerrainType.ROCKY, TerrainType.ROCKY);
-        secondTile.setOrientation(5);
-        Point thirdSettlementOffset = new Point(1, 0);
+        thirdTile.setOrientation(3);
+        Point thirdSettlementOffset = new Point(-2, 2);
         board.placeTile(thirdTile, Board.axialToCube(thirdSettlementOffset));
+
+        Tile fourthTile = new Tile (TerrainType.ROCKY, TerrainType.ROCKY);
+        fourthTile.setOrientation(3);
+        Point fourthSettlementOffset = new Point(-2, 2);
+        board.placeTile(fourthTile, Board.axialToCube(fourthSettlementOffset));
+
+        Tile fifthTile = new Tile (TerrainType.ROCKY, TerrainType.ROCKY);
+        fifthTile.setOrientation(5);
+        Point fifthSettlementOffset = new Point(0, 2);
+        board.placeTile(fifthTile, Board.axialToCube(fifthSettlementOffset));
+
+        Tile sixthTile = new Tile (TerrainType.ROCKY, TerrainType.ROCKY);
+        sixthTile.setOrientation(3);
+        Point sixthSettlementOffset = new Point(-2, 2);
+        board.placeTile(sixthTile, Board.axialToCube(sixthSettlementOffset));
+
+        Tile seventhTile = new Tile (TerrainType.ROCKY, TerrainType.ROCKY);
+        seventhTile.setOrientation(1);
+        Point seventhSettlementOffset = new Point(-3, 2);
+        board.placeTile(seventhTile, Board.axialToCube(seventhSettlementOffset));
+
+        Tile eighthTile = new Tile (TerrainType.ROCKY, TerrainType.ROCKY);
+        eighthTile.setOrientation(6);
+        Point eighthSettlementOffset = new Point(-2, 2);
+        board.placeTile(eighthTile, Board.axialToCube(eighthSettlementOffset));
 
         board.hexagonAtPoint(board.boardPointForOffset(new Point(-1, 1))).setOccupied("1");
 
@@ -136,9 +161,9 @@ public class PlayerTests {
 
         BuildAction buildAction = firstPlayer.performBuildAction();
 
-        Hexagon tigerHex = board.hexagonAtPoint(board.boardPointForOffset(new Point(2,0)));
+        Hexagon tigerHex = board.hexagonAtPoint(board.boardPointForOffset(new Point(-2,1)));
 
 
-        Assert.assertTrue(tigerHex.isTotoroOnTop());
+        Assert.assertTrue(tigerHex.isTigerOnTop());
     }
 }
