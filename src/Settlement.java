@@ -11,18 +11,13 @@ import java.util.Set;
 public class Settlement {
     // List of all hexagons in a particular settlement
     private Set<Point> offsets = new HashSet<>();
-    private boolean containsTotoro;
-    private boolean containsTiger;
 
     // Constructor taking in a Point object
-    public Settlement() {
-        containsTotoro = false;
-        containsTiger = false;
-    }
+    public Settlement() { }
 
     @Override
     public int hashCode() {
-        return offsets.hashCode() + (containsTotoro ? 1 : 0) + (containsTiger ? 1 : 0);
+        return offsets.hashCode();
     }
 
     @Override
@@ -32,9 +27,7 @@ public class Settlement {
         if (obj == this)
             return true;
         Settlement rhs = (Settlement) obj;
-        return offsets.equals(rhs.offsets) &&
-                containsTotoro == rhs.containsTotoro &&
-                containsTiger == rhs.containsTiger;
+        return offsets.equals(rhs.offsets);
     }
 
     public Set<Point> getOffsets(){
@@ -53,19 +46,25 @@ public class Settlement {
         return offsets.contains(offset);
     }
 
-    public void setSettlementContainsTotoro() {
-        containsTotoro = true;
+    public boolean containsTotoroForBoard(Board board) {
+        for (Point offset : offsets) {
+            Point boardPoint = board.boardPointForOffset(offset);
+            Hexagon hex = board.hexagonAtPoint(boardPoint);
+            if (hex.isTotoroOnTop()) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public boolean containsTotoro() {
-        return containsTotoro;
-    }
-
-    public void setSettlementContainsTiger() {
-        containsTiger = true;
-    }
-
-    public boolean containsTiger() {
-        return containsTiger;
+    public boolean containsTigerForBoard(Board board) {
+        for (Point offset : offsets) {
+            Point boardPoint = board.boardPointForOffset(offset);
+            Hexagon hex = board.hexagonAtPoint(boardPoint);
+            if (hex.isTigerOnTop()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
