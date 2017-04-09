@@ -192,7 +192,7 @@ public class Board {
                 Point neighborPoint = boardPointForOffset(neighborOffset);
                 Hexagon neighborHex = hexagonAtPoint(neighborPoint);
 
-                if (!neighborHex.isOccupied() && neighborHex.getTerrainType() != TerrainType.VOLCANO) {
+                if (!neighborHex.isOccupied() && neighborHex.getTerrainType() != TerrainType.VOLCANO && neighborHex.getTerrainType() != TerrainType.EMPTY) {
                     validOffsets.put(neighborOffset, true);
                     visited.put(neighborOffset, true);
                 } else if (neighborHex.getTerrainType() == TerrainType.EMPTY) {
@@ -696,6 +696,7 @@ public class Board {
         }
         return false;
     }
+
     public HashMap<Point, Boolean> offsetsAroundAllOurSettlements( List<Settlement> ourSettlements){
 // This does a BFS from settlementOffset and finds the offsets at the edge of each settlement given a settlement we're expanding from.
         HashMap<Point, Boolean> validOffsets = new HashMap<>();
