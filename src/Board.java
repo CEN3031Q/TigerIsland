@@ -366,7 +366,8 @@ public class Board {
         ArrayList<Point> queue = new ArrayList<>();
         queue.add(settlementOffset);
 
-        String settlementID =  hexagonAtPoint(boardPointForOffset(settlementOffset)).getOccupiedID();
+        Point boardPoint = boardPointForOffset(settlementOffset);
+        String settlementID =  hexagonAtPoint(boardPoint).getOccupiedID();
 
         if (settlementID.equals(Integer.toString(Integer.MIN_VALUE))) {
             return validOffsets;

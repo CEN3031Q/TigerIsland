@@ -2,10 +2,11 @@
  * Created by gonzalonunez on 3/21/17.
  */
 
+import cucumber.api.java8.Ar;
+
 import java.awt.Point;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 public class GameAI implements GameActionPerformer {
     private String id;
@@ -107,26 +108,10 @@ public class GameAI implements GameActionPerformer {
 
         /** TRY TO PLACE A TIGER **/
         if (!inventory.isTigerEmpty()) {
-            List<Settlement> settlements = ourSettlementsOnBoard(board);
-
-            for (Settlement settlement : settlements) {
-                if (settlement.size() >= 1) {
-                    List<Point> offsets = board.offsetsAtEdgeOfSettlementAtOffset((Point)settlement.getOffsets().toArray()[0])
-                            .keySet()
-                            .stream()
-                            .filter(offset -> {
-                                return board.hexagonAtPoint(board.boardPointForOffset(offset)).getLevel() >= 3;
-                            })
-                            .collect(Collectors.toList());
-
-                    for (Point offset : offsets) {
-                        Hexagon hex = board.hexagonAtPoint(board.boardPointForOffset(offset));
-                        if (!hex.isOccupied() && hex.getTerrainType() != TerrainType.VOLCANO && hex.getTerrainType() != TerrainType.EMPTY) {
-                            inventory.removeTigerPiece();
-                            return new BuildAction(id, BuildActionType.TIGER_PLAYGROUND, offset);
-                        }
-                    }
-                }
+            Set<Point> offsets = eligibleTigerOffsets(board);
+            if (!offsets.isEmpty()) {
+                inventory.removeTigerPiece();
+                return new BuildAction(id, BuildActionType.TIGER_PLAYGROUND, offsets.iterator().next());
             }
         }
 
@@ -143,53 +128,49 @@ public class GameAI implements GameActionPerformer {
                 return new BuildAction(id, BuildActionType.FOUND_SETTLEMENT, (Point)offsets.toArray()[random]);
             }
 
-
             for (Settlement settlement : settlements) {
-
-
                 Point firstOffsetInSettlement = (Point)settlement.getOffsets().toArray()[0];
-                Point boardPointForOffset = board.boardPointForOffset(firstOffsetInSettlement);
 
-                if(board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.LAKE, id) + settlement.size() <= 7 &&
-                   board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.LAKE, id) <= inventory.getMeepleSize() &&
-                   !board.doesExpansionConnectTwoSettlements(boardPointForOffset, TerrainType.LAKE, settlements, settlement) &&
-                   board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.LAKE, id) + settlement.size() >= 4
+                if(board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.LAKE, id) + settlement.size() <= 7 &&
+                   board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.LAKE, id) <= inventory.getMeepleSize() &&
+                   !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.LAKE, settlements, settlement) &&
+                   board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.LAKE, id) + settlement.size() >= 4
                    ) {
-                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.LAKE, id));i++){
+                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.LAKE, id));i++){
                         inventory.removeMeeplePiece();
                     }
-                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, boardPointForOffset, TerrainType.LAKE);
+                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.LAKE);
                 }
-                if(board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.ROCKY, id) + settlement.size() <=7 &&
-                 board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.ROCKY, id) <= inventory.getMeepleSize() &&
-                 !board.doesExpansionConnectTwoSettlements(boardPointForOffset, TerrainType.ROCKY, settlements, settlement) &&
-                 board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.ROCKY, id) + settlement.size() >= 4
+                if(board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCKY, id) + settlement.size() <=7 &&
+                 board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCKY, id) <= inventory.getMeepleSize() &&
+                 !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.ROCKY, settlements, settlement) &&
+                 board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCKY, id) + settlement.size() >= 4
                  ){
-                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.ROCKY, id));i++){
+                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCKY, id));i++){
                         inventory.removeMeeplePiece();
                     }
-                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, boardPointForOffset, TerrainType.ROCKY);
+                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.ROCKY);
                 }
-                if(board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.GRASSLANDS, id) + settlement.size() <=7 &&
-                board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.GRASSLANDS, id) <= inventory.getMeepleSize()&&
-                !board.doesExpansionConnectTwoSettlements(boardPointForOffset, TerrainType.GRASSLANDS, settlements, settlement) &&
-                board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.GRASSLANDS, id) + settlement.size() >= 4
+                if(board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASSLANDS, id) + settlement.size() <=7 &&
+                board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASSLANDS, id) <= inventory.getMeepleSize()&&
+                !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.GRASSLANDS, settlements, settlement) &&
+                board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASSLANDS, id) + settlement.size() >= 4
                 ){
-                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.GRASSLANDS, id));i++){
+                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASSLANDS, id));i++){
                         inventory.removeMeeplePiece();
                     }
-                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, boardPointForOffset, TerrainType.GRASSLANDS);
+                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.GRASSLANDS);
                 }
-                if(board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.JUNGLE, id) + settlement.size() <=7 &&
-                board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.JUNGLE, id) <= inventory.getMeepleSize() &&
-                !board.doesExpansionConnectTwoSettlements(boardPointForOffset, TerrainType.JUNGLE, settlements, settlement) &&
-                board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.JUNGLE, id) + settlement.size() >= 4
+                if(board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.JUNGLE, id) + settlement.size() <=7 &&
+                board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.JUNGLE, id) <= inventory.getMeepleSize() &&
+                !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.JUNGLE, settlements, settlement) &&
+                board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.JUNGLE, id) + settlement.size() >= 4
 
                         ){
-                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(boardPointForOffset, TerrainType.JUNGLE, id));i++){
+                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.JUNGLE, id));i++){
                         inventory.removeMeeplePiece();
                     }
-                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, boardPointForOffset, TerrainType.JUNGLE);
+                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.JUNGLE);
                 }
 
                 if(settlement.size()==4){
@@ -242,6 +223,7 @@ public class GameAI implements GameActionPerformer {
         return new BuildAction(id, BuildActionType.UNABLE_TO_BUILD, new Point(0, 0));
 
     }
+
     public List<Settlement> ourSettlementsOnBoard(Board board) {
         List<Settlement> results = new ArrayList<>();
 
@@ -256,5 +238,32 @@ public class GameAI implements GameActionPerformer {
         }
 
         return results;
+    }
+
+    public Set<Point> eligibleTigerOffsets(Board board) {
+        Set<Point> eligibleOffsets = new HashSet<>();
+
+        List<Settlement> settlements = ourSettlementsOnBoard(board);
+
+        for (Settlement settlement : settlements) {
+            Point firstOffsetInSettlement = (Point)settlement.getOffsets().toArray()[0];
+
+            Set<Point> offsetsAtEdge = board.offsetsAtEdgeOfSettlementAtOffset(firstOffsetInSettlement).keySet();
+
+            for (Point offset : offsetsAtEdge) {
+                Point boardPointForOffset = board.boardPointForOffset(offset);
+                Hexagon hex = board.hexagonAtPoint(boardPointForOffset);
+
+                if (hex.getLevel() >= 3 &&
+                    !hex.isOccupied() &&
+                    hex.getTerrainType() != TerrainType.VOLCANO &&
+                    hex.getTerrainType() != TerrainType.EMPTY)
+                {
+                    eligibleOffsets.add(offset);
+                }
+            }
+        }
+
+        return eligibleOffsets;
     }
 }
