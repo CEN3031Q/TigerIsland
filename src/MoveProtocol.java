@@ -75,7 +75,7 @@ public class MoveProtocol implements ServerProtocol {
         }
 
         communicator.receiveInfo(this, str, info);
-        return communicator.replyForMessage(this, str);
+        return communicator.replyForMessage(this, str, info);
     };
 
 }

@@ -9,17 +9,15 @@ import java.util.HashMap;
 
 //TODO: Do all of these TODOs!!
 public class TournamentDriver implements ServerProtocolInfoCommunicator {
-    private HashMap<String, String> receivedInfo;
-
     private Tournament tournament;
 
     public TournamentDriver() { }
 
-    public void receiveInfo(ServerProtocol sender, String message, HashMap<String, String> info) {
-        synchronized (this) {
-            receivedInfo = info;
-        }
+    public TournamentDriver(Tournament tournament) {
+        this.tournament = tournament;
+    }
 
+    public void receiveInfo(ServerProtocol sender, String message, HashMap<String, String> info) {
         String[] split = message.split("\\s+");
 
         if (sender instanceof AuthenticationProtocol) {
@@ -104,19 +102,17 @@ public class TournamentDriver implements ServerProtocolInfoCommunicator {
         }
     }
 
-    public String replyForMessage(ServerProtocol sender, String str) {
+    public String replyForMessage(ServerProtocol sender, String str, HashMap<String, String> info) {
         if (sender instanceof MoveProtocol) {
-            synchronized (this) {
-                if (str.startsWith("MAKE YOUR MOVE IN GAME")) {
-                    String gid = receivedInfo.get("gid");
-                    String time = receivedInfo.get("time");
-                    String moveNumber = receivedInfo.get("moveNumber");
+            if (str.startsWith("MAKE YOUR MOVE IN GAME")) {
+                String gid = info.get("gid");
+                String time = info.get("time");
+                String moveNumber = info.get("moveNumber");
 
-                    String tileString = receivedInfo.get("tile");
-                    Tile tile = new Tile(tileString);
+                String tileString = info.get("tile");
+                Tile tile = new Tile(tileString);
 
-                    return tournament.makeMoveForGame(gid, time, moveNumber, tile);
-                }
+                return tournament.makeMoveForGame(gid, time, moveNumber, tile);
             }
         }
         return null;
