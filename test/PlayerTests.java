@@ -46,11 +46,17 @@ public class PlayerTests {
     }
 
     @Test(timeout=1500)
-    public void testOneTurnInUnderOneAndAHalfSeconds() {
-        Tile tile = new Tile(TerrainType.JUNGLE, TerrainType.ROCKY);
-        Point offset = firstPlayer.performTileAction(tile).getOffset();
-        BuildAction action = firstPlayer.performBuildAction();
+    public void testAllTurnsInUnderOneAndAHalfSeconds() {
+        Deck deck = new Deck();
+        for (int i = 0; i < 24; i++) {
+            for (Player player : new Player[]{ firstPlayer, secondPlayer }) {
+                Tile tile = deck.drawTile();
+                player.performTileAction(tile);
+                player.performBuildAction();
+            }
+        }
     }
+
     @Test
     public void testPlaceTotoroIfWeCan(){
         Board board = game.getGameBoard();

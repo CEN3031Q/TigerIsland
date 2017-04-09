@@ -208,10 +208,7 @@ public class GameAI implements GameActionPerformer {
                 for (int y = minBoardY; y < maxBoardY; y++) {
                     Point rootOffset =  new Point(x, y);
                     Hexagon rootHex = board.hexagonAtPoint(board.boardPointForOffset(rootOffset));
-                    if(!rootHex.isOccupied() && rootHex.getTerrainType() != TerrainType.VOLCANO && rootHex.getTerrainType() != TerrainType.EMPTY
-                            && rootHex.getLevel() == 1
-                            ){
-
+                    if(!rootHex.isOccupied() && rootHex.getTerrainType() != TerrainType.VOLCANO && rootHex.getTerrainType() != TerrainType.EMPTY && rootHex.getLevel() == 1) {
                         inventory.removeMeeplePiece();
                         return new BuildAction(id, BuildActionType.FOUND_SETTLEMENT, rootOffset);
 
