@@ -1,7 +1,3 @@
-import gherkin.formatter.model.Match;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
@@ -43,7 +39,7 @@ public class TigerIslandClient {
 
             String messageFromServer;
             while ((messageFromServer = socketReaderWriter.readLine()) != null) {
-                Thread thread = new Thread(new ServerWritingRunnable(socketReaderWriter, protocols, messageFromServer));
+                Thread thread = new Thread(new WritingRunnable(socketReaderWriter, protocols, messageFromServer));
                 thread.start();
             }
         } catch (UnknownHostException e) {
