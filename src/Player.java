@@ -32,14 +32,4 @@ public class Player {
         game.applyBuildAction(chosenBuildAction);
         return chosenBuildAction;
     }
-
-    // Apply opponents move
-
-    public void applyOtherTileAction(TileAction action) {
-        game.applyTileAction(action);
-    }
-
-    public void applyOtherBuildAction(BuildAction action) {
-        game.applyBuildAction(action);
-    }
 }

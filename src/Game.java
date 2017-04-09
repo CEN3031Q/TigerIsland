@@ -16,7 +16,6 @@ public class Game {
     public void applyTileAction(TileAction tileAction) {
         tileAction.getTile().setOrientation(tileAction.getOrientation());
         board.placeTile(tileAction.getTile(), Board.axialToCube(tileAction.getOffset()));
-        board.getSettlementManager().updateSettlements();
     }
 
     public void applyBuildAction(BuildAction buildAction) {
@@ -40,8 +39,6 @@ public class Game {
             default:
                 break;
         }
-
-        board.getSettlementManager().updateSettlements();
     }
 
     public Board getGameBoard() {

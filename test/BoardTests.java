@@ -1,7 +1,9 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.awt.*;
+import java.awt.Point;
+import javafx.geometry.Point3D;
+
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
@@ -455,5 +457,41 @@ public class BoardTests {
 
         RequirementsToStack reqs = new RequirementsToStack(new Point(-1, 0), 4);
         Assert.assertTrue(stackPossibilities.contains(reqs));
+    }
+
+    @Test
+    public void testCannotStackInScenarioThatFuckedUs() {
+        Board board = new Board();
+
+        Tile firstTile = new Tile (TerrainType.ROCKY, TerrainType.JUNGLE);
+        firstTile.setOrientation(5);
+        Point3D offset = new Point3D(-1, 1, 0);
+        board.placeTile(firstTile, offset);
+
+        Tile secondTile = new Tile (TerrainType.ROCKY, TerrainType.GRASSLANDS);
+        secondTile.setOrientation(1);
+        Point3D secondOffset = new Point3D(1, -2, 1);
+        board.placeTile(secondTile, secondOffset);
+
+        Tile thirdTile = new Tile (TerrainType.JUNGLE, TerrainType.ROCKY);
+        thirdTile.setOrientation(3);
+        Point3D thirdOffset = new Point3D(0, 0, 0);
+        board.placeTile(thirdTile, thirdOffset);
+
+        Set<RequirementsToStack> stackReqs = board.requirementsToStack().keySet();
+
+        RequirementsToStack illegalReqs = new RequirementsToStack(new Point(0, 0), 5);
+        Assert.assertTrue(!stackReqs.contains(illegalReqs));
+
+        for (RequirementsToStack req : stackReqs) {
+            Assert.assertTrue(!req.getOffset().equals(new Point(0, 0)));
+        }
+
+        Tile otherTile = new Tile(TerrainType.JUNGLE, TerrainType.LAKE);
+        otherTile.setOrientation(5);
+
+        Set<Point> edgePoints = board.offsetsAtEdgeOfCurrentlyPlayedBoard().keySet();
+
+        Assert.assertTrue(!edgePoints.contains(new Point(0, 0)));
     }
 }
