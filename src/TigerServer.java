@@ -93,7 +93,7 @@ public class TigerServer {
                     //Multiple game handling test: WORKS
                     //Comment out kk loop header and the 1 game at a time try/catch
                     /*try {
-                        String makeMove = "MAKE YOUR MOVE IN GAME A WITHIN 1.5 SECONDS: MOVE " + 1 + " PLACE JUNGLE+ROCKY";
+                        String makeMove = "MAKE YOUR MOVE IN GAME A WITHIN 1.5 SECONDS: MOVE " + 1 + " PLACE JUNGLE+ROCK";
                         out.println(makeMove);
                         Thread.sleep(500);
 
@@ -107,10 +107,10 @@ public class TigerServer {
                         }
 
                         out.println(response.replaceAll("PLACE", "PLAYER PLAYER1 PLACED"));
-                        out.println("GAME B MOVE 1 PLAYER PLAYER2 PLACED JUNGLE+ROCKY AT 2 0 -2 3 FOUNDED SETTLEMENT AT -1 0 1");
+                        out.println("GAME B MOVE 1 PLAYER PLAYER2 PLACED JUNGLE+ROCK AT 2 0 -2 3 FOUNDED SETTLEMENT AT -1 0 1");
                         Thread.sleep(500);
 
-                        makeMove = "MAKE YOUR MOVE IN GAME B WITHIN 1.5 SECONDS: MOVE " + 2 + " PLACE GRASSLANDS+LAKE";
+                        makeMove = "MAKE YOUR MOVE IN GAME B WITHIN 1.5 SECONDS: MOVE " + 2 + " PLACE GRASS+LAKE";
                         out.println(makeMove);
                         Thread.sleep(500);
 

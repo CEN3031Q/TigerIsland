@@ -7,11 +7,11 @@ import org.junit.Test;
 public class TileTests {
     @Test
     public void testLakeGrasslandsTileFromServer() {
-        String serverString = "LAKE+GRASSLANDS";
+        String serverString = "LAKE+GRASS";
         Tile tile = new Tile(serverString);
 
         TerrainType expectedA = TerrainType.LAKE;
-        TerrainType expectedB = TerrainType.GRASSLANDS;
+        TerrainType expectedB = TerrainType.GRASS;
 
         Assert.assertEquals(expectedA, tile.getTerrainTypeForPosition(HexagonPosition.A));
         Assert.assertEquals(expectedB, tile.getTerrainTypeForPosition(HexagonPosition.B));
