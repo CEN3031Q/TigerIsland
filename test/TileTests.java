@@ -6,7 +6,7 @@ import org.junit.Test;
  */
 public class TileTests {
     @Test
-    public void testTileFromServer() {
+    public void testLakeGrasslandsTileFromServer() {
         String serverString = "LAKE+GRASSLANDS";
         Tile tile = new Tile(serverString);
 

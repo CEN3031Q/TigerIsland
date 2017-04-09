@@ -24,6 +24,4 @@ public class TileActionTests {
         TileAction tileAction = new TileAction(id, tile, offset, orientation);
         Assert.assertEquals("PLACE LAKE+ROCKY AT 2 -1 -1 4", tileAction.tileActionToString());
     }
-
-
 }
