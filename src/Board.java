@@ -623,14 +623,12 @@ public class Board {
                 continue;
             }
 
-            //boardPointForOffset being instantiated. Use this as the offset to bfs from each time
             Point firstOffsetInSettlement = (Point)settlement.getOffsets().toArray()[0];
-            Point boardPointForOffset = boardPointForOffset(firstOffsetInSettlement);
 
             ArrayList<Point> queue = new ArrayList<>();
-            queue.add(boardPointForOffset);
+            queue.add(firstOffsetInSettlement);
 
-            String settlementID = hexagonAtPoint(boardPointForOffset(boardPointForOffset)).getOccupiedID();
+            String settlementID = hexagonAtPoint(boardPointForOffset(firstOffsetInSettlement)).getOccupiedID();
 
             if (settlementID.equals(Integer.toString(Integer.MIN_VALUE))) {
                 return validOffsets;
@@ -639,14 +637,14 @@ public class Board {
             while (!queue.isEmpty()) {
                 Point otherOffset = queue.remove(0);
 
-                Point point = boardPointForOffset(boardPointForOffset);
+                Point point = boardPointForOffset(otherOffset);
                 Hexagon hex = hexagonAtPoint(point);
 
                 visited.put(otherOffset, true);
 
                 ArrayList<Point> appliedNeighborOffsets = new ArrayList<>();
                 for (Point neighborOffset : HexagonNeighborsCalculator.hexagonNeighborOffsets()) {
-                    appliedNeighborOffsets.add(Board.pointTranslatedByPoint(boardPointForOffset, neighborOffset));
+                    appliedNeighborOffsets.add(Board.pointTranslatedByPoint(otherOffset, neighborOffset));
                 }
 
                 for (Point neighborOffset : appliedNeighborOffsets) {
@@ -667,7 +665,7 @@ public class Board {
 
         return validOffsets;
     }
-    public boolean doesExpansionConnectTwoSettlements(Point offset, TerrainType type, List<Settlement> settlements, Settlement settlement){
+    public boolean doesExpansionConnectTwoSettlements(Point offset, TerrainType type, List<Settlement> settlements, Settlement settlement) {
         Set<Point> edgeOffsets = offsetsAroundAllSettlementsButOneSpecified(settlement, settlements).keySet();
         Set<Point> edgeOffsetsForExpansion = offsetsAtEdgeOfSettlementAtOffset(offset).keySet();
 
