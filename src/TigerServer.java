@@ -54,13 +54,13 @@ public class TigerServer {
                             inputLine = in.readLine();
 
                             if (inputLine.contains("FOUND")) {
-                                inputLine.replace("FOUND", "FOUNDED");
+                                inputLine = inputLine.replaceAll("FOUND", "FOUNDED");
                             } else if (inputLine.contains("EXPAND")) {
-                                inputLine.replace("EXPAND", "EXPANDED");
+                                inputLine = inputLine.replaceAll("EXPAND", "EXPANDED");
                             } else if (inputLine.contains("BUILD")) {
-                                inputLine.replace("BUILD", "BUILT");
+                                inputLine = inputLine.replaceAll("BUILD", "BUILT");
                             }
-                            out.println(inputLine.replace("PLACE", "PLAYER PLAYER1 PLACE"));
+                            out.println(inputLine.replaceAll("PLACE", "PLAYER PLAYER1 PLACE"));
                         } else {
                             out.println(stdIn.readLine());
                         }
