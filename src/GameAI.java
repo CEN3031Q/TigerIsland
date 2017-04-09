@@ -2,10 +2,9 @@
  * Created by gonzalonunez on 3/21/17.
  */
 
-import cucumber.api.java8.Ar;
-
-import java.awt.Point;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GameAI implements GameActionPerformer {
@@ -145,10 +144,10 @@ public class GameAI implements GameActionPerformer {
                 int meeplesForLake = board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.LAKE, id);
 
                 if(meeplesForLake + settlement.size() <= 7 &&
-                   meeplesForLake <= inventory.getMeepleSize() &&
-                   !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.LAKE, settlements, settlement) &&
-                   meeplesForLake + settlement.size() >= 4
-                   ) {
+                        meeplesForLake <= inventory.getMeepleSize() &&
+                        !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.LAKE, settlements, settlement) &&
+                        meeplesForLake + settlement.size() >= 4
+                        ) {
                     for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.LAKE, id));i++){
                         inventory.removeMeeplePiece();
                     }
@@ -159,9 +158,9 @@ public class GameAI implements GameActionPerformer {
 
                 if(meeplesForRocky + settlement.size() <=7 &&
                         meeplesForRocky <= inventory.getMeepleSize() &&
-                 !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.ROCKY, settlements, settlement) &&
+                        !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.ROCKY, settlements, settlement) &&
                         meeplesForRocky + settlement.size() >= 4
-                 ){
+                        ){
                     for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCKY, id));i++){
                         inventory.removeMeeplePiece();
                     }
@@ -172,9 +171,9 @@ public class GameAI implements GameActionPerformer {
 
                 if(meeplesForGrasslands + settlement.size() <=7 &&
                         meeplesForGrasslands <= inventory.getMeepleSize()&&
-                !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.GRASSLANDS, settlements, settlement) &&
+                        !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.GRASSLANDS, settlements, settlement) &&
                         meeplesForGrasslands + settlement.size() >= 4
-                ){
+                        ){
                     for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASSLANDS, id));i++){
                         inventory.removeMeeplePiece();
                     }
@@ -185,7 +184,7 @@ public class GameAI implements GameActionPerformer {
 
                 if(meeplesForJungle + settlement.size() <=7 &&
                         meeplesForJungle <= inventory.getMeepleSize() &&
-                !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.JUNGLE, settlements, settlement) &&
+                        !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.JUNGLE, settlements, settlement) &&
                         meeplesForJungle + settlement.size() >= 4
 
                         ){
@@ -238,7 +237,7 @@ public class GameAI implements GameActionPerformer {
                 }
             }
         }
-        
+
         return new BuildAction(id, BuildActionType.UNABLE_TO_BUILD, new Point(0, 0));
 
     }
@@ -278,9 +277,9 @@ public class GameAI implements GameActionPerformer {
                 Hexagon hex = board.hexagonAtPoint(boardPointForOffset);
 
                 if (hex.getLevel() >= 3 &&
-                    !hex.isOccupied() &&
-                    hex.getTerrainType() != TerrainType.VOLCANO &&
-                    hex.getTerrainType() != TerrainType.EMPTY)
+                        !hex.isOccupied() &&
+                        hex.getTerrainType() != TerrainType.VOLCANO &&
+                        hex.getTerrainType() != TerrainType.EMPTY)
                 {
                     eligibleOffsets.add(offset);
                 }
