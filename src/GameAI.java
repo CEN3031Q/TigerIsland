@@ -95,6 +95,10 @@ public class GameAI implements GameActionPerformer {
             });
 
             for (Settlement settlement : settlements) {
+                if (settlement.containsTotoroForBoard(board)) {
+                    continue;
+                }
+
                 if (settlement.size() >= 5) {
                     Set<Point> offsets = board.offsetsAtEdgeOfSettlementAtOffset((Point)settlement.getOffsets().toArray()[0]).keySet();
                     for (Point offset : offsets) {
@@ -132,6 +136,10 @@ public class GameAI implements GameActionPerformer {
             }
 
             for (Settlement settlement : settlements) {
+                if (settlement.containsTotoroForBoard(board) || settlement.containsTigerForBoard(board)) {
+                    continue;
+                }
+
                 Point firstOffsetInSettlement = (Point)settlement.getOffsets().toArray()[0];
 
                 int meeplesForLake = board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.LAKE, id);
@@ -257,6 +265,10 @@ public class GameAI implements GameActionPerformer {
         List<Settlement> settlements = ourSettlementsOnBoard(board);
 
         for (Settlement settlement : settlements) {
+            if (settlement.containsTigerForBoard(board)) {
+                continue;
+            }
+
             Point firstOffsetInSettlement = (Point)settlement.getOffsets().toArray()[0];
 
             Set<Point> offsetsAtEdge = board.offsetsAtEdgeOfSettlementAtOffset(firstOffsetInSettlement).keySet();

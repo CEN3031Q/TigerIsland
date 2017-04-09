@@ -19,15 +19,6 @@ public class SettlementManager {
         listOfSettlements = new HashSet<>();
     }
 
-    public int sizeOfSettlementAtOffset(Point offset) {
-        for(Settlement settlement : listOfSettlements) {
-            if (settlement.containsOffset(offset)) {
-                return settlement.size();
-            }
-        }
-        return 0;
-    }
-
     public Settlement getSettlementForOffset(Point offset) {
         for (Settlement settlement : listOfSettlements) {
             if (settlement.containsOffset(offset)) {
