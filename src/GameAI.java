@@ -18,6 +18,8 @@ public class GameAI implements GameActionPerformer {
     }
 
     public TileAction tileAction(Tile tile, Board board) {
+        board.getSettlementManager().updateSettlements();
+
         Set<RequirementsToStack> stackReqs = board.requirementsToStack().keySet();
         for (RequirementsToStack req : stackReqs) {
             Point offset = req.getOffset();
@@ -33,33 +35,32 @@ public class GameAI implements GameActionPerformer {
             Settlement settlementForB = board.getSettlementManager().getSettlementForOffset(offsetB);
 
             if (settlementForA != null) {
+                Point aOffset = settlementForA.getOffsets().iterator().next();
+                String settlementAID = board.hexagonAtPoint(board.boardPointForOffset(aOffset)).getOccupiedID();
 
-                // There is a settlement here. See if we want to stack and fuck it up.
-                if(settlementForB != null){
+                if (settlementForB != null) {
+                    Point bOffset = settlementForB.getOffsets().iterator().next();
+                    String settlementBID = board.hexagonAtPoint(board.boardPointForOffset(bOffset)).getOccupiedID();
 
-                    //There are settlements on both of them
-                    if(settlementForA.size() <= 6){
+                    if (!settlementAID.equals(id) && !settlementBID.equals(id) && settlementForA.size() == 6) {
+                        return new TileAction(id, tile, offset, orientation);
+                    }
+
+                } else {
+                    if (!settlementAID.equals(id) && settlementForA.size() == 5) {
                         return new TileAction(id, tile, offset, orientation);
                     }
                 }
-                else{
-                    //There is just a settlement on A
-                    if(settlementForA.size() <= 5){
-                        return new TileAction(id,tile,offset, orientation);
-                    }
-
-                }
             }
-
 
             if (settlementForB != null) {
-                // There is just a settlement here at B
-                if(settlementForB.size() <= 5){
-                    return new TileAction(id,tile,offset,orientation);
+                Point bOffset = settlementForB.getOffsets().iterator().next();
+                String settlementBID = board.hexagonAtPoint(board.boardPointForOffset(bOffset)).getOccupiedID();
+
+                if (!settlementBID.equals(id) && settlementForB.size() == 5) {
+                    return new TileAction(id, tile, offset, orientation);
                 }
             }
-
-
         }
 
         /** TRY TO PLACE BECAUSE WE DIDN'T STACK **/
@@ -79,6 +80,8 @@ public class GameAI implements GameActionPerformer {
     }
 
     public BuildAction buildAction(Board board) {
+        board.getSettlementManager().updateSettlements();
+
         /** TRY TO PLACE A TOTORO **/
         //TODO: Make totoro not connect settlements together
         if (!inventory.isTotoroEmpty()) {
