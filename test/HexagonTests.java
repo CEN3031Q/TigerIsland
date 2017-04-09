@@ -15,7 +15,7 @@ public class HexagonTests {
     @Test
     public void getLevelTest() {
         Hexagon hex = new Hexagon();
-        TerrainType grass = TerrainType.GRASSLANDS;
+        TerrainType grass = TerrainType.GRASS;
         hex.setTerrainType(grass);
         hex.incrementLevel();
         hex.incrementLevel();
@@ -24,7 +24,7 @@ public class HexagonTests {
     @Test
     public void getTotoroOnTopTest() {
         Hexagon hex = new Hexagon();
-        TerrainType grass = TerrainType.GRASSLANDS;
+        TerrainType grass = TerrainType.GRASS;
         hex.setTerrainType(grass);
         hex.incrementLevel();
         hex.setTotoroOnTop(true);
@@ -33,7 +33,7 @@ public class HexagonTests {
     @Test
     public void getTigerOnTopTest() {
         Hexagon hex = new Hexagon();
-        TerrainType grass = TerrainType.GRASSLANDS;
+        TerrainType grass = TerrainType.GRASS;
         hex.setTerrainType(grass);
         hex.incrementLevel();
         hex.incrementLevel();

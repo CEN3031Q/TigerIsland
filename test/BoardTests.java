@@ -28,11 +28,11 @@ public class BoardTests {
 
         Point br = new Point( 0, 1);
         actual = board.getTerrainTypeAtPoint(board.boardPointForOffset(br));
-        Assert.assertEquals(TerrainType.GRASSLANDS, actual);
+        Assert.assertEquals(TerrainType.GRASS, actual);
 
         Point bl = new Point(-1, 1);
         actual = board.getTerrainTypeAtPoint(board.boardPointForOffset(bl));
-        Assert.assertEquals(TerrainType.ROCKY, actual);
+        Assert.assertEquals(TerrainType.ROCK, actual);
     }
 
     @Test
@@ -115,12 +115,12 @@ public class BoardTests {
     public void testBoardFindsAllVolcanoes() {
         Board board = new Board();
 
-        Tile firstTile = new Tile(TerrainType.LAKE, TerrainType.GRASSLANDS);
+        Tile firstTile = new Tile(TerrainType.LAKE, TerrainType.GRASS);
         firstTile.setOrientation(4);
 
         board.placeTile(firstTile, Board.axialToCube(new Point(1, 1)));
 
-        Tile secondTile = new Tile(TerrainType.ROCKY, TerrainType.JUNGLE);
+        Tile secondTile = new Tile(TerrainType.ROCK, TerrainType.JUNGLE);
         secondTile.setOrientation(5);
 
         board.placeTile(secondTile, Board.axialToCube(new Point(-2, 2)));
@@ -178,14 +178,14 @@ public class BoardTests {
         board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 0))).setOccupied("1");
         board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied("1");
 
-        Tile secondTile = new Tile (TerrainType.ROCKY, TerrainType.ROCKY);
+        Tile secondTile = new Tile (TerrainType.ROCK, TerrainType.ROCK);
         secondTile.setOrientation(2);
 
         board.placeTile(secondTile, Board.axialToCube(new Point(-2, 3)));
 
         Set<Point> edgeOffsets = board.offsetsAtEdgeOfSettlementAtOffset(new Point(-1, 0)).keySet();
 
-        TerrainType type = TerrainType.ROCKY;
+        TerrainType type = TerrainType.ROCK;
 
         Set<Point> offsetsOfTerrain = edgeOffsets.stream().filter( edgeOffset -> {
             Hexagon hex = board.hexagonAtPoint(board.boardPointForOffset(edgeOffset));
@@ -215,12 +215,12 @@ public class BoardTests {
         board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 0))).setOccupied(settlementID);
         board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(settlementID);
 
-        Tile secondTile = new Tile (TerrainType.ROCKY, TerrainType.ROCKY);
+        Tile secondTile = new Tile (TerrainType.ROCK, TerrainType.ROCK);
         secondTile.setOrientation(2);
 
         board.placeTile(secondTile, Board.axialToCube(new Point(-2, 3)));
 
-        board.expandSettlementAtOffset(settlementOffset, TerrainType.ROCKY, settlementID);
+        board.expandSettlementAtOffset(settlementOffset, TerrainType.ROCK, settlementID);
 
         Set<Point> expected = new HashSet<Point>(Arrays.asList(
                 new Point(-1, 1),
@@ -229,7 +229,7 @@ public class BoardTests {
         ));
 
         for (Point offset : expected) {
-            Assert.assertEquals(TerrainType.ROCKY, board.hexagonAtPoint(board.boardPointForOffset(offset)).getTerrainType());
+            Assert.assertEquals(TerrainType.ROCK, board.hexagonAtPoint(board.boardPointForOffset(offset)).getTerrainType());
             Assert.assertEquals(settlementID, board.hexagonAtPoint(board.boardPointForOffset(offset)).getOccupiedID());
         }
     }
@@ -249,12 +249,12 @@ public class BoardTests {
         board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 0))).setOccupied(settlementID);
         board.hexagonAtPoint(board.boardPointForOffset(new Point(-2, 1))).setOccupied(settlementID);
 
-        Tile secondTile = new Tile (TerrainType.ROCKY, TerrainType.ROCKY);
+        Tile secondTile = new Tile (TerrainType.ROCK, TerrainType.ROCK);
         secondTile.setOrientation(2);
 
         board.placeTile(secondTile, Board.axialToCube(new Point(-2, 3)));
 
-        board.expandSettlementAtOffset(new Point(-2, 0), TerrainType.ROCKY, settlementID);
+        board.expandSettlementAtOffset(new Point(-2, 0), TerrainType.ROCK, settlementID);
 
         Set<Point> expected = new HashSet<Point>(Arrays.asList(
                 new Point(-1, 1),
@@ -263,7 +263,7 @@ public class BoardTests {
         ));
 
         for (Point offset : expected) {
-            Assert.assertEquals(TerrainType.ROCKY, board.hexagonAtPoint(board.boardPointForOffset(offset)).getTerrainType());
+            Assert.assertEquals(TerrainType.ROCK, board.hexagonAtPoint(board.boardPointForOffset(offset)).getTerrainType());
             Assert.assertEquals(settlementID, board.hexagonAtPoint(board.boardPointForOffset(offset)).getOccupiedID());
         }
     }
@@ -441,7 +441,7 @@ public class BoardTests {
 
         board.placeTile(firstTile, Board.axialToCube(new Point(-1, 0)));
 
-        Tile secondTile = new Tile (TerrainType.GRASSLANDS, TerrainType.ROCKY);
+        Tile secondTile = new Tile (TerrainType.GRASS, TerrainType.ROCK);
         secondTile.setOrientation(4);
 
         board.placeTile(secondTile, Board.axialToCube(new Point(-3, 0)));
@@ -463,17 +463,17 @@ public class BoardTests {
     public void testCannotStackInScenarioThatFuckedUs() {
         Board board = new Board();
 
-        Tile firstTile = new Tile (TerrainType.ROCKY, TerrainType.JUNGLE);
+        Tile firstTile = new Tile (TerrainType.ROCK, TerrainType.JUNGLE);
         firstTile.setOrientation(5);
         Point3D offset = new Point3D(-1, 1, 0);
         board.placeTile(firstTile, offset);
 
-        Tile secondTile = new Tile (TerrainType.ROCKY, TerrainType.GRASSLANDS);
+        Tile secondTile = new Tile (TerrainType.ROCK, TerrainType.GRASS);
         secondTile.setOrientation(1);
         Point3D secondOffset = new Point3D(1, -2, 1);
         board.placeTile(secondTile, secondOffset);
 
-        Tile thirdTile = new Tile (TerrainType.JUNGLE, TerrainType.ROCKY);
+        Tile thirdTile = new Tile (TerrainType.JUNGLE, TerrainType.ROCK);
         thirdTile.setOrientation(3);
         Point3D thirdOffset = new Point3D(0, 0, 0);
         board.placeTile(thirdTile, thirdOffset);

@@ -99,14 +99,14 @@ public class BuildAction {
     }
 
     public TerrainType getTerrainTypeFromString(String terrainString) {
-        if (terrainString.equals("GRASSLANDS"))
-            return TerrainType.GRASSLANDS;
+        if (terrainString.equals("GRASS"))
+            return TerrainType.GRASS;
         if (terrainString.equals("JUNGLE"))
             return TerrainType.JUNGLE;
         if (terrainString.equals("LAKE"))
             return TerrainType.LAKE;
-        if (terrainString.equals("ROCKY"))
-            return TerrainType.ROCKY;
+        if (terrainString.equals("ROCK"))
+            return TerrainType.ROCK;
         if (terrainString.equals("VOLCANO"))
             return TerrainType.VOLCANO;
         return null;

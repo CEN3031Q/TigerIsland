@@ -154,30 +154,30 @@ public class GameAI implements GameActionPerformer {
                     return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.LAKE);
                 }
 
-                int meeplesForRocky = board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCKY, id);
+                int meeplesForRocky = board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCK, id);
 
                 if(meeplesForRocky + settlement.size() <=7 &&
                         meeplesForRocky <= inventory.getMeepleSize() &&
-                        !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.ROCKY, settlements, settlement) &&
+                        !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.ROCK, settlements, settlement) &&
                         meeplesForRocky + settlement.size() >= 4
                         ){
-                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCKY, id));i++){
+                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCK, id)); i++){
                         inventory.removeMeeplePiece();
                     }
-                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.ROCKY);
+                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.ROCK);
                 }
 
-                int meeplesForGrasslands = board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASSLANDS, id);
+                int meeplesForGrasslands = board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASS, id);
 
                 if(meeplesForGrasslands + settlement.size() <=7 &&
                         meeplesForGrasslands <= inventory.getMeepleSize()&&
-                        !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.GRASSLANDS, settlements, settlement) &&
+                        !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.GRASS, settlements, settlement) &&
                         meeplesForGrasslands + settlement.size() >= 4
                         ){
-                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASSLANDS, id));i++){
+                    for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASS, id)); i++){
                         inventory.removeMeeplePiece();
                     }
-                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.GRASSLANDS);
+                    return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.GRASS);
                 }
 
                 int meeplesForJungle = board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.JUNGLE, id);
