@@ -2,18 +2,17 @@ Feature: Tile Placement
   Players should be able to alternate placing tiles on the board
 
   Scenario: First turn placement
-    Given It is the first turn of the game
+    Given There are no other tiles besides the first tile
     And And the first player has received their tile
     When That player chooses a valid location
     Then The tile is placed onto the board
 
-  Scenario: Second turn placement
-    Given It is the second turn of the game
-    And The first player has placed their tile
-    When The second player chooses a new valid location
-    Then The tile is placed onto the board
-
-  Scenario: Second level tile placement
-    Given There are tiles on the first level
-    When A player chooses a valid space on the second level
-    Then The tile is placed on top of the existing hexagons
+  Scenario: Second level placement
+    Given There are at least two tiles on the board
+    When A player chooses a spot on the second level
+    And The settlement below is not of size 1
+    And The hexagon below does not contain a Totoro
+    And The hexagon below does not contain a Tiger
+    And There is no empty space under the new tile
+    And The volcano is on top of the bottom volcano
+    Then The tile is placed on the second level
