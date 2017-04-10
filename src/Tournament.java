@@ -1,5 +1,5 @@
-import java.awt.*;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by gonzalonunez on 4/8/17.
@@ -21,8 +21,11 @@ public class Tournament {
 
     public void startNewRound(String rid, String rounds) {
         synchronized (players) {
-            for (String gid : players.keySet()) {
-                players.remove(gid);
+            Set<String> _players = players.keySet();
+            for (String gid : _players) {
+                if (players.get(gid) != null) {
+                    players.remove(gid);
+                }
             }
         }
     }

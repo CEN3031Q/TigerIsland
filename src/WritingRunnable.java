@@ -14,11 +14,11 @@ public class WritingRunnable implements Runnable {
     }
 
     public void run() {
-        System.out.println(messageFromServer);
+        System.out.println("SERVER: " + messageFromServer);
         String response = messageDispatcher.processInput(messageFromServer);
         if (response != null) {
             readerWriter.println(response);
-            System.out.println(response);
+            System.out.println("CLIENT: " + response);
         }
     }
 }
