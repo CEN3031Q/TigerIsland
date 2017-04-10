@@ -18,7 +18,7 @@ public class ServerInteractionTests {
 
         public String readLine() throws IOException {
             String[] messages = new String[] {
-                    "GAME A MOVE 1 PLAYER 0375 PLACED ROCKY+LAKE AT -1 1 0 5 FOUNDED SETTLEMENT AT -2 2 0",
+                    "GAME A MOVE 1 PLAYER 0375 PLACED ROCK+LAKE AT -1 1 0 5 FOUNDED SETTLEMENT AT -2 2 0",
                     "MAKE YOUR MOVE IN GAME A WITHIN 1.5 SECOND: MOVE 2 PLACE LAKE+LAKE"
             };
             return idx < messages.length ? messages[idx++] : null;

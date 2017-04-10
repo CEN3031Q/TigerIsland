@@ -46,10 +46,10 @@ public class Board {
         hexagonAtPoint(point).setTerrainType(TerrainType.LAKE);
 
         point = boardPointForOffset(new Point(0, 1));
-        hexagonAtPoint(point).setTerrainType(TerrainType.GRASSLANDS);
+        hexagonAtPoint(point).setTerrainType(TerrainType.GRASS);
 
         point = boardPointForOffset(new Point(-1, 1));
-        hexagonAtPoint(point).setTerrainType(TerrainType.ROCKY);
+        hexagonAtPoint(point).setTerrainType(TerrainType.ROCK);
 
         Point[] points = new Point[] {
                 boardPointForOffset(new Point(0, 0)),

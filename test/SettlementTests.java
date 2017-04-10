@@ -43,10 +43,10 @@ public class SettlementTests {
     public void testUpdateSettlementSeparatePlayerSettlements(){
         Board board = new Board();
 
-        Tile tile1 = new Tile(TerrainType.LAKE, TerrainType.GRASSLANDS);
+        Tile tile1 = new Tile(TerrainType.LAKE, TerrainType.GRASS);
         tile1.setOrientation(6);
 
-        Tile tile2 = new Tile(TerrainType.JUNGLE, TerrainType.ROCKY);
+        Tile tile2 = new Tile(TerrainType.JUNGLE, TerrainType.ROCK);
         tile2.setOrientation(5);
 
         board.placeTile(tile1, Board.axialToCube(new Point(-1, -1)));
