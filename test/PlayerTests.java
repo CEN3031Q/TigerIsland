@@ -45,8 +45,8 @@ public class PlayerTests {
         }
     }
 
-    @Test(timeout=1500)
-    public void testAllTurnsInUnderOneAndAHalfSeconds() {
+    @Test(timeout=72000)
+    public void testAllTurnsInUnder7200Seconds() {
         Deck deck = new Deck();
         for (int i = 0; i < 24; i++) {
             for (Player player : new Player[]{ firstPlayer, secondPlayer }) {
