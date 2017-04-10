@@ -146,7 +146,8 @@ public class GameAI implements GameActionPerformer {
                 if(meeplesForLake + settlement.size() <= 7 &&
                         meeplesForLake <= inventory.getMeepleSize() &&
                         !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.LAKE, settlements, settlement) &&
-                        meeplesForLake + settlement.size() >= 4
+                        meeplesForLake + settlement.size() >= 4 &&
+                        meeplesForLake > 1
                         ) {
                     for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.LAKE, id));i++){
                         inventory.removeMeeplePiece();
@@ -160,6 +161,7 @@ public class GameAI implements GameActionPerformer {
                         meeplesForRocky <= inventory.getMeepleSize() &&
                         !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.ROCK, settlements, settlement) &&
                         meeplesForRocky + settlement.size() >= 4
+                        && meeplesForRocky > 1
                         ){
                     for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCK, id)); i++){
                         inventory.removeMeeplePiece();
@@ -172,7 +174,8 @@ public class GameAI implements GameActionPerformer {
                 if(meeplesForGrasslands + settlement.size() <=7 &&
                         meeplesForGrasslands <= inventory.getMeepleSize()&&
                         !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.GRASS, settlements, settlement) &&
-                        meeplesForGrasslands + settlement.size() >= 4
+                        meeplesForGrasslands + settlement.size() >= 4 &&
+                        meeplesForGrasslands > 1
                         ){
                     for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASS, id)); i++){
                         inventory.removeMeeplePiece();
@@ -185,7 +188,8 @@ public class GameAI implements GameActionPerformer {
                 if(meeplesForJungle + settlement.size() <=7 &&
                         meeplesForJungle <= inventory.getMeepleSize() &&
                         !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.JUNGLE, settlements, settlement) &&
-                        meeplesForJungle + settlement.size() >= 4
+                        meeplesForJungle + settlement.size() >= 4 &&
+                        meeplesForJungle > 1
 
                         ){
                     for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.JUNGLE, id));i++){
