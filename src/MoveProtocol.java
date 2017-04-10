@@ -35,7 +35,7 @@ public class MoveProtocol implements ServerProtocol {
                 info.put("pid", split[5]);
             }
 
-            info.put("gameEnded", String.valueOf(split.length > 6 && (split[5].equals("FORFEITED:") || split[5].equals("LOST:"))));
+            info.put("gameEnded", String.valueOf(split.length > 6 && (split[6].equals("FORFEITED:") || split[6].equals("LOST:"))));
 
             if (split.length > 18) {
                 info.put("tile", split[7]);
