@@ -152,7 +152,7 @@ public class GameAI implements GameActionPerformer {
                         meeplesForLake > 1 &&
                         !settlementContainsTotoro
                         ) {
-                    for(int i = 0; i < meeplesForLake;i++){
+                    for(int i = 0; i < meeplesForLake; i++){
                         inventory.removeMeeplePiece();
                     }
                     return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.LAKE);
@@ -198,7 +198,7 @@ public class GameAI implements GameActionPerformer {
                         !settlement.containsTotoroForBoard(board)
 
                         ){
-                    for(int i = 0; i < meeplesForJungle;i++){
+                    for(int i = 0; i < meeplesForJungle; i++){
                         inventory.removeMeeplePiece();
                     }
                     return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.JUNGLE);
