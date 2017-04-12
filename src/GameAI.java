@@ -233,6 +233,7 @@ public class GameAI implements GameActionPerformer {
             Set<Point> offsets = board.offsetsEligibleForSettlementFounding().keySet();
             if (!offsets.isEmpty()) {
                 Integer random = ThreadLocalRandom.current().nextInt(0, offsets.size());
+                inventory.removeMeeplePiece();
                 return new BuildAction(id, BuildActionType.FOUND_SETTLEMENT, (Point)offsets.toArray()[random]);
             }
         }
