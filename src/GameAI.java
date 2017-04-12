@@ -139,15 +139,18 @@ public class GameAI implements GameActionPerformer {
                     continue;
                 }
 
+                boolean settlementContainsTotoro = settlement.containsTotoroForBoard(board);
+
                 Point firstOffsetInSettlement = (Point)settlement.getOffsets().toArray()[0];
 
                 int meeplesForLake = board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.LAKE, id);
 
-                if(meeplesForLake + settlement.size() <= 7 &&
+                if(meeplesForLake + settlement.size() <= 6 &&
                         meeplesForLake <= inventory.getMeepleSize() &&
                         !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.LAKE, settlements, settlement) &&
-                        meeplesForLake + settlement.size() >= 4 &&
-                        meeplesForLake > 1
+                        meeplesForLake + settlement.size() >= 3 &&
+                        meeplesForLake > 1 &&
+                        !settlementContainsTotoro
                         ) {
                     for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.LAKE, id));i++){
                         inventory.removeMeeplePiece();
@@ -157,11 +160,12 @@ public class GameAI implements GameActionPerformer {
 
                 int meeplesForRocky = board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCK, id);
 
-                if(meeplesForRocky + settlement.size() <=7 &&
+                if(meeplesForRocky + settlement.size() <=6 &&
                         meeplesForRocky <= inventory.getMeepleSize() &&
                         !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.ROCK, settlements, settlement) &&
-                        meeplesForRocky + settlement.size() >= 4
-                        && meeplesForRocky > 1
+                        meeplesForRocky + settlement.size() >= 3
+                        && meeplesForRocky > 1 &&
+                        !settlement.containsTotoroForBoard(board)
                         ){
                     for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.ROCK, id)); i++){
                         inventory.removeMeeplePiece();
@@ -171,11 +175,12 @@ public class GameAI implements GameActionPerformer {
 
                 int meeplesForGrasslands = board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASS, id);
 
-                if(meeplesForGrasslands + settlement.size() <=7 &&
+                if(meeplesForGrasslands + settlement.size() <=6 &&
                         meeplesForGrasslands <= inventory.getMeepleSize()&&
                         !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.GRASS, settlements, settlement) &&
-                        meeplesForGrasslands + settlement.size() >= 4 &&
-                        meeplesForGrasslands > 1
+                        meeplesForGrasslands + settlement.size() >= 3 &&
+                        meeplesForGrasslands > 1 &&
+                        !settlement.containsTotoroForBoard(board)
                         ){
                     for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.GRASS, id)); i++){
                         inventory.removeMeeplePiece();
@@ -185,11 +190,12 @@ public class GameAI implements GameActionPerformer {
 
                 int meeplesForJungle = board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.JUNGLE, id);
 
-                if(meeplesForJungle + settlement.size() <=7 &&
+                if(meeplesForJungle + settlement.size() <=6 &&
                         meeplesForJungle <= inventory.getMeepleSize() &&
                         !board.doesExpansionConnectTwoSettlements(firstOffsetInSettlement, TerrainType.JUNGLE, settlements, settlement) &&
-                        meeplesForJungle + settlement.size() >= 4 &&
-                        meeplesForJungle > 1
+                        meeplesForJungle + settlement.size() >= 3 &&
+                        meeplesForJungle > 1 &&
+                        !settlement.containsTotoroForBoard(board)
 
                         ){
                     for(int i = 0; i < (board.numberOfMeeplesNeededForExpansion(firstOffsetInSettlement, TerrainType.JUNGLE, id));i++){
@@ -198,7 +204,7 @@ public class GameAI implements GameActionPerformer {
                     return new BuildAction(id, BuildActionType.EXPAND_SETTLEMENT, firstOffsetInSettlement, TerrainType.JUNGLE);
                 }
 
-                if(settlement.size()==4){
+                if(settlement.size()==4 && !settlement.containsTotoroForBoard(board)){
 
                     Set<Point> offsets = board.offsetsAtEdgeOfSettlementAtOffset((Point)settlement.getOffsets().toArray()[0]).keySet();
                     for (Point offset : offsets) {
@@ -210,7 +216,7 @@ public class GameAI implements GameActionPerformer {
                     }
 
                 }
-                if(settlement.size()==3){
+                if(settlement.size()==3 && !settlement.containsTotoroForBoard(board)){
 
                     Set<Point> offsets = board.offsetsAtEdgeOfSettlementAtOffset((Point)settlement.getOffsets().toArray()[0]).keySet();
                     for (Point offset : offsets) {
@@ -224,22 +230,9 @@ public class GameAI implements GameActionPerformer {
                 }
             }
             //found settlement not adjacent to one of our settlements
-            int minBoardX = board.getMinOffset().x;
-            int maxBoardX = board.getMaxOffset().x;
-            int minBoardY = board.getMinOffset().y;
-            int maxBoardY = board.getMaxOffset().y;
-
-            for (int x = minBoardX; x < maxBoardX; x++) {
-                for (int y = minBoardY; y < maxBoardY; y++) {
-                    Point rootOffset =  new Point(x, y);
-                    Hexagon rootHex = board.hexagonAtPoint(board.boardPointForOffset(rootOffset));
-                    if(!rootHex.isOccupied() && rootHex.getTerrainType() != TerrainType.VOLCANO && rootHex.getTerrainType() != TerrainType.EMPTY && rootHex.getLevel() == 1) {
-                        inventory.removeMeeplePiece();
-                        return new BuildAction(id, BuildActionType.FOUND_SETTLEMENT, rootOffset);
-
-                    }
-                }
-            }
+                    Set<Point> offsets = board.offsetsEligibleForSettlementFounding().keySet();
+                    Integer random = ThreadLocalRandom.current().nextInt(0, offsets.size());
+                    return new BuildAction(id, BuildActionType.FOUND_SETTLEMENT, (Point)offsets.toArray()[random]);
         }
 
         return new BuildAction(id, BuildActionType.UNABLE_TO_BUILD, new Point(0, 0));

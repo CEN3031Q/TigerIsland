@@ -747,4 +747,5 @@ public class Board {
 
         return validOffsets;
     }
+
 }
