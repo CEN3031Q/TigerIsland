@@ -230,9 +230,11 @@ public class GameAI implements GameActionPerformer {
                 }
             }
             //found settlement not adjacent to one of our settlements
-                    Set<Point> offsets = board.offsetsEligibleForSettlementFounding().keySet();
-                    Integer random = ThreadLocalRandom.current().nextInt(0, offsets.size());
-                    return new BuildAction(id, BuildActionType.FOUND_SETTLEMENT, (Point)offsets.toArray()[random]);
+            Set<Point> offsets = board.offsetsEligibleForSettlementFounding().keySet();
+            if (!offsets.isEmpty()) {
+                Integer random = ThreadLocalRandom.current().nextInt(0, offsets.size());
+                return new BuildAction(id, BuildActionType.FOUND_SETTLEMENT, (Point)offsets.toArray()[random]);
+            }
         }
 
         return new BuildAction(id, BuildActionType.UNABLE_TO_BUILD, new Point(0, 0));
