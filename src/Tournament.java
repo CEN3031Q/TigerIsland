@@ -22,7 +22,6 @@ public class Tournament {
     public void startNewRound(String rid, String rounds) {
         synchronized (players) {
             Iterator iter = players.entrySet().iterator();
-
             while (iter.hasNext()) {
                 iter.remove();
             }
