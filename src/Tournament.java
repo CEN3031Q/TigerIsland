@@ -1,5 +1,5 @@
 import java.util.HashMap;
-import java.util.Set;
+import java.util.Iterator;
 
 /**
  * Created by gonzalonunez on 4/8/17.
@@ -21,11 +21,9 @@ public class Tournament {
 
     public void startNewRound(String rid, String rounds) {
         synchronized (players) {
-            Set<String> _players = players.keySet();
-            for (String gid : _players) {
-                if (players.get(gid) != null) {
-                    players.remove(gid);
-                }
+            Iterator iter = players.entrySet().iterator();
+            while (iter.hasNext()) {
+                iter.remove();
             }
         }
     }
