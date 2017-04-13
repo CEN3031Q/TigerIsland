@@ -192,7 +192,7 @@ public class Board {
                 Point neighborPoint = boardPointForOffset(neighborOffset);
                 Hexagon neighborHex = hexagonAtPoint(neighborPoint);
 
-                if (!neighborHex.isOccupied() && neighborHex.getTerrainType() != TerrainType.VOLCANO && neighborHex.getTerrainType() != TerrainType.EMPTY && hex.getLevel() == 1) {
+                if (!neighborHex.isOccupied() && neighborHex.getTerrainType() != TerrainType.VOLCANO && neighborHex.getTerrainType() != TerrainType.EMPTY && neighborHex.getLevel() == 1) {
                     validOffsets.put(neighborOffset, true);
                     visited.put(neighborOffset, true);
                 } else if (neighborHex.getTerrainType() == TerrainType.EMPTY) {
