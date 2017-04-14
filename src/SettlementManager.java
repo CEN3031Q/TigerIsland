@@ -1,9 +1,3 @@
-/**
- * Created by hugh on 4/2/17.
- * This class is responsible for managing all the settlements on the board
- * It keeps a list of settlements - which are a list of Points
- */
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;

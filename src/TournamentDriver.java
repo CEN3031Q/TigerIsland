@@ -3,10 +3,6 @@ import javafx.geometry.Point3D;
 import java.awt.*;
 import java.util.HashMap;
 
-/**
- * Created by gonzalonunez on 4/7/17.
- */
-
 public class TournamentDriver implements ServerProtocolInfoCommunicator {
     private Tournament tournament;
 

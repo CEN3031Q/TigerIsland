@@ -1,8 +1,3 @@
-/**
- * Created by gonzalonunez on 4/5/17.
- */
-import com.sun.org.apache.regexp.internal.RE;
-
 import java.awt.Point;
 
 public class RequirementsToStack {

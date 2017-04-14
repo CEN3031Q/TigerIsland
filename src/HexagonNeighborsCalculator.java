@@ -1,6 +1,3 @@
-/**
- * Created by gonzalonunez on 3/28/17.
- */
 import java.awt.Point;
 import java.util.HashMap;
 

@@ -6,9 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-/**
- * Created by taylo on 4/4/2017.
- */
 public class TigerServer {
 
     public static void main(String[] args) throws IOException {

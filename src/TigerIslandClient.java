@@ -1,9 +1,6 @@
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-/**
- * Created by taylo on 4/3/2017.
- */
 public class TigerIslandClient {
     public static ServerProtocol[] serverProtocols(ServerProtocolInfoCommunicator comm,
                                                     String username,

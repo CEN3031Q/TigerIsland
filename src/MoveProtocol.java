@@ -1,8 +1,5 @@
 import java.util.HashMap;
 
-/**
- * Created by gonzalonunez on 4/7/17.
- */
 public class MoveProtocol implements ServerProtocol {
     ServerProtocolInfoCommunicator communicator;
 

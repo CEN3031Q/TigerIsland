@@ -4,9 +4,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-/**
- * Created by gonzalonunez on 4/7/17.
- */
 public class SocketReaderWriter implements ReaderWriter {
     Socket socket;
     BufferedReader reader;

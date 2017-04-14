@@ -1,7 +1,3 @@
-/**
- * Created by gonzalonunez on 3/16/17.
- */
-
 public class Hexagon {
     private TerrainType terrainType;
     private int tileID;

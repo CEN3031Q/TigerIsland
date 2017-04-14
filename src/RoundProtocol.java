@@ -1,9 +1,5 @@
-import javax.management.StringValueExp;
 import java.util.HashMap;
 
-/**
- * Created by gonzalonunez on 4/7/17.
- */
 public class RoundProtocol implements ServerProtocol {
     ServerProtocolInfoCommunicator communicator;
 

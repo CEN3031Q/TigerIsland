@@ -1,6 +1,3 @@
-/**
- * Created by gonzalonunez on 4/7/17.
- */
 public class MessageDispatcher {
     private ServerProtocol[] protocols;
 

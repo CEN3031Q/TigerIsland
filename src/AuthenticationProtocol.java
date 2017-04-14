@@ -1,8 +1,5 @@
 import java.util.HashMap;
 
-/**
- * Created by gonzalonunez on 4/7/17.
- */
 public class AuthenticationProtocol implements ServerProtocol {
     private String username;
     private String password;
