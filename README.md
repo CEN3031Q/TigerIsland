@@ -13,7 +13,7 @@ There are no features missing as far as game functionality goes. We divided up a
   ```
   Run > Edit Configurations > Application > TigerIslandClient
   ```
-  **Program Arguments:** <host_name> <port> <username> <password> <tournament_password>
+  **Program Arguments:** `<host_name> <port> <username> <password> <tournament_password>`
   
 2. If you've created a .jar file:
 ```java
