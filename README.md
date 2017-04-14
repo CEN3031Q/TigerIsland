@@ -1,6 +1,25 @@
 # TigerIsland
 CEN3031 Team Q's Project
 
+## Features
+There are no features missing as far as game functionality goes. We divided up a turn into a `TileAction` and a `BuildAction`. Our AI strategy prioritizes as follows:
+
+###### TileAction
+
+###### BuildAction
+
+## Instructions
+1. If you're running from within IntelliJ:
+  ```
+  Run > Edit Configurations > Application > TigerIslandClient
+  ```
+  **Program Arguments:** <host_name> <port> <username> <password> <tournament_password>
+  
+2. If you've created a .jar file:
+```java
+java MyJarFile.jar <host_name> <port> <username> <password> <tournament_password>
+```
+
 ## Git Workflow
 1. `git checkout master` // Get on your local `master` branch
 2. `git fetch upstream` // Fetch the team's repo
