@@ -35,6 +35,17 @@ java MyJarFile.jar <host_name> <port> <username> <password> <tournament_password
 1. Make sure that the server is up and running prior to running the client!
 2. Make sure the Program Arguments (see Instructions step 1) are correct.
 
+## General Architecture
+1. The `main` method can be found in `TigerIslandClient.java`. This is where we set up a connection to the server by creating a `SocketReaderWriter`. We read messages from the server here, and dispatch the handling of each message to a new `Thread` via a `Runnable` that we created called `WritingRunnable`.
+
+2. Each `WritingRunnable` creates a `MessageDispatcher` and provides it `ServerProtocol` objects. The dispatcher loops through each protocol and routes the message to it's corresponding protocol. The protocol provides a response via the `responseForMessage` method.
+
+3. Each protocol relays the relevant information to its `ServerProtocolInfoCommunicator` object, which in this case is the `TournamentDriver` object that's created in `TigerIslandClient.java`. In some cases, the `TournamentDriver` provides the protocol a response and in other cases it does not.
+
+4. The `TournamentDriver` object receives information via the `receiveInfo` method. It owns a `Tournament` object which is responsible for creating `Game` and `Player` objects. Each `Player` object has a `GameAI` object which is responsible for making move decisions, which happen in the `tileAction` and `buildAction` method, respectively.
+
+5. Messages are routed back up and sent to the server via the same `SocketReaderWriter`. 
+
 ## Git Workflow
 1. `git checkout master` // Get on your local `master` branch
 2. `git fetch upstream` // Fetch the team's repo
