@@ -93,14 +93,6 @@ public class TournamentDriver implements ServerProtocolInfoCommunicator {
                     return;
                 }
 
-                //FIXME: When we pass this info to tileActionFromInfo, sometimes it doesn't have `orientation`.
-                /**
-                // Maybe synchronizing on `this` can fix it, but we might lose the fact that two games can be played at once.
-                synchronized (this) {
-
-                }
-                */
-
                 TileAction tileAction = tileActionFromInfo(pid, info);
                 BuildAction buildAction = buildActionFromInfo(pid, info);
 
@@ -131,7 +123,6 @@ public class TournamentDriver implements ServerProtocolInfoCommunicator {
         String tileString = info.get("tile");
 
         String orientationString = info.get("orientation");
-        //FIXME: This throws sometimes... idk why? Try printing out orientationString
         Integer orientation = Integer.parseInt(orientationString);
 
         Tile tile = new Tile(tileString);
