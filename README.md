@@ -58,3 +58,6 @@ java MyJarFile.jar <host_name> <port> <username> <password> <tournament_password
 9. `git push origin myBranchName` // Push your changes to your **remote** fork
 
 Now, go to the [team's repo](https://github.com/CEN3031Q/TigerIsland) and submit a Pull Request. It'll get merged when we see all is good!
+
+## Notes
+- Pat doesn't show up as a contributor for some reason. Probably because a lot of his commits were actually merged via other people's branches, etc. We're not entirely sure why he doesn't show up, but if you scroll through the commit history you'll see he has authored many commits.
