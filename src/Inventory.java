@@ -1,6 +1,3 @@
-/**
- * Created by user on 3/27/2017.
- */
 import java.util.ArrayList;
 public class Inventory {
     private String playerID;

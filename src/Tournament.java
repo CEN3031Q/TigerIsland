@@ -1,9 +1,6 @@
 import java.util.HashMap;
 import java.util.Iterator;
 
-/**
- * Created by gonzalonunez on 4/8/17.
- */
 public class Tournament {
     private String ourPID;
     private String opponentPID;

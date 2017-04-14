@@ -19,8 +19,6 @@ public class Player {
 
     /**** CHANNELS OF COMMUNICATION ****/
 
-    // Make our move
-
     public TileAction performTileAction(Tile tile) {
         TileAction chosenAction = gameActionPerformer.tileAction(tile, game.getGameBoard());
         game.applyTileAction(chosenAction);

@@ -229,7 +229,6 @@ public class GameAI implements GameActionPerformer {
 
                 }
             }
-            //found settlement not adjacent to one of our settlements
             Set<Point> offsets = board.offsetsEligibleForSettlementFounding().keySet();
             if (!offsets.isEmpty()) {
                 Integer random = ThreadLocalRandom.current().nextInt(0, offsets.size());

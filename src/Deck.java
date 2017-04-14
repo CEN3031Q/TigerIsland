@@ -3,9 +3,6 @@ import java.util.Arrays;
 import java.util.Random;
 import java.lang.ArrayIndexOutOfBoundsException;
 
-/**
- * Created by patrickwert on 3/20/17.
- */
 public class Deck {
     private ArrayList<Tile> gameDeck;
 

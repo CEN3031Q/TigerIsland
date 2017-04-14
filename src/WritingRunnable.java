@@ -1,6 +1,3 @@
-/**
- * Created by gonzalonunez on 4/8/17.
- */
 public class WritingRunnable implements Runnable {
     private MessageDispatcher messageDispatcher;
 
