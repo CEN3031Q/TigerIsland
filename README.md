@@ -31,6 +31,9 @@ _Running from within IntelliJ and setting the Program Arguments is the preferred
 ```java
 java MyJarFile.jar <host_name> <port> <username> <password> <tournament_password>
 ```
+## Common Pitfalls
+1. Make sure that the server is up and running prior to running the client!
+2. Make sure the Program Arguments (see Instructions step 1) are correct.
 
 ## Git Workflow
 1. `git checkout master` // Get on your local `master` branch
